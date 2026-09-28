@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bdc6e9430f3d8f4ea8827703a99bf5c, type: 3}
+  m_Name: Story_Sample
+  m_EditorClassIdentifier: Assembly-CSharp::StoryChapter
+  cuts:
+  - memo: "\uCEF7 1 - \uB3C4\uC785"
+    illustration: {fileID: 21300000, guid: 9bc061fe98dd5bf4d8951321efe197c3, type: 3}
+    transition: 0
+    transitionDuration: 0
+    lines:
+    - speaker: 
+      standing: {fileID: 0}
+      hideStanding: 0
+      text: "\u2026\u2026\uC5EC\uAE30\uB294 \uC5B4\uB514\uC9C0?"
+      pause: 0
+    - speaker: ???
+      standing: {fileID: 210663743702183661, guid: 80c932d26a7454644a8ddd4181078aeb, type: 3}
+      hideStanding: 0
+      text: "\uB4DC\uB514\uC5B4 \uB208\uC744 \uB5B4\uAD6C\uB098.\n\uC774\uB984\uC774
+        \uBB50\uC9C0?"
+      pause: 0
+    - speaker: ???
+      standing: {fileID: 0}
+      hideStanding: 0
+      text: "\uADF8\uB798, \uAE30\uC5B5\uD574 \uB450\uC9C0."
+      pause: 1
+  - memo: "\uCEF7 2 - \uC774\uB984 \uD655\uC778"
+    illustration: {fileID: 21300000, guid: 0ac6874f928553e499499754714719c8, type: 3}
+    transition: 1
+    transitionDuration: 0
+    lines:
+    - speaker: ???
+      standing: {fileID: 0}
+      hideStanding: 0
+      text: "\uBC18\uAC00\uC6CC, {player}."
+      pause: 0
+    - speaker: '{player}'
+      standing: {fileID: 0}
+      hideStanding: 1
+      text: "\u2026\u2026\uC798 \uBD80\uD0C1\uD574."
+      pause: 0

@@ -13,6 +13,9 @@
 /[Aa]ssets/AssetStoreTools*
 /[Aa]ssets/Plugins/PlasticSCM*
 
+# Unity crash recovery scenes
+/[Aa]ssets/_Recovery*
+
 # Unity Version Control (Plastic SCM) workspace data
 /.plastic/
 

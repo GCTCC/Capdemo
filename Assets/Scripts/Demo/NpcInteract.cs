@@ -10,8 +10,8 @@ public class NpcInteract : MonoBehaviour
     [Tooltip("플레이어가 가까이 오면 보일 안내 표시 (예: \"Space\")")]
     [SerializeField] private GameObject prompt;
 
-    private PlayerController2D playerInRange;
-    private bool talking;
+    private PlayerController2D playerInRange; // 상호작용 가능하게 할 범위
+    private bool talking; // 대화중에는 이동 제어. 제어를 위한 bool
 
     public IReadOnlyList<StoryLine> Lines => lines;
 

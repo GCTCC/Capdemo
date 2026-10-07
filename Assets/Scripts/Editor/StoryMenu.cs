@@ -40,10 +40,6 @@ public static class StoryMenu
         scaler.matchWidthOrHeight = 0.5f;
         var root = canvasGo.transform;
 
-        // Backdrop: 일러스트가 없는 컷(Black Screen)에서 보일 검은 바탕. 카메라 배경색과 상관없이 검게 보이게 한다
-        var backdrop = CreateImage("Backdrop", root, Color.black);
-        Stretch(backdrop.gameObject);
-
         // Illustration: 컷 배경 일러스트 두 장 (크로스페이드용). 비율이 달라도 잘리지 않게 preserveAspect
         var illustGo = CreateUI("Illustration", root, typeof(IllustrationView));
         Stretch(illustGo);

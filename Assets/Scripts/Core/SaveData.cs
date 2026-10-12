@@ -20,10 +20,14 @@ public static class SaveData
     // 튜토리얼에서 입력받은 플레이어 이름. 아직 없으면 빈 문자열
     public static string GetPlayerName() => PlayerPrefs.GetString(PlayerNameKey, "");
 
+    // 이름이 바뀌면 알린다 (PlayerNameText가 다시 그린다)
+    public static event System.Action PlayerNameChanged;
+
     public static void SetPlayerName(string name)
     {
         PlayerPrefs.SetString(PlayerNameKey, name);
         PlayerPrefs.Save();
+        PlayerNameChanged?.Invoke();
     }
 
     // 플레이 진행 데이터 초기화 (설정값 같은 다른 키는 건드리지 않는다)
@@ -32,5 +36,6 @@ public static class SaveData
         PlayerPrefs.DeleteKey(TutorialClearedKey);
         PlayerPrefs.DeleteKey(PlayerNameKey);
         PlayerPrefs.Save();
+        PlayerNameChanged?.Invoke();
     }
 }

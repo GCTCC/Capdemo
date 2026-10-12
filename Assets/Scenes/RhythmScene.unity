@@ -119,6 +119,135 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &855492045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 855492051}
+  - component: {fileID: 855492050}
+  - component: {fileID: 855492049}
+  - component: {fileID: 855492048}
+  - component: {fileID: 855492047}
+  - component: {fileID: 855492046}
+  m_Layer: 0
+  m_Name: Rhythm Game Prototype
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &855492046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855492045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5de865849e2b44768960e5d9f32a1941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RhythmGameController
+  nearZ: 0
+  farZ: 20
+  nearHalfWidth: 5.8
+  farHalfWidth: 2.35
+  judgeZ: 1.15
+  noteSpeed: 15
+  minSpawnInterval: 0.52
+  maxSpawnInterval: 0.78
+  doubleNoteChance: 0.32
+  chartData: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 3748192f16664aec9c003692b2c15841, type: 3}
+  boardMaterial: {fileID: 2100000, guid: 71a8f56fd33d37140870ac09a724da7d, type: 2}
+  sideFloorMaterial: {fileID: 2100000, guid: af9b3c1a1d056f64b82213ebdcd6b677, type: 2}
+  railMaterial: {fileID: 2100000, guid: 1e32e2785f4d39d48a6c5240866dbdc5, type: 2}
+  railGlowMaterial: {fileID: 2100000, guid: 07f8be700951adf4a8721fc95ab747b4, type: 2}
+  gridMaterial: {fileID: 2100000, guid: 03b2f65b4a1670841bc75ee20486d472, type: 2}
+  judgeMaterial: {fileID: 2100000, guid: 3a79ea246d3e9bc48901246acdf9d1fc, type: 2}
+  leftNoteMaterial: {fileID: 2100000, guid: 3361820cb54a22a4da7a6ac758b3fed5, type: 2}
+  rightNoteMaterial: {fileID: 2100000, guid: 272087a7f10c2ca4ca83b5ab019314b3, type: 2}
+  leftLaneGlowMaterial: {fileID: 2100000, guid: 617b6217ab0e4244c96ff832799f834a, type: 2}
+  rightLaneGlowMaterial: {fileID: 2100000, guid: 3bb591a37c92733469efc4a62129165f, type: 2}
+  cityMaterialA: {fileID: 2100000, guid: ddec6b2805aaf2846b963557c2bc17b6, type: 2}
+  cityMaterialB: {fileID: 2100000, guid: 4712954ba4b22e34cb50a1f07fdada2d, type: 2}
+  cityCyanMaterial: {fileID: 2100000, guid: 9ff83c52d18d86a4481449f3b88e6397, type: 2}
+  cityMagentaMaterial: {fileID: 2100000, guid: ebd9fd1237a2ec943a91136b5403d950, type: 2}
+--- !u!114 &855492047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855492045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7d05a5c34124d739f0052a2b92cb462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChartAutoLoader
+  resourcesFolder: RhythmSongs
+  preferredSongName: 
+  fallbackBpm: 120
+  warnAboutHandPatterns: 1
+--- !u!114 &855492048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855492045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40976fb69d654a309c12c00896d56b0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JudgementScoreManager
+  perfectWindow: 0.08
+  greatWindow: 0.12
+  goodWindow: 0.16
+--- !u!114 &855492049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855492045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc68060c4b8477692e6afe0163b8b75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NoteManager
+--- !u!114 &855492050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855492045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a870fc1407d24ccf85d6c4c947a27b61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RhythmClock
+  fallbackBpm: 120
+--- !u!4 &855492051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855492045}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1801660745
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,3 +518,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1861402759}
   - {fileID: 1801660747}
+  - {fileID: 855492051}

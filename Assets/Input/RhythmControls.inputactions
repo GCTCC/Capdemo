@@ -1,0 +1,34 @@
+{
+    "name": "RhythmControls",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "9e8fcbd1-1b6b-4c4c-a238-7db19ad05f8a",
+            "actions": [
+                { "name": "Lane1", "type": "Button", "id": "ee9be002-f059-4ce0-b922-ea7d6da5d1a1", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Lane2", "type": "Button", "id": "f65295e8-07d7-4b1b-a353-b58f3de6ca08", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Lane3", "type": "Button", "id": "7be44157-4946-4a84-bda6-35d92c72b5ad", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Lane4", "type": "Button", "id": "7fba6327-6db8-4713-bc58-005cb6a99ee2", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Lane5", "type": "Button", "id": "63725826-fe5d-4797-ac02-e88c4996d5db", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Lane6", "type": "Button", "id": "c41a33e4-149c-4f72-9c1b-5f5c553c0a6e", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false }
+            ],
+            "bindings": [
+                { "name": "", "id": "74c36f29-98dc-422f-9ab8-f072ffbb8615", "path": "<Keyboard>/a", "interactions": "Press", "processors": "", "groups": "Keyboard", "action": "Lane1", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "dcfe48d1-1f10-4a5d-87e7-e1b64d3b64d2", "path": "<Keyboard>/s", "interactions": "Press", "processors": "", "groups": "Keyboard", "action": "Lane2", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "e67807de-f535-4396-974e-95744c4e66b5", "path": "<Keyboard>/d", "interactions": "Press", "processors": "", "groups": "Keyboard", "action": "Lane3", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "934205d4-b0df-4145-9b5f-d59adf020be7", "path": "<Keyboard>/j", "interactions": "Press", "processors": "", "groups": "Keyboard", "action": "Lane4", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "0b06b5ee-0ea4-461f-b1d2-61ba8feb74da", "path": "<Keyboard>/k", "interactions": "Press", "processors": "", "groups": "Keyboard", "action": "Lane5", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "840073b7-fcc5-471b-b0ef-530d16be3580", "path": "<Keyboard>/l", "interactions": "Press", "processors": "", "groups": "Keyboard", "action": "Lane6", "isComposite": false, "isPartOfComposite": false }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                { "devicePath": "<Keyboard>", "isOptional": false, "isOR": false }
+            ]
+        }
+    ]
+}

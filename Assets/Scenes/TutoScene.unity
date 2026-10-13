@@ -1811,7 +1811,7 @@ MonoBehaviour:
   nameInput: {fileID: 1469625377}
   storyAudio: {fileID: 0}
   playOnStart: 1
-  startCut: 0
+  startCut: 2
   fadeOverlay: {fileID: 1526762366}
   fadeInDuration: 1
   fadeOutDuration: 1

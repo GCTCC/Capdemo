@@ -42,15 +42,12 @@ public static class DemoMenu
         var light = new GameObject("Global Light 2D").AddComponent<Light2D>();
         light.lightType = Light2D.LightType.Global;
 
-        // 지형: 바닥(윗면 y=0), 양쪽 벽, 발판
+        // 지형: 바닥(윗면 y=0), 양쪽 벽
         var groundColor = new Color(0.35f, 0.35f, 0.38f);
         var level = new GameObject("Level").transform;
         CreateBlock("Ground", level, square, new Vector2(0f, -0.5f), new Vector2(40f, 1f), groundColor);
         CreateBlock("WallLeft", level, square, new Vector2(-20.5f, 5f), new Vector2(1f, 12f), groundColor);
         CreateBlock("WallRight", level, square, new Vector2(20.5f, 5f), new Vector2(1f, 12f), groundColor);
-        CreateBlock("Platform1", level, square, new Vector2(-6f, 1.8f), new Vector2(3f, 0.4f), groundColor);
-        CreateBlock("Platform2", level, square, new Vector2(9f, 1.6f), new Vector2(3f, 0.4f), groundColor);
-        CreateBlock("Platform3", level, square, new Vector2(13f, 3.2f), new Vector2(3f, 0.4f), groundColor);
 
         // 대사창
         var canvasGo = new GameObject("DialogueCanvas", typeof(Canvas), typeof(UnityEngine.UI.CanvasScaler),
@@ -100,6 +97,7 @@ public static class DemoMenu
         npcSo.ApplyModifiedPropertiesWithoutUndo();
 
         EditorSceneManager.SaveScene(scene, ScenePath);
+        DemoArtMenu.Apply();
         Debug.Log($"[CapDemo] {ScenePath} 를 만들었습니다. 플레이해서 이동·점프와 NPC 대화를 확인하세요.");
     }
 

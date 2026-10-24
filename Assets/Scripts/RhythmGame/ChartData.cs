@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 채보에서 사용할 노트 종류다. 현재 프로토타입은 Tap만 실제 판정한다.
+// 채보에서 사용할 탭 노트와 롱노트 종류다.
 public enum NoteType
 {
     Tap,

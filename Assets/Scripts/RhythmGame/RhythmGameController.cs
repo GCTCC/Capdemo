@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 리듬게임의 입력과 각 기능별 컴포넌트 연결만 담당하는 최상위 컨트롤러다.
+// 로비, 입력과 리듬게임 기능별 컴포넌트를 연결하는 최상위 컨트롤러다.
 [RequireComponent(typeof(RhythmClock))]
 [RequireComponent(typeof(NoteManager))]
 [RequireComponent(typeof(JudgementScoreManager))]
@@ -9,6 +10,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(RhythmPlayField))]
 [RequireComponent(typeof(RhythmGameUI))]
 [RequireComponent(typeof(PauseMenu))]
+[RequireComponent(typeof(SongLobbyMenu))]
 [DisallowMultipleComponent]
 public class RhythmGameController : MonoBehaviour
 {
@@ -23,7 +25,6 @@ public class RhythmGameController : MonoBehaviour
     public float doubleNoteChance = 0.32f;
 
     [Header("Chart")]
-    // 실제 곡과 채보를 연결한다. 비워 두면 음악 자동 탐색 또는 랜덤 채보를 사용한다.
     public ChartData chartData;
 
     [Header("Input System")]
@@ -42,6 +43,7 @@ public class RhythmGameController : MonoBehaviour
     private InputActionMap gameplayActionMap;
     private InputAction[] laneActions;
     private bool ownsRuntimeActionMap;
+    private bool gameplayActive;
 
     private RhythmClock rhythmClock;
     private NoteManager noteManager;
@@ -50,7 +52,14 @@ public class RhythmGameController : MonoBehaviour
     private RhythmPlayField playField;
     private RhythmGameUI gameUI;
     private PauseMenu pauseMenu;
+    private SongLobbyMenu songLobbyMenu;
     private ChartData activeChartData;
+    private List<ChartAutoLoader.SongEntry> availableSongs;
+
+    public bool IsGameplayActive
+    {
+        get { return gameplayActive; }
+    }
 
     private void Awake()
     {
@@ -63,40 +72,31 @@ public class RhythmGameController : MonoBehaviour
         playField = GetComponent<RhythmPlayField>();
         gameUI = GetComponent<RhythmGameUI>();
         pauseMenu = GetComponent<PauseMenu>();
-
-        activeChartData = chartData;
-        if (activeChartData == null && chartAutoLoader != null)
-        {
-            chartAutoLoader.TryLoadChart(out activeChartData);
-        }
+        songLobbyMenu = GetComponent<SongLobbyMenu>();
 
         BuildInputActions();
-
-        // 편집 모드에서 미리 만들어진 필드를 찾아 런타임 참조만 준비한다.
         playField.PrepareForPlay();
         gameUI.Initialize(rhythmClock, judgementScoreManager, this);
         pauseMenu.Initialize(this);
-
+        songLobbyMenu.Initialize(this);
         judgementScoreManager.Initialize(noteManager);
-        noteManager.Initialize(
-            rhythmClock,
-            activeChartData,
-            leftNoteMaterial,
-            rightNoteMaterial,
-            playField.NearZ,
-            playField.FarZ,
-            playField.JudgeZ,
-            playField.NearHalfWidth,
-            playField.FarHalfWidth,
-            noteSpeed,
-            minSpawnInterval,
-            maxSpawnInterval,
-            doubleNoteChance);
 
         noteManager.NoteMissed += HandleNoteMissed;
         judgementScoreManager.Judged += HandleJudged;
 
-        rhythmClock.StartClock(activeChartData);
+        availableSongs = chartAutoLoader.GetAvailableSongs();
+        if (availableSongs.Count > 0)
+        {
+            // 음악이 하나라도 있으면 재생 전에 반드시 로비에서 선택한다.
+            gameplayActive = false;
+            gameUI.SetVisible(false);
+            songLobbyMenu.Show(availableSongs, false);
+        }
+        else
+        {
+            // 음악과 채보가 모두 없으면 기존처럼 무음 랜덤 모드를 바로 시작한다.
+            StartGameplay(chartData);
+        }
     }
 
     private void OnEnable()
@@ -122,24 +122,98 @@ public class RhythmGameController : MonoBehaviour
             return;
         }
 
-        HandleLaneActions();
+        if (gameplayActive)
+        {
+            HandleLaneActions();
+            noteManager.Tick();
+        }
+
         playField.UpdateLaneGlows(IsLaneHeldForView);
-        noteManager.Tick();
     }
 
-    // PauseMenu에서 호출하는 게임 정지 진입점이다.
+    // 로비에서 누른 곡을 ChartData로 만든 뒤 게임을 시작한다.
+    public void PlaySelectedSong(ChartAutoLoader.SongEntry song)
+    {
+        ChartData selectedChart;
+        if (!chartAutoLoader.TryLoadSong(song, out selectedChart))
+        {
+            return;
+        }
+
+        StartGameplay(selectedChart);
+    }
+
+    public void PlayRandomWithoutMusic()
+    {
+        StartGameplay(null);
+    }
+
+    public void RefreshLobbySongs(bool openedFromPause)
+    {
+        availableSongs = chartAutoLoader.GetAvailableSongs();
+        songLobbyMenu.Show(availableSongs, openedFromPause);
+    }
+
+    // 일시정지 메뉴의 나가기 버튼이 호출하는 로비 복귀 진입점이다.
+    public void ReturnToLobby()
+    {
+        StopCurrentGameplay();
+        availableSongs = chartAutoLoader.GetAvailableSongs();
+        songLobbyMenu.Show(availableSongs, true);
+    }
+
+    private void StartGameplay(ChartData selectedChart)
+    {
+        if (rhythmClock.IsPlaying)
+        {
+            rhythmClock.StopClock();
+        }
+
+        noteManager.ClearNotes();
+        activeChartData = selectedChart;
+        judgementScoreManager.ResetScore();
+
+        noteManager.Initialize(
+            rhythmClock,
+            activeChartData,
+            leftNoteMaterial,
+            rightNoteMaterial,
+            playField.NearZ,
+            playField.FarZ,
+            playField.JudgeZ,
+            playField.NearHalfWidth,
+            playField.FarHalfWidth,
+            noteSpeed,
+            minSpawnInterval,
+            maxSpawnInterval,
+            doubleNoteChance);
+
+        gameplayActive = true;
+        songLobbyMenu.Hide();
+        gameUI.SetVisible(true);
+        rhythmClock.StartClock(activeChartData);
+    }
+
+    private void StopCurrentGameplay()
+    {
+        gameplayActive = false;
+        rhythmClock.StopClock();
+        noteManager.ClearNotes();
+        judgementScoreManager.ResetScore();
+        gameUI.SetVisible(false);
+    }
+
     public void PauseGame()
     {
-        if (rhythmClock != null)
+        if (gameplayActive)
         {
             rhythmClock.PauseClock();
         }
     }
 
-    // PauseMenu의 카운트다운이 끝난 뒤 호출하는 재개 진입점이다.
     public void ResumeGame()
     {
-        if (rhythmClock != null)
+        if (gameplayActive)
         {
             rhythmClock.ResumeClock();
         }
@@ -150,10 +224,9 @@ public class RhythmGameController : MonoBehaviour
         return judgementScoreManager.CreatePlayResult();
     }
 
-    // UI와 플레이필드 효과가 현재 레인 입력 상태를 확인할 때 사용한다.
     public bool IsLaneHeldForView(int lane)
     {
-        if (rhythmClock == null || rhythmClock.IsPaused)
+        if (!gameplayActive || rhythmClock == null || rhythmClock.IsPaused)
         {
             return false;
         }
@@ -194,16 +267,32 @@ public class RhythmGameController : MonoBehaviour
 
     private void HandleLaneActions()
     {
-        if (rhythmClock.IsPaused || laneActions == null)
+        if (rhythmClock.IsPaused
+            || !rhythmClock.HasStarted
+            || laneActions == null)
         {
             return;
         }
 
         for (int lane = 0; lane < LaneCount; lane++)
         {
-            if (laneActions[lane] != null && laneActions[lane].WasPressedThisFrame())
+            InputAction laneAction = laneActions[lane];
+            if (laneAction == null)
             {
-                judgementScoreManager.TryJudge(lane, rhythmClock.SongTime);
+                continue;
+            }
+
+            if (laneAction.WasPressedThisFrame())
+            {
+                judgementScoreManager.TryJudgePress(lane, rhythmClock.ChartTime);
+            }
+
+            // 일시정지 중 키를 놓은 경우에도 재개 직후 해제 상태를 감지한다.
+            if (laneAction.WasReleasedThisFrame()
+                || (judgementScoreManager.HasHoldingNote(lane)
+                    && !laneAction.IsPressed()))
+            {
+                judgementScoreManager.TryReleaseHold(lane, rhythmClock.ChartTime);
             }
         }
     }
@@ -215,10 +304,7 @@ public class RhythmGameController : MonoBehaviour
 
     private void HandleJudged(JudgementResult result)
     {
-        if (gameUI != null)
-        {
-            gameUI.ShowJudgement(result.judgement.ToString().ToUpperInvariant());
-        }
+        gameUI.ShowJudgement(result.judgement.ToString().ToUpperInvariant());
     }
 
     private void OnDestroy()

@@ -38,7 +38,9 @@ public class PauseMenu : MonoBehaviour
 
         if (state == PauseState.Playing)
         {
-            if (escapePressed)
+            if (escapePressed
+                && controller != null
+                && controller.IsGameplayActive)
             {
                 OpenPauseMenu();
             }
@@ -66,7 +68,9 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenPauseMenu()
     {
-        if (state != PauseState.Playing)
+        if (state != PauseState.Playing
+            || controller == null
+            || !controller.IsGameplayActive)
         {
             return;
         }
@@ -131,7 +135,7 @@ public class PauseMenu : MonoBehaviour
     private void DrawPausePanel()
     {
         float panelWidth = Mathf.Min(520.0f, Screen.width * 0.82f);
-        float panelHeight = Mathf.Min(330.0f, Screen.height * 0.62f);
+        float panelHeight = Mathf.Min(410.0f, Screen.height * 0.72f);
         Rect panel = new Rect(
             (Screen.width - panelWidth) * 0.5f,
             (Screen.height - panelHeight) * 0.5f,
@@ -174,9 +178,15 @@ public class PauseMenu : MonoBehaviour
 
         Rect resumeButton = new Rect(
             panel.x + panel.width * 0.18f,
-            panel.yMax - 105.0f,
+            panel.yMax - 175.0f,
             panel.width * 0.64f,
             58.0f);
+
+        Rect exitButton = new Rect(
+            panel.x + panel.width * 0.18f,
+            panel.yMax - 100.0f,
+            panel.width * 0.64f,
+            52.0f);
 
         Color oldBackgroundColor = GUI.backgroundColor;
         GUI.backgroundColor = new Color(0.18f, 0.12f, 0.42f);
@@ -185,7 +195,24 @@ public class PauseMenu : MonoBehaviour
             BeginResumeCountdown();
         }
 
+        GUI.backgroundColor = new Color(0.48f, 0.08f, 0.28f);
+        if (GUI.Button(exitButton, "나가기 / 곡 선택으로", buttonStyle))
+        {
+            ExitToLobby();
+        }
+
         GUI.backgroundColor = oldBackgroundColor;
+    }
+
+    private void ExitToLobby()
+    {
+        Time.timeScale = timeScaleBeforePause;
+        state = PauseState.Playing;
+
+        if (controller != null)
+        {
+            controller.ReturnToLobby();
+        }
     }
 
     private void DrawCountdown()

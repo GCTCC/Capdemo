@@ -71,8 +71,8 @@ public class JudgementScoreManager : MonoBehaviour
         ResetScore();
     }
 
-    // 지정한 레인의 입력 시각을 사용해 가장 가까운 노트를 판정한다.
-    public bool TryJudge(int lane, double inputTime)
+    // 키를 누른 순간 탭 노트 또는 롱노트 시작점을 판정한다.
+    public bool TryJudgePress(int lane, double inputTime)
     {
         if (noteManager == null)
         {
@@ -106,8 +106,72 @@ public class JudgementScoreManager : MonoBehaviour
         }
 
         ApplySuccessfulJudgement(note, judgement, difference);
+
+        if (note.data.noteType == NoteType.Hold)
+        {
+            // 롱노트는 시작 판정 후 제거하지 않고 판정선에 붙여 둔다.
+            noteManager.BeginHold(note);
+        }
+        else
+        {
+            noteManager.ConsumeNote(note);
+        }
+
+        return true;
+    }
+
+    // 기존 코드에서 사용하던 이름과의 호환을 유지한다.
+    public bool TryJudge(int lane, double inputTime)
+    {
+        return TryJudgePress(lane, inputTime);
+    }
+
+    // 키를 뗀 순간 해당 레인에서 유지 중인 롱노트 끝점을 판정한다.
+    public bool TryReleaseHold(int lane, double inputTime)
+    {
+        if (noteManager == null)
+        {
+            return false;
+        }
+
+        NoteManager.RuntimeNote note = noteManager.FindHoldingNote(lane);
+        if (note == null)
+        {
+            return false;
+        }
+
+        double difference = Math.Abs(note.data.endTime - inputTime);
+        if (difference <= goodWindow)
+        {
+            JudgementType judgement;
+            if (difference <= perfectWindow)
+            {
+                judgement = JudgementType.Perfect;
+            }
+            else if (difference <= greatWindow)
+            {
+                judgement = JudgementType.Great;
+            }
+            else
+            {
+                judgement = JudgementType.Good;
+            }
+
+            ApplySuccessfulJudgement(note, judgement, difference);
+        }
+        else
+        {
+            // 너무 일찍 떼거나 허용 범위를 지난 해제는 MISS다.
+            RegisterMiss(note);
+        }
+
         noteManager.ConsumeNote(note);
         return true;
+    }
+
+    public bool HasHoldingNote(int lane)
+    {
+        return noteManager != null && noteManager.FindHoldingNote(lane) != null;
     }
 
     // 성공 판정에 맞춰 점수, 판정 수와 콤보를 갱신한다.

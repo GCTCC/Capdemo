@@ -12,6 +12,7 @@ public class RhythmGameUI : MonoBehaviour
 
     private float judgementTimer;
     private string judgementText = "READY";
+    private bool isVisible;
 
     public void Initialize(
         RhythmClock newRhythmClock,
@@ -21,6 +22,16 @@ public class RhythmGameUI : MonoBehaviour
         rhythmClock = newRhythmClock;
         scoreManager = newScoreManager;
         controller = newController;
+    }
+
+    public void SetVisible(bool visible)
+    {
+        isVisible = visible;
+        if (visible)
+        {
+            judgementText = "READY";
+            judgementTimer = 0.45f;
+        }
     }
 
     public void ShowJudgement(string text)
@@ -39,7 +50,10 @@ public class RhythmGameUI : MonoBehaviour
 
     private void OnGUI()
     {
-        if (rhythmClock == null || scoreManager == null || controller == null)
+        if (!isVisible
+            || rhythmClock == null
+            || scoreManager == null
+            || controller == null)
         {
             return;
         }

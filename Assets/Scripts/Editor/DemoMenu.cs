@@ -121,7 +121,7 @@ public static class DemoMenu
         CreateSprite(name, parent, sprite, position, size, color, 0).AddComponent<BoxCollider2D>();
     }
 
-    private static GameObject CreatePrompt(Transform npc, TMP_FontAsset font)
+    internal static GameObject CreatePrompt(Transform npc, TMP_FontAsset font)
     {
         var go = new GameObject("Prompt", typeof(TextMeshPro));
         go.transform.SetParent(npc, false);
@@ -169,7 +169,7 @@ public static class DemoMenu
     }
 
     // 공중에서 벽 쪽으로 이동할 때 벽에 걸려 멈추는 것을 막는 마찰 0 재질
-    private static PhysicsMaterial2D LoadOrCreateNoFriction()
+    internal static PhysicsMaterial2D LoadOrCreateNoFriction()
     {
         var material = AssetDatabase.LoadAssetAtPath<PhysicsMaterial2D>(NoFrictionPath);
         if (material) return material;

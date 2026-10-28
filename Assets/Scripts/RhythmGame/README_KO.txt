@@ -35,6 +35,11 @@ NoteManager.cs
 JudgementScoreManager.cs
 - 입력 시각을 노트 시각과 비교하고 판정, 점수, 콤보를 계산합니다.
 - 롱노트 시작점과 키를 떼는 끝점을 각각 판정합니다.
+- 같은 레인에서는 항상 가장 앞 노트만 판정합니다.
+- 판정 시각보다 0.30초 이상 이른 입력은 무시하여 MISS가 발생하지 않습니다.
+- 판정 시각 0.30초 전부터 GOOD 판정창 직전까지는 그 앞 노트 하나만 조기 MISS로 제거합니다.
+- 뒤 노트에는 영향을 주지 않습니다.
+- Rhythm Game Prototype의 Judgement Score Manager에서 Early Miss Window 값을 조절할 수 있습니다.
 
 ChartData.cs / ChartAutoLoader.cs
 - 음악과 노트 데이터를 보관하고, 같은 이름의 외부 채보가 있으면 불러옵니다.

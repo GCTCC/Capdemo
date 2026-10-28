@@ -49,6 +49,11 @@ public class JudgementScoreManager : MonoBehaviour
     [SerializeField]
     private double goodWindow = 0.160;
 
+    // 이 값보다 더 일찍 누른 입력은 MISS로 만들지 않고 무시한다.
+    // goodWindow와 이 값 사이에서 누른 입력만 조기 MISS가 된다.
+    [SerializeField]
+    private double earlyMissWindow = 0.300;
+
     // 판정 결과, 점수와 콤보가 바뀌었음을 UI에 알리는 이벤트다.
     public event Action<JudgementResult> Judged;
     public event Action<int> ScoreChanged;
@@ -79,14 +84,37 @@ public class JudgementScoreManager : MonoBehaviour
             return false;
         }
 
-        double difference;
-        NoteManager.RuntimeNote note = noteManager.FindClosestNote(
-            lane,
-            inputTime,
-            out difference);
+        // 같은 레인의 가장 앞 노트만 판정한다.
+        // 절댓값이 가장 가까운 노트를 고르면 뒤 노트가 대신 판정될 수 있으므로 사용하지 않는다.
+        NoteManager.RuntimeNote note = noteManager.FindEarliestPendingNote(lane);
+        if (note == null)
+        {
+            return false;
+        }
 
-        // 같은 레인에 노트가 없거나 GOOD 범위보다 멀면 입력을 무시한다.
-        if (note == null || difference > goodWindow)
+        double signedDifference = inputTime - note.data.hitTime;
+        double difference = Math.Abs(signedDifference);
+
+        // 노트가 아직 너무 멀리 있다면 실수 입력으로 보지 않고 무시한다.
+        // 따라서 화면 앞쪽에서 미리 키를 눌러도 MISS나 노트 제거가 발생하지 않는다.
+        double safeEarlyMissWindow = Math.Max(goodWindow, earlyMissWindow);
+        if (signedDifference < -safeEarlyMissWindow)
+        {
+            return false;
+        }
+
+        // GOOD 판정창보다 일찍 눌렀다면 가장 앞 노트 하나만 MISS로 처리한다.
+        // 해당 노트를 제거한 뒤 종료하므로 같은 입력이 뒤 노트에 전달되지 않는다.
+        if (signedDifference < -goodWindow)
+        {
+            RegisterMiss(note, difference);
+            noteManager.ConsumeNote(note);
+            return true;
+        }
+
+        // 너무 늦은 입력은 NoteManager의 자동 MISS가 담당한다.
+        // 이때도 뒤 노트를 대신 판정하지 않는다.
+        if (signedDifference > goodWindow)
         {
             return false;
         }
@@ -211,7 +239,9 @@ public class JudgementScoreManager : MonoBehaviour
     }
 
     // NoteManager가 판정 시간을 지나쳤다고 알린 노트를 MISS로 처리한다.
-    public void RegisterMiss(NoteManager.RuntimeNote note)
+    public void RegisterMiss(
+        NoteManager.RuntimeNote note,
+        double timeDifference = 0.0)
     {
         if (note == null)
         {
@@ -225,7 +255,7 @@ public class JudgementScoreManager : MonoBehaviour
         result.noteId = note.data.noteId;
         result.lane = note.data.lane;
         result.judgement = JudgementType.Miss;
-        result.timeDifference = 0.0;
+        result.timeDifference = timeDifference;
 
         RaiseEvents(result);
     }

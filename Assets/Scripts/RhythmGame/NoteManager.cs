@@ -288,11 +288,11 @@ public class NoteManager : MonoBehaviour
         return judgeZ + (float)((targetTime - rhythmClock.ChartTime) * noteSpeed);
     }
 
-    // 아직 시작 판정되지 않은 가장 가까운 노트를 찾는다.
-    public RuntimeNote FindClosestNote(int lane, double inputTime, out double timeDifference)
+    // 같은 레인에서 아직 판정되지 않은 가장 앞 노트를 찾는다.
+    // 입력 하나가 뒤 노트로 건너뛰지 않도록 항상 hitTime이 가장 이른 노트만 반환한다.
+    public RuntimeNote FindEarliestPendingNote(int lane)
     {
-        RuntimeNote closestNote = null;
-        timeDifference = double.MaxValue;
+        RuntimeNote earliestNote = null;
 
         for (int i = 0; i < activeNotes.Count; i++)
         {
@@ -302,15 +302,16 @@ public class NoteManager : MonoBehaviour
                 continue;
             }
 
-            double difference = Math.Abs(note.data.hitTime - inputTime);
-            if (difference < timeDifference)
+            if (earliestNote == null
+                || note.data.hitTime < earliestNote.data.hitTime
+                || (Math.Abs(note.data.hitTime - earliestNote.data.hitTime) < 0.000001
+                    && note.data.noteId < earliestNote.data.noteId))
             {
-                timeDifference = difference;
-                closestNote = note;
+                earliestNote = note;
             }
         }
 
-        return closestNote;
+        return earliestNote;
     }
 
     public RuntimeNote FindHoldingNote(int lane)

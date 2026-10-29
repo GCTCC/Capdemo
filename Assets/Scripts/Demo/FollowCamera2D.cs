@@ -24,6 +24,10 @@ public class FollowCamera2D : MonoBehaviour
     [Tooltip("클로즈업으로 들어가고 나오는 데 걸리는 시간(초)")]
     [SerializeField, Min(0f)] private float closeUpSmoothTime = 0.4f;
 
+    [Header("화면 범위")]
+    [Tooltip("이 맵 범위 밖은 보여 주지 않는다. 비우면 씬에서 찾고, 없으면 범위 제한 없이 따라간다.")]
+    [SerializeField] private MapBackground bounds;
+
     private Camera cam;
     private Transform focusA, focusB;
     private Vector3 moveVelocity;
@@ -36,6 +40,12 @@ public class FollowCamera2D : MonoBehaviour
         cam = GetComponent<Camera>();
         cam.orthographic = true;
         cam.orthographicSize = normalSize;
+        if (!target)
+        {
+            var player = FindAnyObjectByType<PlayerController2D>();
+            if (player) target = player.transform;
+        }
+        if (!bounds) bounds = FindAnyObjectByType<MapBackground>();
         if (target) transform.position = WithZ(target.position + (Vector3)followOffset);
     }
 
@@ -64,12 +74,24 @@ public class FollowCamera2D : MonoBehaviour
             goalSize = normalSize;
         }
         else return;
+        goal = ClampToBounds(goal, goalSize);
 
         // 클로즈업에서 돌아오는 동안에도 클로즈업 속도로 움직인다
         bool zoomed = Mathf.Abs(cam.orthographicSize - normalSize) > 0.01f;
         float smoothTime = Focused || zoomed ? closeUpSmoothTime : followSmoothTime;
         transform.position = Vector3.SmoothDamp(transform.position, WithZ(goal), ref moveVelocity, smoothTime);
         cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, goalSize, ref zoomVelocity, closeUpSmoothTime);
+    }
+
+    // 화면 가장자리가 맵 밖으로 나가지 않게 카메라 중심을 안쪽으로 당긴다. 맵이 화면보다 좁으면 가운데에 둔다
+    private Vector3 ClampToBounds(Vector3 goal, float size)
+    {
+        if (!bounds) return goal;
+        var area = bounds.Area;
+        Vector2 half = new Vector2(size * cam.aspect, size);
+        goal.x = area.size.x <= half.x * 2f ? area.center.x : Mathf.Clamp(goal.x, area.min.x + half.x, area.max.x - half.x);
+        goal.y = area.size.y <= half.y * 2f ? area.center.y : Mathf.Clamp(goal.y, area.min.y + half.y, area.max.y - half.y);
+        return goal;
     }
 
     private Vector3 WithZ(Vector3 p) => new Vector3(p.x, p.y, transform.position.z);

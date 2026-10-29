@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-// UI Image에 붙인다. 마우스를 올리면 색과 투명도가 부드럽게 바뀌고, 치우면 원래대로 돌아온다.
-[RequireComponent(typeof(Graphic))]
+// UI Image나 포스트 묶음(빈 부모)에 붙인다. 마우스를 올리면 색과 투명도가 부드럽게 바뀌고, 치우면 원래대로 돌아온다.
+// 묶음 부모에 붙이면 자식(종이·버튼·글자) 어디에 올려도 호버로 인식된다.
 public class HoverFade : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Tooltip("마우스를 올렸을 때 곱해질 색. 흰색이면 색은 그대로이고, A(알파)로 투명도를 정한다.")]
@@ -25,7 +25,8 @@ public class HoverFade : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private void Awake()
     {
-        var own = includeChildren ? GetComponentsInChildren<Graphic>(true) : new[] { GetComponent<Graphic>() };
+        var self = GetComponent<Graphic>();
+        var own = includeChildren ? GetComponentsInChildren<Graphic>(true) : self ? new[] { self } : new Graphic[0];
         int extra = extraTargets != null ? extraTargets.Length : 0;
         targets = new Graphic[own.Length + extra];
         own.CopyTo(targets, 0);

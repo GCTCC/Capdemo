@@ -25,7 +25,7 @@ public class FollowCamera2D : MonoBehaviour
     [SerializeField, Min(0f)] private float closeUpSmoothTime = 0.4f;
 
     [Header("화면 범위")]
-    [Tooltip("이 배경 밖은 보여 주지 않는다. 비우면 씬에서 찾고, 없으면 범위 제한 없이 따라간다.")]
+    [Tooltip("이 맵 범위 밖은 보여 주지 않는다. 비우면 씬에서 찾고, 없으면 범위 제한 없이 따라간다.")]
     [SerializeField] private MapBackground bounds;
 
     private Camera cam;
@@ -83,10 +83,10 @@ public class FollowCamera2D : MonoBehaviour
         cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, goalSize, ref zoomVelocity, closeUpSmoothTime);
     }
 
-    // 화면 가장자리가 배경 밖으로 나가지 않게 카메라 중심을 안쪽으로 당긴다. 배경이 화면보다 좁으면 가운데에 둔다
+    // 화면 가장자리가 맵 밖으로 나가지 않게 카메라 중심을 안쪽으로 당긴다. 맵이 화면보다 좁으면 가운데에 둔다
     private Vector3 ClampToBounds(Vector3 goal, float size)
     {
-        if (!bounds || !bounds.HasImage) return goal;
+        if (!bounds) return goal;
         var area = bounds.Area;
         Vector2 half = new Vector2(size * cam.aspect, size);
         goal.x = area.size.x <= half.x * 2f ? area.center.x : Mathf.Clamp(goal.x, area.min.x + half.x, area.max.x - half.x);

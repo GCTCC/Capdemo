@@ -33,11 +33,12 @@ public static class PlayerAnimMenu
         PixelsPerUnit = 128f, Pivots = Repeat(new Vector2(0.5f, 13f / 256f), 4),
     };
 
-    // Run: 192px 칸, 캐릭터 키 약 159px. 칸 아래에서 발끝까지 11px.
+    // Run: 달리기 GIF(8프레임)를 4x2로 붙인 시트. 256px 칸, 캐릭터 키 약 211px. 칸 아래에서 발끝까지 15px.
+    // 1~4번은 몸이 살짝 등을 보이고 5~8번은 앞을 보여서, 반 사이클마다 반대쪽 다리가 나가는 것처럼 보인다.
     private static readonly Sheet RunSheet = new Sheet
     {
-        File = "Run_Sheet", Prefix = "Run", CellWidth = 192, CellHeight = 192, Columns = 4, Rows = 2,
-        PixelsPerUnit = 92f, Pivots = Repeat(new Vector2(0.5f, 11f / 192f), 8),
+        File = "Run_Sheet", Prefix = "Run", CellWidth = 256, CellHeight = 256, Columns = 4, Rows = 2,
+        PixelsPerUnit = 128f, Pivots = Repeat(new Vector2(0.5f, 15f / 256f), 8),
     };
 
     // Jump: 256x320px 칸 9장, 캐릭터 키 약 218px. 그림 속에서 캐릭터가 직접 뛰어오르는데

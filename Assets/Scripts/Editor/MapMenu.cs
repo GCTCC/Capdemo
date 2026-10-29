@@ -28,8 +28,10 @@ public static class MapMenu
     private static readonly string[] SortingLayers =
         { MapBackground.SortingLayer, MapObject.BackLayer, NpcLayout.SortingLayer, MapObject.FrontLayer };
 
-    // 새 씬에서 배경 그림의 기본 바닥 높이(MapBackground 기본값과 같다): 화면 아래끝 -5에서 2 위
+    // 새 씬의 기본 바닥 높이(MapBackground 기본값과 같다): 맵 아래끝 -5에서 2 위
     private const float DefaultGroundY = -3f;
+    // 시작 지점은 맵(기본 길이 30) 왼쪽 끝에서 2유닛 안쪽
+    private const float DefaultSpawnX = -13f;
     // 플레이어 루트는 몸 중심, 발끝은 0.8 아래
     private const float PlayerHalfHeight = 0.8f;
 
@@ -57,14 +59,14 @@ public static class MapMenu
         var light = new GameObject("Global Light 2D").AddComponent<Light2D>();
         light.lightType = Light2D.LightType.Global;
 
-        new GameObject("Background", typeof(SpriteRenderer), typeof(EdgeCollider2D), typeof(MapBackground));
+        new GameObject("Background", typeof(EdgeCollider2D), typeof(MapBackground));
         new GameObject("Objects");
         new GameObject("NPCs");
         var portals = new GameObject("Portals").transform;
 
         var spawn = (GameObject)PrefabUtility.InstantiatePrefab(Load(SpawnPrefab), portals);
         spawn.name = "Spawn_Start";
-        spawn.transform.position = new Vector3(0f, DefaultGroundY + PlayerHalfHeight, 0f);
+        spawn.transform.position = new Vector3(DefaultSpawnX, DefaultGroundY + PlayerHalfHeight, 0f);
 
         var player = (GameObject)PrefabUtility.InstantiatePrefab(Load(PlayerPrefab));
         player.transform.position = spawn.transform.position;
@@ -73,7 +75,7 @@ public static class MapMenu
         EditorSceneManager.SaveScene(scene, path);
         AddToBuildSettings(path);
         Selection.activeGameObject = GameObject.Find("Background");
-        Debug.Log($"[CapDemo] {path} 를 만들었습니다. Background의 Sprite 칸에 배경 그림을 넣으세요.");
+        Debug.Log($"[CapDemo] {path} 를 만들었습니다. Background의 Image 칸에 배경 그림을 넣고 Map Length로 맵 길이를 정하세요.");
     }
 
     [MenuItem("Tools/CapDemo/맵/맵 부품 준비 (프리팹·그리기 순서·폴더)", priority = 1)]

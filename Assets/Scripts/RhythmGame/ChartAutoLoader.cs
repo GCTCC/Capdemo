@@ -2,40 +2,40 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Resources/RhythmSongs에서 음악과 동명의 중립 JSON 채보를 자동으로 찾는다.
-// 특정 외부 에디터 형식에 종속되지 않으며, 향후 .osu 등의 변환기가 이 JSON을 만들면
-// 리듬게임 런타임 코드를 수정하지 않고 그대로 사용할 수 있다.
+// Resources/RhythmSongs의 음악과 동명 채보를 검색하고 ChartData로 변환한다.
+// 기존 중립 JSON과 NoteEditor JSON을 모두 지원한다.
 [DisallowMultipleComponent]
 public class ChartAutoLoader : MonoBehaviour
 {
+    // 로비가 표시할 곡 하나의 검색 결과다.
+    public class SongEntry
+    {
+        public AudioClip audioClip;
+        public TextAsset chartFile;
+
+        public string DisplayName
+        {
+            get { return audioClip != null ? audioClip.name : "Unknown Song"; }
+        }
+
+        public bool HasChart
+        {
+            get { return chartFile != null; }
+        }
+    }
+
     [Header("Automatic Chart Discovery")]
-    // Assets/Resources 아래에서 음악과 채보를 검색할 상대 경로다.
-    [SerializeField]
-    private string resourcesFolder = "RhythmSongs";
+    [SerializeField] private string resourcesFolder = "RhythmSongs";
+    [SerializeField] private string preferredSongName = "";
+    [SerializeField] private float fallbackBpm = 120.0f;
+    [SerializeField] private bool warnAboutHandPatterns = true;
 
-    // 여러 곡이 있을 때 우선 선택할 파일명이다. 확장자는 입력하지 않는다.
-    // 비워 두면 동명 채보가 있는 첫 음악을 우선하고, 없으면 첫 음악을 선택한다.
-    [SerializeField]
-    private string preferredSongName = "";
-
-    // JSON에 BPM이 없을 때 사용할 기본값이다.
-    [SerializeField]
-    private float fallbackBpm = 120.0f;
-
-    // 호환되지 않는 동시 입력 형태를 발견했을 때 Console에 경고할지 결정한다.
-    [SerializeField]
-    private bool warnAboutHandPatterns = true;
-
-    // 자동으로 생성한 ChartData는 프로젝트 에셋이 아니므로 이 컴포넌트가 소유한다.
     private ChartData runtimeChartData;
 
-    // 동명의 JSON 채보를 실제로 읽었는지 외부에서 확인할 수 있다.
     public bool HasMatchedChart { get; private set; }
-
-    // 마지막 자동 탐색 결과를 디버깅할 때 사용할 설명이다.
     public string LastLoadMessage { get; private set; }
 
-    // 중립 JSON 파일의 최상위 구조다.
+    // 프로젝트의 기존 중립 JSON 형식이다.
     [Serializable]
     private class ExternalChartFile
     {
@@ -49,7 +49,6 @@ public class ChartAutoLoader : MonoBehaviour
         public ExternalNote[] notes;
     }
 
-    // JSON에서 읽은 BPM 변경 데이터다.
     [Serializable]
     private class ExternalBpmEvent
     {
@@ -57,7 +56,6 @@ public class ChartAutoLoader : MonoBehaviour
         public float bpm;
     }
 
-    // JSON에서 읽은 노트 하나의 데이터다.
     [Serializable]
     private class ExternalNote
     {
@@ -68,72 +66,99 @@ public class ChartAutoLoader : MonoBehaviour
         public double endTime;
     }
 
-    // 음악을 하나 찾으면 ChartData를 만든다.
-    // 동명의 JSON이 없으면 노트 목록이 빈 ChartData를 반환하므로 NoteManager가 랜덤 채보를 사용한다.
-    public bool TryLoadChart(out ChartData loadedChart)
+    // GitHub NoteEditor가 출력하는 JSON 형식이다.
+    [Serializable]
+    private class NoteEditorChartFile
     {
-        // 재시작이나 테스트 도중 다시 호출되면 이전 런타임 데이터부터 정리한다.
-        if (runtimeChartData != null)
-        {
-            Destroy(runtimeChartData);
-            runtimeChartData = null;
-        }
+        public string name;
+        public int maxBlock;
+        public float BPM;
+        public double offset;
+        public NoteEditorNote[] notes;
+    }
 
-        loadedChart = null;
-        HasMatchedChart = false;
-        LastLoadMessage = "No music was found.";
+    [Serializable]
+    private class NoteEditorNote
+    {
+        public int LPB;
+        public int num;
+        public int block;
+        public int type;
+        public NoteEditorNote[] notes;
+    }
 
+    // Resources 폴더에서 선택 가능한 모든 음악을 이름순으로 반환한다.
+    public List<SongEntry> GetAvailableSongs()
+    {
         AudioClip[] audioClips = Resources.LoadAll<AudioClip>(resourcesFolder);
         TextAsset[] chartFiles = Resources.LoadAll<TextAsset>(resourcesFolder);
-
-        if (audioClips == null || audioClips.Length == 0)
-        {
-            Debug.Log("ChartAutoLoader: Resources/" + resourcesFolder
-                + "에 음악이 없어 기존 무음 랜덤 채보를 사용합니다.");
-            return false;
-        }
-
         Array.Sort(audioClips, CompareAudioClipNames);
-        AudioClip selectedAudio = SelectAudioClip(audioClips, chartFiles);
-        if (selectedAudio == null)
+
+        List<SongEntry> songs = new List<SongEntry>();
+        for (int i = 0; i < audioClips.Length; i++)
         {
+            SongEntry entry = new SongEntry();
+            entry.audioClip = audioClips[i];
+            entry.chartFile = FindTextAsset(chartFiles, audioClips[i].name);
+            songs.Add(entry);
+        }
+
+        return songs;
+    }
+
+    // 이전 자동 시작 방식과의 호환용 메서드다.
+    public bool TryLoadChart(out ChartData loadedChart)
+    {
+        List<SongEntry> songs = GetAvailableSongs();
+        if (songs.Count == 0)
+        {
+            loadedChart = null;
+            HasMatchedChart = false;
+            LastLoadMessage = "No music was found.";
             return false;
         }
 
-        // 음악만 있어도 랜덤 채보와 함께 재생할 수 있도록 기본 ChartData를 만든다.
+        SongEntry selectedSong = SelectPreferredSong(songs);
+        return TryLoadSong(selectedSong, out loadedChart);
+    }
+
+    // 로비에서 선택한 음악과 동명 채보를 런타임 ChartData로 만든다.
+    public bool TryLoadSong(SongEntry song, out ChartData loadedChart)
+    {
+        ReleaseRuntimeChart();
+        loadedChart = null;
+        HasMatchedChart = false;
+
+        if (song == null || song.audioClip == null)
+        {
+            LastLoadMessage = "선택한 음악이 없습니다.";
+            return false;
+        }
+
         runtimeChartData = ScriptableObject.CreateInstance<ChartData>();
-        runtimeChartData.songId = selectedAudio.name;
-        runtimeChartData.title = selectedAudio.name;
-        runtimeChartData.audioClip = selectedAudio;
+        runtimeChartData.songId = song.audioClip.name;
+        runtimeChartData.title = song.audioClip.name;
+        runtimeChartData.audioClip = song.audioClip;
         runtimeChartData.initialBpm = Mathf.Max(1.0f, fallbackBpm);
         runtimeChartData.musicOffset = 0.0;
         runtimeChartData.notes = new List<NoteData>();
         runtimeChartData.bpmEvents = new List<BpmEventData>();
 
-        TextAsset matchingChart = FindTextAsset(chartFiles, selectedAudio.name);
-        if (matchingChart == null)
+        // 곡만 있으면 빈 채보를 반환하여 NoteManager가 랜덤 노트를 만든다.
+        if (song.chartFile == null)
         {
-            LastLoadMessage = selectedAudio.name
-                + " 음악은 찾았지만 동명의 JSON 채보가 없어 랜덤 채보를 사용합니다.";
+            LastLoadMessage = song.DisplayName
+                + " 음악은 찾았지만 동명 JSON이 없어 랜덤 채보를 사용합니다.";
             Debug.Log("ChartAutoLoader: " + LastLoadMessage);
             loadedChart = runtimeChartData;
             return true;
         }
 
-        if (!LooksLikeJson(matchingChart.text))
+        if (!LooksLikeJson(song.chartFile.text)
+            || !TryApplyJson(song.chartFile.text, runtimeChartData))
         {
-            // .osu처럼 다른 형식의 파일이 같은 이름으로 들어온 경우 자동으로 잘못 해석하지 않는다.
-            LastLoadMessage = matchingChart.name
-                + " 파일은 중립 JSON이 아닙니다. 해당 형식용 변환 어댑터가 필요하므로 랜덤 채보를 사용합니다.";
-            Debug.LogWarning("ChartAutoLoader: " + LastLoadMessage);
-            loadedChart = runtimeChartData;
-            return true;
-        }
-
-        if (!TryApplyJson(matchingChart.text, runtimeChartData))
-        {
-            LastLoadMessage = matchingChart.name
-                + " JSON을 읽지 못해 랜덤 채보를 사용합니다.";
+            LastLoadMessage = song.chartFile.name
+                + " 채보를 읽지 못해 음악과 랜덤 채보를 사용합니다.";
             Debug.LogWarning("ChartAutoLoader: " + LastLoadMessage);
             loadedChart = runtimeChartData;
             return true;
@@ -141,84 +166,173 @@ public class ChartAutoLoader : MonoBehaviour
 
         HasMatchedChart = runtimeChartData.HasNotes;
         LastLoadMessage = HasMatchedChart
-            ? selectedAudio.name + " 음악과 동명 채보를 불러왔습니다."
-            : selectedAudio.name + " 채보에 유효한 노트가 없어 랜덤 채보를 사용합니다.";
+            ? song.DisplayName + " 음악과 동명 채보를 불러왔습니다."
+            : song.DisplayName + " 채보가 비어 있어 랜덤 채보를 사용합니다.";
         Debug.Log("ChartAutoLoader: " + LastLoadMessage);
 
         loadedChart = runtimeChartData;
         return true;
     }
 
-    // 사용자가 지정한 곡을 우선하고, 미지정이면 채보가 있는 음악을 먼저 선택한다.
-    private AudioClip SelectAudioClip(AudioClip[] audioClips, TextAsset[] chartFiles)
+    private SongEntry SelectPreferredSong(List<SongEntry> songs)
     {
         if (!string.IsNullOrWhiteSpace(preferredSongName))
         {
-            for (int i = 0; i < audioClips.Length; i++)
+            string preferred = preferredSongName.Trim();
+            for (int i = 0; i < songs.Count; i++)
             {
                 if (string.Equals(
-                    audioClips[i].name,
-                    preferredSongName.Trim(),
+                    songs[i].DisplayName,
+                    preferred,
                     StringComparison.OrdinalIgnoreCase))
                 {
-                    return audioClips[i];
+                    return songs[i];
                 }
             }
-
-            Debug.LogWarning("ChartAutoLoader: Preferred Song Name '"
-                + preferredSongName + "'과 일치하는 음악을 찾지 못했습니다.");
         }
 
-        for (int i = 0; i < audioClips.Length; i++)
+        for (int i = 0; i < songs.Count; i++)
         {
-            if (FindTextAsset(chartFiles, audioClips[i].name) != null)
+            if (songs[i].HasChart)
             {
-                return audioClips[i];
+                return songs[i];
             }
         }
 
-        return audioClips[0];
+        return songs[0];
     }
 
-    private static int CompareAudioClipNames(AudioClip left, AudioClip right)
+    private bool TryApplyJson(string json, ChartData target)
     {
-        return string.Compare(left.name, right.name, StringComparison.OrdinalIgnoreCase);
-    }
-
-    // 확장자를 제외한 Unity 에셋 이름이 음악 이름과 같은 TextAsset을 찾는다.
-    private static TextAsset FindTextAsset(TextAsset[] chartFiles, string songName)
-    {
-        if (chartFiles == null)
+        if (LooksLikeNoteEditorJson(json))
         {
-            return null;
+            return TryApplyNoteEditorJson(json, target);
         }
 
-        for (int i = 0; i < chartFiles.Length; i++)
-        {
-            if (string.Equals(
-                chartFiles[i].name,
-                songName,
-                StringComparison.OrdinalIgnoreCase))
-            {
-                return chartFiles[i];
-            }
-        }
-
-        return null;
+        return TryApplyNeutralJson(json, target);
     }
 
-    private static bool LooksLikeJson(string text)
+    private bool TryApplyNoteEditorJson(string json, ChartData target)
     {
-        if (string.IsNullOrWhiteSpace(text))
+        NoteEditorChartFile source;
+        try
+        {
+            source = JsonUtility.FromJson<NoteEditorChartFile>(json);
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning("ChartAutoLoader: NoteEditor JSON 파싱 오류 - "
+                + exception.Message);
+            return false;
+        }
+
+        if (source == null || source.notes == null || source.BPM <= 0.0f)
         {
             return false;
         }
 
-        return text.TrimStart().StartsWith("{", StringComparison.Ordinal);
+        if (source.maxBlock != RhythmGameController.LaneCount)
+        {
+            Debug.LogWarning("ChartAutoLoader: NoteEditor 채보가 6라인이 아닙니다. 현재 값: "
+                + source.maxBlock);
+            return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(source.name))
+        {
+            target.songId = source.name;
+            target.title = source.name;
+        }
+
+        target.initialBpm = source.BPM;
+
+        // NoteEditor의 offset은 밀리초가 아니라 원본 음원의 샘플 개수다.
+        // 실제 초 단위 값은 offset / sampleRate로 계산해야 한다.
+        int sampleRate = target.audioClip != null
+            ? target.audioClip.frequency
+            : 44100;
+        target.musicOffset = source.offset / sampleRate;
+        target.bpmEvents.Clear();
+
+        BpmEventData initialEvent = new BpmEventData();
+        initialEvent.beat = 0.0;
+        initialEvent.bpm = source.BPM;
+        target.bpmEvents.Add(initialEvent);
+
+        target.notes.Clear();
+        for (int i = 0; i < source.notes.Length; i++)
+        {
+            NoteEditorNote sourceNote = source.notes[i];
+            if (sourceNote == null
+                || sourceNote.block < 0
+                || sourceNote.block >= RhythmGameController.LaneCount
+                || sourceNote.LPB <= 0)
+            {
+                continue;
+            }
+
+            double hitTime = ConvertNoteEditorTime(
+                sourceNote.num,
+                sourceNote.LPB,
+                source.BPM,
+                source.offset,
+                sampleRate);
+
+            NoteData note = new NoteData();
+            note.noteId = i;
+            note.lane = sourceNote.block;
+            note.hitTime = hitTime;
+
+            if (sourceNote.type == 2)
+            {
+                note.noteType = NoteType.Hold;
+                note.endTime = hitTime;
+
+                if (sourceNote.notes != null
+                    && sourceNote.notes.Length > 0
+                    && sourceNote.notes[0] != null
+                    && sourceNote.notes[0].LPB > 0)
+                {
+                    NoteEditorNote endNote = sourceNote.notes[0];
+                    note.endTime = ConvertNoteEditorTime(
+                        endNote.num,
+                        endNote.LPB,
+                        source.BPM,
+                        source.offset,
+                        sampleRate);
+                }
+
+                // 끝점이 없는 비정상 롱노트는 탭 노트로 안전하게 처리한다.
+                if (note.endTime <= note.hitTime)
+                {
+                    note.noteType = NoteType.Tap;
+                    note.endTime = note.hitTime;
+                }
+            }
+            else if (sourceNote.type == 1)
+            {
+                note.noteType = NoteType.Tap;
+                note.endTime = hitTime;
+            }
+            else
+            {
+                continue;
+            }
+
+            target.notes.Add(note);
+        }
+
+        target.notes.Sort(CompareNoteTimes);
+        WarnIfRequested(target.notes);
+        Debug.Log("ChartAutoLoader: NoteEditor 채보에서 "
+            + target.notes.Count + "개의 노트를 변환했습니다. offset="
+            + source.offset + " samples ("
+            + target.musicOffset.ToString("0.0000") + "초, "
+            + sampleRate + "Hz)");
+        return target.notes.Count > 0;
     }
 
-    // 중립 JSON을 현재 게임이 사용하는 ChartData와 NoteData로 변환한다.
-    private bool TryApplyJson(string json, ChartData target)
+    private bool TryApplyNeutralJson(string json, ChartData target)
     {
         ExternalChartFile source;
         try
@@ -276,17 +390,10 @@ public class ChartAutoLoader : MonoBehaviour
             for (int i = 0; i < source.notes.Length; i++)
             {
                 ExternalNote externalNote = source.notes[i];
-                if (externalNote.lane < 0 || externalNote.lane >= 6)
+                if (externalNote.lane < 0
+                    || externalNote.lane >= RhythmGameController.LaneCount
+                    || externalNote.hitTime < 0.0)
                 {
-                    Debug.LogWarning("ChartAutoLoader: " + i
-                        + "번 노트의 lane이 0~5 범위를 벗어나 제외했습니다.");
-                    continue;
-                }
-
-                if (externalNote.hitTime < 0.0)
-                {
-                    Debug.LogWarning("ChartAutoLoader: " + i
-                        + "번 노트의 hitTime이 음수라 제외했습니다.");
                     continue;
                 }
 
@@ -314,27 +421,80 @@ public class ChartAutoLoader : MonoBehaviour
             }
         }
 
-        // NoteManager가 앞에서부터 생성하므로 판정 시각 기준 오름차순으로 정렬한다.
         target.notes.Sort(CompareNoteTimes);
+        WarnIfRequested(target.notes);
+        return true;
+    }
 
+    private void WarnIfRequested(List<NoteData> notes)
+    {
         if (warnAboutHandPatterns)
         {
-            WarnForUnsupportedChords(target.notes);
+            WarnForUnsupportedChords(notes);
+        }
+    }
+
+    private static double ConvertNoteEditorTime(
+        int num,
+        int lpb,
+        float bpm,
+        double offsetSamples,
+        int sampleRate)
+    {
+        double secondsPerBeat = 60.0 / bpm;
+        double beatPosition = num / (double)lpb;
+        double offsetSeconds = sampleRate > 0
+            ? offsetSamples / sampleRate
+            : 0.0;
+        return offsetSeconds + beatPosition * secondsPerBeat;
+    }
+
+    private static bool LooksLikeNoteEditorJson(string json)
+    {
+        return json.Contains("\"maxBlock\"")
+            && json.Contains("\"BPM\"")
+            && json.Contains("\"LPB\"");
+    }
+
+    private static bool LooksLikeJson(string text)
+    {
+        return !string.IsNullOrWhiteSpace(text)
+            && text.TrimStart().StartsWith("{", StringComparison.Ordinal);
+    }
+
+    private static int CompareAudioClipNames(AudioClip left, AudioClip right)
+    {
+        return string.Compare(left.name, right.name, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static TextAsset FindTextAsset(TextAsset[] chartFiles, string songName)
+    {
+        if (chartFiles == null)
+        {
+            return null;
         }
 
-        return true;
+        for (int i = 0; i < chartFiles.Length; i++)
+        {
+            if (string.Equals(
+                chartFiles[i].name,
+                songName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return chartFiles[i];
+            }
+        }
+
+        return null;
     }
 
     private static NoteType ParseNoteType(string type)
     {
         NoteType parsedType;
-        if (!string.IsNullOrWhiteSpace(type)
-            && Enum.TryParse(type, true, out parsedType))
-        {
-            return parsedType;
-        }
-
-        return NoteType.Tap;
+        return !string.IsNullOrWhiteSpace(type)
+            && Enum.TryParse(type, true, out parsedType)
+            ? parsedType
+            : NoteType.Tap;
     }
 
     private static int CompareNoteTimes(NoteData left, NoteData right)
@@ -345,7 +505,6 @@ public class ChartAutoLoader : MonoBehaviour
             : left.lane.CompareTo(right.lane);
     }
 
-    // 현재 프로토타입 규칙인 최대 2개, 왼손·오른손 하나씩 구성에서 벗어나면 경고한다.
     private static void WarnForUnsupportedChords(List<NoteData> notes)
     {
         const double simultaneousTolerance = 0.001;
@@ -366,8 +525,7 @@ public class ChartAutoLoader : MonoBehaviour
             {
                 Debug.LogWarning("ChartAutoLoader: "
                     + notes[start].hitTime.ToString("0.000")
-                    + "초에 " + count
-                    + "개 노트가 동시에 있습니다. 현재 권장 규칙은 최대 2개입니다.");
+                    + "초에 " + count + "개 노트가 동시에 있습니다.");
             }
             else if (count == 2)
             {
@@ -385,11 +543,17 @@ public class ChartAutoLoader : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void ReleaseRuntimeChart()
     {
         if (runtimeChartData != null)
         {
             Destroy(runtimeChartData);
+            runtimeChartData = null;
         }
+    }
+
+    private void OnDestroy()
+    {
+        ReleaseRuntimeChart();
     }
 }

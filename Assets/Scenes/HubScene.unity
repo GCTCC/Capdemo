@@ -948,6 +948,7 @@ GameObject:
   - component: {fileID: 586945398}
   - component: {fileID: 586945400}
   - component: {fileID: 586945399}
+  - component: {fileID: 586945401}
   m_Layer: 5
   m_Name: Button (2)
   m_TagString: Untagged
@@ -1099,6 +1100,7 @@ GameObject:
   - component: {fileID: 622636998}
   - component: {fileID: 622637000}
   - component: {fileID: 622636999}
+  - component: {fileID: 622637001}
   m_Layer: 5
   m_Name: ButtonShadow
   m_TagString: Untagged
@@ -1592,6 +1594,7 @@ GameObject:
   - component: {fileID: 1059703909}
   - component: {fileID: 1059703911}
   - component: {fileID: 1059703910}
+  - component: {fileID: 1059703912}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2571,6 +2574,7 @@ GameObject:
   - component: {fileID: 1701534074}
   - component: {fileID: 1701534076}
   - component: {fileID: 1701534075}
+  - component: {fileID: 1701534077}
   m_Layer: 5
   m_Name: BoardPost
   m_TagString: Untagged
@@ -3299,6 +3303,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109194813}
   m_CullTransparentMesh: 1
+--- !u!114 &586945401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586945397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3b7a82ef2d4251996bdc0b6dc19841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RhythmSceneLauncher
+  rhythmSceneName: RhythmScene
+  songName: 
+  returnSceneName: 
+  launchOnPointerClick: 1
+  pointerLaunchMode: 0
+--- !u!114 &622637001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622636997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3b7a82ef2d4251996bdc0b6dc19841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RhythmSceneLauncher
+  rhythmSceneName: RhythmScene
+  songName: 
+  returnSceneName: 
+  launchOnPointerClick: 1
+  pointerLaunchMode: 0
+--- !u!114 &1059703912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059703908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3b7a82ef2d4251996bdc0b6dc19841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RhythmSceneLauncher
+  rhythmSceneName: RhythmScene
+  songName: 
+  returnSceneName: 
+  launchOnPointerClick: 1
+  pointerLaunchMode: 0
+--- !u!114 &1701534077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701534073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a3b7a82ef2d4251996bdc0b6dc19841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RhythmSceneLauncher
+  rhythmSceneName: RhythmScene
+  songName: 
+  returnSceneName: 
+  launchOnPointerClick: 1
+  pointerLaunchMode: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

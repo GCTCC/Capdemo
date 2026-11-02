@@ -12,6 +12,7 @@ public class ChartAutoLoader : MonoBehaviour
     {
         public AudioClip audioClip;
         public TextAsset chartFile;
+        public Texture2D albumCover;
 
         public string DisplayName
         {
@@ -92,6 +93,8 @@ public class ChartAutoLoader : MonoBehaviour
     {
         AudioClip[] audioClips = Resources.LoadAll<AudioClip>(resourcesFolder);
         TextAsset[] chartFiles = Resources.LoadAll<TextAsset>(resourcesFolder);
+        Texture2D[] coverTextures = Resources.LoadAll<Texture2D>(resourcesFolder);
+        Sprite[] coverSprites = Resources.LoadAll<Sprite>(resourcesFolder);
         Array.Sort(audioClips, CompareAudioClipNames);
 
         List<SongEntry> songs = new List<SongEntry>();
@@ -100,6 +103,11 @@ public class ChartAutoLoader : MonoBehaviour
             SongEntry entry = new SongEntry();
             entry.audioClip = audioClips[i];
             entry.chartFile = FindTextAsset(chartFiles, audioClips[i].name);
+            entry.albumCover = FindTexture(coverTextures, audioClips[i].name);
+            if (entry.albumCover == null)
+            {
+                entry.albumCover = FindSpriteTexture(coverSprites, audioClips[i].name);
+            }
             songs.Add(entry);
         }
 
@@ -482,6 +490,49 @@ public class ChartAutoLoader : MonoBehaviour
                 StringComparison.OrdinalIgnoreCase))
             {
                 return chartFiles[i];
+            }
+        }
+
+        return null;
+    }
+
+    // 음악과 확장자를 제외한 이름이 같은 이미지를 앨범커버로 연결한다.
+    private static Texture2D FindTexture(Texture2D[] textures, string songName)
+    {
+        if (textures == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < textures.Length; i++)
+        {
+            if (string.Equals(
+                textures[i].name,
+                songName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return textures[i];
+            }
+        }
+
+        return null;
+    }
+
+    private static Texture2D FindSpriteTexture(Sprite[] sprites, string songName)
+    {
+        if (sprites == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            if (string.Equals(
+                sprites[i].name,
+                songName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return sprites[i].texture;
             }
         }
 

@@ -1,10 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Resources/RhythmSongs에서 찾은 곡을 보여주고 플레이할 곡을 선택받는 로비다.
+// 먹색 카드, 아이보리 타이포와 적색 선택 강조를 사용하는 곡 선택 로비다.
 [DisallowMultipleComponent]
 public class SongLobbyMenu : MonoBehaviour
 {
+    private static readonly Color Ink = new Color(0.018f, 0.016f, 0.015f, 0.98f);
+    private static readonly Color InkSoft = new Color(0.065f, 0.055f, 0.048f, 0.98f);
+    private static readonly Color Cream = new Color(0.94f, 0.88f, 0.75f, 1.0f);
+    private static readonly Color CreamDim = new Color(0.68f, 0.62f, 0.52f, 1.0f);
+    private static readonly Color DeepRed = new Color(0.55f, 0.075f, 0.08f, 1.0f);
+    private static readonly Color Cyan = new Color(0.13f, 0.90f, 0.88f, 1.0f);
+
     private RhythmGameController controller;
     private List<ChartAutoLoader.SongEntry> songs
         = new List<ChartAutoLoader.SongEntry>();
@@ -45,58 +52,56 @@ public class SongLobbyMenu : MonoBehaviour
         }
 
         GUI.depth = -200;
-        DrawScreenRect(
-            new Rect(0.0f, 0.0f, Screen.width, Screen.height),
-            new Color(0.004f, 0.008f, 0.028f, 0.96f));
+        DrawRect(new Rect(0.0f, 0.0f, Screen.width, Screen.height), Ink);
+        DrawBackdropAccents();
 
-        float panelWidth = Mathf.Min(760.0f, Screen.width * 0.86f);
-        float panelHeight = Mathf.Min(650.0f, Screen.height * 0.84f);
+        float panelWidth = Mathf.Min(940.0f, Screen.width * 0.88f);
+        float panelHeight = Mathf.Min(720.0f, Screen.height * 0.88f);
         Rect panel = new Rect(
             (Screen.width - panelWidth) * 0.5f,
             (Screen.height - panelHeight) * 0.5f,
             panelWidth,
             panelHeight);
 
-        DrawScreenRect(panel, new Color(0.025f, 0.035f, 0.095f, 0.98f));
-        DrawScreenRect(
-            new Rect(panel.x, panel.y, panel.width, 5.0f),
-            new Color(0.08f, 0.95f, 1.0f));
-        DrawScreenRect(
-            new Rect(panel.x, panel.yMax - 5.0f, panel.width, 5.0f),
-            new Color(1.0f, 0.08f, 0.72f));
+        DrawRect(new Rect(panel.x + 8.0f, panel.y + 10.0f, panel.width, panel.height),
+            new Color(0.0f, 0.0f, 0.0f, 0.40f));
+        DrawRect(panel, new Color(0.035f, 0.03f, 0.027f, 0.98f));
+        DrawRect(new Rect(panel.x, panel.y, 12.0f, panel.height), DeepRed);
+        DrawRect(new Rect(panel.x, panel.y, panel.width, 2.0f), CreamDim);
 
-        GUIStyle titleStyle = new GUIStyle(GUI.skin.label);
-        titleStyle.alignment = TextAnchor.MiddleCenter;
-        titleStyle.fontSize = Mathf.Max(32, Screen.height / 21);
-        titleStyle.fontStyle = FontStyle.Bold;
-        titleStyle.normal.textColor = new Color(0.32f, 1.0f, 0.96f);
-
-        GUIStyle guideStyle = new GUIStyle(GUI.skin.label);
-        guideStyle.alignment = TextAnchor.MiddleCenter;
-        guideStyle.fontSize = Mathf.Max(15, Screen.height / 52);
-        guideStyle.normal.textColor = new Color(0.70f, 0.82f, 1.0f);
+        GUIStyle overlineStyle = MakeStyle(
+            Mathf.Max(13, Screen.height / 58),
+            CreamDim,
+            FontStyle.Bold,
+            TextAnchor.MiddleLeft);
+        GUIStyle titleStyle = MakeStyle(
+            Mathf.Max(34, Screen.height / 21),
+            Cream,
+            FontStyle.Bold,
+            TextAnchor.MiddleLeft);
 
         GUI.Label(
-            new Rect(panel.x, panel.y + 22.0f, panel.width, 58.0f),
-            "SONG SELECT // 곡 선택",
+            new Rect(panel.x + 42.0f, panel.y + 22.0f, panel.width - 84.0f, 26.0f),
+            controller.CurrentModeLabel + "  //  MUSIC ARCHIVE",
+            overlineStyle);
+        GUI.Label(
+            new Rect(panel.x + 40.0f, panel.y + 48.0f, panel.width - 80.0f, 58.0f),
+            "곡 선택  /  SONG SELECT",
             titleStyle);
-        GUI.Label(
-            new Rect(panel.x, panel.y + 76.0f, panel.width, 30.0f),
-            "채보 있음: JSON 플레이  ·  채보 없음: 랜덤 노트 플레이",
-            guideStyle);
 
         if (songs.Count == 0)
         {
-            DrawEmptyLobby(panel, guideStyle);
+            DrawEmptyLobby(panel);
             return;
         }
 
         Rect listRect = new Rect(
-            panel.x + 44.0f,
-            panel.y + 125.0f,
-            panel.width - 88.0f,
-            panel.height - 205.0f);
-        float contentHeight = Mathf.Max(listRect.height, songs.Count * 76.0f);
+            panel.x + 40.0f,
+            panel.y + 128.0f,
+            panel.width - 80.0f,
+            panel.height - 210.0f);
+        float rowHeight = 94.0f;
+        float contentHeight = Mathf.Max(listRect.height, songs.Count * rowHeight);
         scrollPosition = GUI.BeginScrollView(
             listRect,
             scrollPosition,
@@ -104,66 +109,91 @@ public class SongLobbyMenu : MonoBehaviour
 
         GUIStyle songButtonStyle = new GUIStyle(GUI.skin.button);
         songButtonStyle.alignment = TextAnchor.MiddleLeft;
-        songButtonStyle.fontSize = Mathf.Max(18, Screen.height / 42);
+        songButtonStyle.fontSize = Mathf.Max(18, Screen.height / 43);
         songButtonStyle.fontStyle = FontStyle.Bold;
-        songButtonStyle.padding = new RectOffset(22, 14, 6, 6);
-        songButtonStyle.normal.textColor = Color.white;
-        songButtonStyle.hover.textColor = new Color(0.30f, 1.0f, 0.95f);
+        songButtonStyle.padding = new RectOffset(102, 150, 8, 8);
+        songButtonStyle.normal.textColor = Cream;
+        songButtonStyle.hover.textColor = Color.white;
+        songButtonStyle.active.textColor = Cream;
+
+        GUIStyle stateStyle = MakeStyle(
+            Mathf.Max(12, Screen.height / 61),
+            CreamDim,
+            FontStyle.Bold,
+            TextAnchor.MiddleRight);
 
         for (int i = 0; i < songs.Count; i++)
         {
             ChartAutoLoader.SongEntry song = songs[i];
-            string chartState = song.HasChart
-                ? "  [채보 있음]"
-                : "  [랜덤 채보]";
+            Rect row = new Rect(2.0f, i * rowHeight + 3.0f, listRect.width - 30.0f, 82.0f);
 
             GUI.backgroundColor = song.HasChart
-                ? new Color(0.08f, 0.42f, 0.52f)
-                : new Color(0.34f, 0.12f, 0.42f);
+                ? new Color(0.22f, 0.065f, 0.06f, 1.0f)
+                : new Color(0.10f, 0.085f, 0.075f, 1.0f);
 
-            if (GUI.Button(
-                new Rect(4.0f, i * 76.0f + 4.0f, listRect.width - 32.0f, 62.0f),
-                song.DisplayName + chartState,
-                songButtonStyle))
+            if (GUI.Button(row, song.DisplayName, songButtonStyle))
             {
                 controller.PlaySelectedSong(song);
             }
+
+            Rect coverRect = new Rect(row.x + 8.0f, row.y + 7.0f, 68.0f, 68.0f);
+            DrawAlbumCover(song.albumCover, coverRect);
+            DrawRect(new Rect(row.x + 84.0f, row.y + 12.0f, 3.0f, row.height - 24.0f),
+                song.HasChart ? DeepRed : CreamDim);
+
+            GUI.Label(
+                new Rect(row.xMax - 148.0f, row.y + 17.0f, 132.0f, 48.0f),
+                song.HasChart ? "CHART READY" : "RANDOM NOTES",
+                stateStyle);
         }
 
         GUI.backgroundColor = Color.white;
         GUI.EndScrollView();
 
+        GUIStyle refreshStyle = new GUIStyle(GUI.skin.button);
+        refreshStyle.fontSize = Mathf.Max(14, Screen.height / 55);
+        refreshStyle.fontStyle = FontStyle.Bold;
+        refreshStyle.normal.textColor = Cream;
+        GUI.backgroundColor = DeepRed;
         if (GUI.Button(
-            new Rect(panel.xMax - 180.0f, panel.yMax - 58.0f, 136.0f, 38.0f),
-            "목록 새로고침"))
+            new Rect(panel.xMax - 198.0f, panel.yMax - 58.0f, 154.0f, 38.0f),
+            "목록 새로고침",
+            refreshStyle))
         {
             controller.RefreshLobbySongs(wasOpenedFromPause);
         }
+        GUI.backgroundColor = Color.white;
     }
 
-    private void DrawEmptyLobby(Rect panel, GUIStyle guideStyle)
+    private void DrawEmptyLobby(Rect panel)
     {
-        GUIStyle emptyStyle = new GUIStyle(guideStyle);
-        emptyStyle.fontSize = Mathf.Max(20, Screen.height / 35);
-        emptyStyle.normal.textColor = new Color(1.0f, 0.45f, 0.78f);
+        GUIStyle titleStyle = MakeStyle(
+            Mathf.Max(23, Screen.height / 33),
+            Cream,
+            FontStyle.Bold,
+            TextAnchor.MiddleCenter);
+        GUIStyle guideStyle = MakeStyle(
+            Mathf.Max(15, Screen.height / 52),
+            CreamDim,
+            FontStyle.Normal,
+            TextAnchor.MiddleCenter);
 
         GUI.Label(
-            new Rect(panel.x + 30.0f, panel.center.y - 70.0f, panel.width - 60.0f, 50.0f),
-            "Resources/RhythmSongs에 음악 파일이 없습니다.",
-            emptyStyle);
-
+            new Rect(panel.x + 35.0f, panel.center.y - 75.0f, panel.width - 70.0f, 48.0f),
+            "등록된 음악이 없습니다.",
+            titleStyle);
         GUI.Label(
-            new Rect(panel.x + 30.0f, panel.center.y - 20.0f, panel.width - 60.0f, 54.0f),
-            "음악 없이 랜덤 채보를 다시 시작할 수 있습니다.",
+            new Rect(panel.x + 35.0f, panel.center.y - 28.0f, panel.width - 70.0f, 48.0f),
+            "Resources/RhythmSongs에 OGG와 JSON을 추가해 주세요.",
             guideStyle);
 
         GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
-        buttonStyle.fontSize = Mathf.Max(20, Screen.height / 38);
+        buttonStyle.fontSize = Mathf.Max(18, Screen.height / 42);
         buttonStyle.fontStyle = FontStyle.Bold;
-
-        GUI.backgroundColor = new Color(0.18f, 0.22f, 0.50f);
+        buttonStyle.normal.textColor = Cream;
+        GUI.backgroundColor = DeepRed;
         if (GUI.Button(
-            new Rect(panel.center.x - 150.0f, panel.center.y + 55.0f, 300.0f, 58.0f),
+            new Rect(panel.center.x - 150.0f, panel.center.y + 55.0f, 300.0f, 56.0f),
             "랜덤 모드 시작",
             buttonStyle))
         {
@@ -172,11 +202,57 @@ public class SongLobbyMenu : MonoBehaviour
         GUI.backgroundColor = Color.white;
     }
 
-    private static void DrawScreenRect(Rect rect, Color color)
+    private static void DrawAlbumCover(Texture2D texture, Rect rect)
     {
-        Color oldColor = GUI.color;
+        DrawRect(new Rect(rect.x - 2.0f, rect.y - 2.0f, rect.width + 4.0f, rect.height + 4.0f),
+            CreamDim);
+
+        if (texture != null)
+        {
+            GUI.DrawTexture(rect, texture, ScaleMode.ScaleAndCrop, true);
+            return;
+        }
+
+        DrawRect(rect, InkSoft);
+        DrawRect(new Rect(rect.x, rect.y, rect.width, 12.0f), DeepRed);
+
+        GUIStyle fallbackStyle = MakeStyle(
+            11,
+            Cream,
+            FontStyle.Bold,
+            TextAnchor.MiddleCenter);
+        GUI.Label(rect, "NO\nCOVER", fallbackStyle);
+    }
+
+    private static void DrawBackdropAccents()
+    {
+        DrawRect(new Rect(0.0f, Screen.height * 0.13f, Screen.width * 0.22f, 2.0f),
+            new Color(DeepRed.r, DeepRed.g, DeepRed.b, 0.55f));
+        DrawRect(new Rect(Screen.width * 0.80f, Screen.height * 0.84f,
+            Screen.width * 0.20f, 2.0f),
+            new Color(Cyan.r, Cyan.g, Cyan.b, 0.35f));
+    }
+
+    private static GUIStyle MakeStyle(
+        int size,
+        Color color,
+        FontStyle fontStyle,
+        TextAnchor alignment)
+    {
+        GUIStyle style = new GUIStyle(GUI.skin.label);
+        style.fontSize = size;
+        style.fontStyle = fontStyle;
+        style.alignment = alignment;
+        style.clipping = TextClipping.Clip;
+        style.normal.textColor = color;
+        return style;
+    }
+
+    private static void DrawRect(Rect rect, Color color)
+    {
+        Color previous = GUI.color;
         GUI.color = color;
         GUI.DrawTexture(rect, Texture2D.whiteTexture);
-        GUI.color = oldColor;
+        GUI.color = previous;
     }
 }

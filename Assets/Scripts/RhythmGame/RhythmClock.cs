@@ -129,6 +129,40 @@ public class RhythmClock : MonoBehaviour
     public bool IsPaused { get { return isPaused; } }
     public float PlaybackScale { get { return playbackScale; } }
 
+    public float SongDuration
+    {
+        get
+        {
+            return musicSource != null && musicSource.clip != null
+                ? musicSource.clip.length
+                : 0.0f;
+        }
+    }
+
+    public float NormalizedProgress
+    {
+        get
+        {
+            float duration = SongDuration;
+            return duration > 0.0f
+                ? Mathf.Clamp01((float)(SongTime / duration))
+                : 0.0f;
+        }
+    }
+
+    // 음악 파일이 끝까지 재생되었는지 컨트롤러가 확인할 때 사용한다.
+    public bool IsSongFinished
+    {
+        get
+        {
+            float duration = SongDuration;
+            return isPlaying
+                && duration > 0.0f
+                && HasStarted
+                && lastAudioSongTime >= duration - 0.08f;
+        }
+    }
+
     // 음악이 예약된 DSP 시작 시각에 실제로 도달했는지 알려준다.
     // 음악이 없는 랜덤 모드는 StartClock 호출 즉시 true가 된다.
     public bool HasStarted

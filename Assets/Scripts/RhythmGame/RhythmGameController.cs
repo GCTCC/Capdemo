@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 // 로비, 입력과 리듬게임 기능별 컴포넌트를 연결하는 최상위 컨트롤러다.
 [RequireComponent(typeof(RhythmClock))]
@@ -11,6 +14,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(RhythmGameUI))]
 [RequireComponent(typeof(PauseMenu))]
 [RequireComponent(typeof(SongLobbyMenu))]
+[RequireComponent(typeof(RhythmSceneTransition))]
 [DisallowMultipleComponent]
 public class RhythmGameController : MonoBehaviour
 {
@@ -53,12 +57,48 @@ public class RhythmGameController : MonoBehaviour
     private RhythmGameUI gameUI;
     private PauseMenu pauseMenu;
     private SongLobbyMenu songLobbyMenu;
+    private RhythmSceneTransition sceneTransition;
     private ChartData activeChartData;
     private List<ChartAutoLoader.SongEntry> availableSongs;
+    private RhythmEntryMode entryMode = RhythmEntryMode.Direct;
+    private string returnSceneName = "";
+    private string currentSongTitle = "NO TRACK";
+    private bool isEndingSong;
 
     public bool IsGameplayActive
     {
         get { return gameplayActive; }
+    }
+
+    public bool IsTransitioning
+    {
+        get { return sceneTransition != null && sceneTransition.IsBusy; }
+    }
+
+    public string CurrentSongTitle
+    {
+        get { return currentSongTitle; }
+    }
+
+    public string CurrentModeLabel
+    {
+        get
+        {
+            switch (entryMode)
+            {
+                case RhythmEntryMode.Story:
+                    return "STORY MODE";
+                case RhythmEntryMode.Single:
+                    return "SINGLE PLAY";
+                default:
+                    return "FREE PLAY";
+            }
+        }
+    }
+
+    public bool IsStoryMode
+    {
+        get { return entryMode == RhythmEntryMode.Story; }
     }
 
     private void Awake()
@@ -73,6 +113,7 @@ public class RhythmGameController : MonoBehaviour
         gameUI = GetComponent<RhythmGameUI>();
         pauseMenu = GetComponent<PauseMenu>();
         songLobbyMenu = GetComponent<SongLobbyMenu>();
+        sceneTransition = GetComponent<RhythmSceneTransition>();
 
         BuildInputActions();
         playField.PrepareForPlay();
@@ -85,18 +126,36 @@ public class RhythmGameController : MonoBehaviour
         judgementScoreManager.Judged += HandleJudged;
 
         availableSongs = chartAutoLoader.GetAvailableSongs();
+
+        RhythmLaunchRequest launchRequest;
+        if (RhythmLaunchContext.TryConsume(out launchRequest))
+        {
+            entryMode = launchRequest.mode;
+            returnSceneName = launchRequest.returnSceneName;
+
+            if (!string.IsNullOrWhiteSpace(launchRequest.songName))
+            {
+                ChartAutoLoader.SongEntry requestedSong = FindSongByName(
+                    launchRequest.songName);
+                if (requestedSong != null)
+                {
+                    StartCoroutine(BeginSelectedSong(requestedSong));
+                    return;
+                }
+
+                Debug.LogWarning("RhythmGameController: 요청한 곡 '"
+                    + launchRequest.songName + "'을 찾지 못해 곡 선택 화면을 엽니다.");
+            }
+        }
+
         if (availableSongs.Count > 0)
         {
-            // 음악이 하나라도 있으면 재생 전에 반드시 로비에서 선택한다.
-            gameplayActive = false;
-            gameUI.SetVisible(false);
-            songLobbyMenu.Show(availableSongs, false);
+            ShowLobby(false, true);
+            return;
         }
-        else
-        {
-            // 음악과 채보가 모두 없으면 기존처럼 무음 랜덤 모드를 바로 시작한다.
-            StartGameplay(chartData);
-        }
+
+        // 음악과 채보가 모두 없으면 기존처럼 무음 랜덤 모드를 시작한다.
+        StartCoroutine(BeginRandomMode());
     }
 
     private void OnEnable()
@@ -122,10 +181,15 @@ public class RhythmGameController : MonoBehaviour
             return;
         }
 
-        if (gameplayActive)
+        if (gameplayActive && !IsTransitioning && !isEndingSong)
         {
             HandleLaneActions();
             noteManager.Tick();
+
+            if (rhythmClock.IsSongFinished)
+            {
+                StartCoroutine(FinishSong());
+            }
         }
 
         playField.UpdateLaneGlows(IsLaneHeldForView);
@@ -134,18 +198,20 @@ public class RhythmGameController : MonoBehaviour
     // 로비에서 누른 곡을 ChartData로 만든 뒤 게임을 시작한다.
     public void PlaySelectedSong(ChartAutoLoader.SongEntry song)
     {
-        ChartData selectedChart;
-        if (!chartAutoLoader.TryLoadSong(song, out selectedChart))
+        if (song == null || IsTransitioning || gameplayActive)
         {
             return;
         }
 
-        StartGameplay(selectedChart);
+        StartCoroutine(BeginSelectedSong(song));
     }
 
     public void PlayRandomWithoutMusic()
     {
-        StartGameplay(null);
+        if (!IsTransitioning && !gameplayActive)
+        {
+            StartCoroutine(BeginRandomMode());
+        }
     }
 
     public void RefreshLobbySongs(bool openedFromPause)
@@ -157,9 +223,57 @@ public class RhythmGameController : MonoBehaviour
     // 일시정지 메뉴의 나가기 버튼이 호출하는 로비 복귀 진입점이다.
     public void ReturnToLobby()
     {
-        StopCurrentGameplay();
+        if (!isEndingSong)
+        {
+            StartCoroutine(ExitGameplay(entryMode == RhythmEntryMode.Story));
+        }
+    }
+
+    private IEnumerator BeginSelectedSong(ChartAutoLoader.SongEntry song)
+    {
+        ChartData selectedChart;
+        if (!chartAutoLoader.TryLoadSong(song, out selectedChart))
+        {
+            yield break;
+        }
+
+        gameplayActive = false;
+        currentSongTitle = song.DisplayName;
+        songLobbyMenu.Hide();
+        gameUI.SetVisible(false);
+
+        yield return sceneTransition.PlaySongIntro(
+            song.albumCover,
+            song.DisplayName,
+            CurrentModeLabel,
+            delegate { StartGameplay(selectedChart); });
+    }
+
+    private IEnumerator BeginRandomMode()
+    {
+        gameplayActive = false;
+        currentSongTitle = "RANDOM PROTOCOL";
+        songLobbyMenu.Hide();
+        gameUI.SetVisible(false);
+
+        yield return sceneTransition.PlaySongIntro(
+            null,
+            currentSongTitle,
+            CurrentModeLabel,
+            delegate { StartGameplay(null); });
+    }
+
+    private void ShowLobby(bool openedFromPause, bool revealScene)
+    {
+        gameplayActive = false;
+        gameUI.SetVisible(false);
         availableSongs = chartAutoLoader.GetAvailableSongs();
-        songLobbyMenu.Show(availableSongs, true);
+        songLobbyMenu.Show(availableSongs, openedFromPause);
+
+        if (revealScene)
+        {
+            StartCoroutine(sceneTransition.RevealScene());
+        }
     }
 
     private void StartGameplay(ChartData selectedChart)
@@ -171,7 +285,12 @@ public class RhythmGameController : MonoBehaviour
 
         noteManager.ClearNotes();
         activeChartData = selectedChart;
+        if (activeChartData != null && !string.IsNullOrWhiteSpace(activeChartData.title))
+        {
+            currentSongTitle = activeChartData.title;
+        }
         judgementScoreManager.ResetScore();
+        isEndingSong = false;
 
         noteManager.Initialize(
             rhythmClock,
@@ -179,10 +298,10 @@ public class RhythmGameController : MonoBehaviour
             leftNoteMaterial,
             rightNoteMaterial,
             playField.NearZ,
-            playField.FarZ,
+            playField.NoteSpawnZ,
             playField.JudgeZ,
             playField.NearHalfWidth,
-            playField.FarHalfWidth,
+            playField.NoteSpawnHalfWidth,
             noteSpeed,
             minSpawnInterval,
             maxSpawnInterval,
@@ -192,6 +311,79 @@ public class RhythmGameController : MonoBehaviour
         songLobbyMenu.Hide();
         gameUI.SetVisible(true);
         rhythmClock.StartClock(activeChartData);
+    }
+
+    private IEnumerator FinishSong()
+    {
+        if (isEndingSong)
+        {
+            yield break;
+        }
+
+        isEndingSong = true;
+        gameplayActive = false;
+        yield return sceneTransition.FadeToBlack();
+        StopCurrentGameplay();
+
+        if (entryMode == RhythmEntryMode.Story && TryLoadReturnScene())
+        {
+            yield break;
+        }
+
+        ShowLobby(false, false);
+        yield return sceneTransition.RevealScene();
+        isEndingSong = false;
+    }
+
+    private IEnumerator ExitGameplay(bool returnToStory)
+    {
+        isEndingSong = true;
+        gameplayActive = false;
+        yield return sceneTransition.FadeToBlack();
+        StopCurrentGameplay();
+
+        if (returnToStory && TryLoadReturnScene())
+        {
+            yield break;
+        }
+
+        ShowLobby(true, false);
+        yield return sceneTransition.RevealScene();
+        isEndingSong = false;
+    }
+
+    private bool TryLoadReturnScene()
+    {
+        if (string.IsNullOrWhiteSpace(returnSceneName))
+        {
+            return false;
+        }
+
+        if (!Application.CanStreamedLevelBeLoaded(returnSceneName))
+        {
+            Debug.LogError("RhythmGameController: 돌아갈 씬 '"
+                + returnSceneName + "'이 Build Settings에 없습니다.");
+            return false;
+        }
+
+        SceneManager.LoadScene(returnSceneName);
+        return true;
+    }
+
+    private ChartAutoLoader.SongEntry FindSongByName(string songName)
+    {
+        for (int i = 0; i < availableSongs.Count; i++)
+        {
+            if (string.Equals(
+                availableSongs[i].DisplayName,
+                songName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return availableSongs[i];
+            }
+        }
+
+        return null;
     }
 
     private void StopCurrentGameplay()
@@ -226,7 +418,10 @@ public class RhythmGameController : MonoBehaviour
 
     public bool IsLaneHeldForView(int lane)
     {
-        if (!gameplayActive || rhythmClock == null || rhythmClock.IsPaused)
+        if (!gameplayActive
+            || IsTransitioning
+            || rhythmClock == null
+            || rhythmClock.IsPaused)
         {
             return false;
         }

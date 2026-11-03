@@ -8,7 +8,16 @@ RhythmGameController.cs
 SongLobbyMenu.cs
 - Resources/RhythmSongs에 음악이 하나 이상 있으면 Play 직후 곡 선택 화면을 표시합니다.
 - 동명 JSON이 있는 곡은 '채보 있음', 없는 곡은 '랜덤 채보'로 표시합니다.
+- 음악과 이름이 같은 PNG/JPG가 있으면 앨범커버로 표시합니다.
 - 음악이 전혀 없으면 처음 실행할 때는 로비를 생략하고 무음 랜덤 모드를 시작합니다.
+
+RhythmSceneTransition.cs
+- 곡 선택 뒤 앨범커버를 페이드 인·아웃하고 검은 화면에서 플레이필드를 부드럽게 공개합니다.
+- 곡 종료 및 스토리 복귀 때도 같은 검은 화면 페이드를 사용합니다.
+
+RhythmLaunchContext.cs / RhythmSceneLauncher.cs
+- 싱글모드와 스토리모드가 선택 곡, 진입 모드와 돌아갈 씬 이름을 RhythmScene에 전달합니다.
+- Hub 버튼이나 StoryManager의 UnityEvent에는 RhythmSceneLauncher의 공개 메서드를 연결합니다.
 
 RhythmPlayField.cs
 - 플레이필드, 레일, 판정선, 배경 도시, 카메라와 레인 발광을 담당합니다.
@@ -17,7 +26,8 @@ RhythmPlayField.cs
   Generate / Refresh Stage 버튼을 누르고 Ctrl+S로 씬을 저장하면 됩니다.
 
 RhythmGameUI.cs
-- 점수, 콤보, 박자, 판정 문구와 A/S/D/J/K/L 키 안내를 표시합니다.
+- 먹색·아이보리·짙은 적색 스타일로 곡명, 모드, 진행도, 점수, 콤보와 판정을 표시합니다.
+- 청록과 마젠타는 좌우 레인 입력과 리듬 판정 강조에만 사용합니다.
 
 PauseMenu.cs
 - 플레이 중 ESC를 누르면 게임 시계와 Time.timeScale을 멈춥니다.
@@ -48,8 +58,9 @@ ChartData.cs / ChartAutoLoader.cs
 [음악 및 NoteEditor 채보 넣기]
 
 1. Assets/Resources/RhythmSongs 폴더에 OGG와 JSON을 넣습니다.
-2. 확장자를 제외한 두 파일의 이름을 완전히 같게 맞춥니다.
-   예: MoonsideHowl.ogg / MoonsideHowl.json
+2. 확장자를 제외한 파일 이름을 완전히 같게 맞춥니다.
+   예: MoonsideHowl.ogg / MoonsideHowl.json / MoonsideHowl.png
+   커버 이미지는 선택 사항이며 Texture Type이 Default 또는 Sprite여도 Texture2D로 검색합니다.
 3. NoteEditor 채보는 maxBlock=6, block=0~5, type=1(탭), type=2(롱노트)를 사용합니다.
 4. Play를 누르면 곡 선택 로비가 열립니다.
 5. JSON이 없는 음악을 선택하면 해당 음악과 랜덤 채보가 재생됩니다.
@@ -89,6 +100,24 @@ ChartData.cs / ChartAutoLoader.cs
 - 예약 시각 전에는 노트 생성, 이동, 판정을 진행하지 않습니다.
 - OGG 디코딩이나 오디오 버퍼 준비 때문에 노트만 먼저 시작되는 현상을 방지합니다.
 - 예약 시작 후에는 NoteEditor처럼 AudioSource.timeSamples / AudioClip.frequency를 곡 시간으로 사용합니다.
+
+[싱글모드에서 RhythmScene 열기]
+
+1. HubScene의 싱글 플레이 버튼을 가진 오브젝트에 RhythmSceneLauncher를 추가합니다.
+2. 버튼 OnClick에 RhythmSceneLauncher.LaunchSingleMode를 연결합니다.
+3. Launcher의 Song Name을 비워 두면 곡 선택 로비가 열립니다.
+4. Song Name을 동명 파일 이름으로 지정하면 로비를 건너뛰고 커버 전환 후 바로 시작합니다.
+
+[스토리모드에서 RhythmScene 열기]
+
+1. 스토리 전환용 오브젝트에 RhythmSceneLauncher를 추가합니다.
+2. Song Name에 플레이할 곡 이름을 입력합니다.
+3. Return Scene Name을 비우면 현재 스토리 씬 이름이 자동으로 저장됩니다.
+4. 스토리 이벤트에서 RhythmSceneLauncher.LaunchStoryMode를 호출합니다.
+5. 곡 종료 또는 일시정지 메뉴의 나가기를 누르면 저장된 스토리 씬으로 페이드 복귀합니다.
+
+- 현재 기반 구현은 돌아갈 스토리 씬을 다시 로드합니다. 정확한 대사·컷에서 재개하려면
+  추후 스토리 진행 저장 데이터에 재개 Cut/Line 인덱스를 함께 저장해 StoryManager가 읽도록 확장해야 합니다.
 
 [처음 확인하는 순서]
 

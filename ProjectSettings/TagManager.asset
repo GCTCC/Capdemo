@@ -50,6 +50,9 @@ TagManager:
   - name: Characters
     uniqueID: 751597202
     locked: 0
+  - name: ForeGround
+    uniqueID: 3552090279
+    locked: 0
   - name: Map
     uniqueID: 696030444
     locked: 0

@@ -17,5 +17,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RhythmScene.unity
     guid: 624ac7fad7817234a9aa5b32582aeaff
+  - enabled: 1
+    path: Assets/Scenes/Map/Area3_HomeStreet.unity
+    guid: 882b916fa16c6c54c8d32f832e12ae53
+  - enabled: 1
+    path: Assets/Scenes/Map/Area4_BlackMarket.unity
+    guid: 4c32954fb5b9e7f448c9f05fc2f986d5
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

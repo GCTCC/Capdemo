@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // DemoScene의 NPC 대화 진행: 대사창을 열고, 한 줄씩 넘기고, 끝나면 닫는다.
@@ -9,6 +10,7 @@ public class DemoDialogue : MonoBehaviour
     [SerializeField] private FollowCamera2D followCamera;
 
     private NpcInteract npc;
+    private IReadOnlyList<StoryLine> lines; // 대화를 연 순간의 대사. 대화 중에 NPC 쪽 대사가 바뀌어도 끝까지 이것을 쓴다
     private int lineIndex;
 
     public bool IsOpen => npc;
@@ -16,6 +18,7 @@ public class DemoDialogue : MonoBehaviour
     private void Awake()
     {
         if (box) box.gameObject.SetActive(false);
+        if (!followCamera && Camera.main) followCamera = Camera.main.GetComponent<FollowCamera2D>();
     }
 
     public void Open(NpcInteract target, Transform player)
@@ -23,12 +26,13 @@ public class DemoDialogue : MonoBehaviour
         if (IsOpen || !target || target.Lines.Count == 0 || !box) return;
 
         npc = target;
+        lines = target.Lines;
         npc.SetTalking(true);
         box.gameObject.SetActive(true);
         if (followCamera) followCamera.FocusOn(player, npc.transform);
 
         lineIndex = 0;
-        box.Show(npc.Lines[lineIndex]);
+        box.Show(lines[lineIndex]);
     }
 
     // 출력 중이면 대사를 한 번에 보여 주고, 다 나왔으면 다음 줄로. 마지막 줄 다음에는 닫는다
@@ -42,7 +46,7 @@ public class DemoDialogue : MonoBehaviour
         }
 
         lineIndex++;
-        if (lineIndex < npc.Lines.Count) box.Show(npc.Lines[lineIndex]);
+        if (lineIndex < lines.Count) box.Show(lines[lineIndex]);
         else Close();
     }
 
@@ -53,5 +57,6 @@ public class DemoDialogue : MonoBehaviour
         if (followCamera) followCamera.ClearFocus();
         npc.SetTalking(false);
         npc = null;
+        lines = null;
     }
 }

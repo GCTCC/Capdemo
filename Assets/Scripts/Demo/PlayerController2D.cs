@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 횡스크롤 플레이어: A/D·←/→로 좌우 이동, 스페이스바로 점프.
-// NPC 근처에서는 스페이스바가 점프 대신 대화를 연다. 대화 중에는 이동·점프를 막고 스페이스바로 대사를 넘긴다.
+// 횡스크롤 플레이어: A/D·←/→로 좌우 이동, 스페이스바로 점프, NPC 근처에서 F로 대화.
+// 대화 중에는 이동·점프를 막고 F·스페이스바·Enter로 대사를 넘긴다.
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour
 {
@@ -24,12 +24,17 @@ public class PlayerController2D : MonoBehaviour
     private bool jumpQueued;
     private NpcInteract nearbyNpc;
 
+    // 마지막 FixedUpdate 기준으로 바닥에 서 있는지. 애니메이션이 공중/착지를 고를 때 쓴다.
+    public bool IsGrounded { get; private set; } = true;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         bodyCollider = GetComponent<Collider2D>();
         groundFilter = new ContactFilter2D { useTriggers = false };
         groundFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
+        // 프리팹으로 씬에 끌어다 놓았을 때는 씬에 있는 대화창을 찾아 쓴다
+        if (!dialogue) dialogue = FindAnyObjectByType<DemoDialogue>();
     }
 
     private void Update()
@@ -47,14 +52,14 @@ public class PlayerController2D : MonoBehaviour
         moveInput = ((keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) ? 1f : 0f)
                   - ((keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) ? 1f : 0f);
 
-        if (!keyboard.spaceKey.wasPressedThisFrame) return;
-        if (nearbyNpc && dialogue) dialogue.Open(nearbyNpc, transform);
-        else jumpQueued = true;
+        if (keyboard.fKey.wasPressedThisFrame && nearbyNpc && dialogue) dialogue.Open(nearbyNpc, transform);
+        else if (keyboard.spaceKey.wasPressedThisFrame) jumpQueued = true;
     }
 
     private void FixedUpdate()
     {
-        if (IsGrounded()) lastGroundedTime = Time.time;
+        IsGrounded = CheckGrounded();
+        if (IsGrounded) lastGroundedTime = Time.time;
 
         var velocity = body.linearVelocity;
         velocity.x = moveInput * moveSpeed;
@@ -69,15 +74,21 @@ public class PlayerController2D : MonoBehaviour
     }
 
     // 발밑으로 콜라이더를 살짝 밀어 봐서 닿는 게 있으면 바닥에 서 있는 것
-    private bool IsGrounded()
+    private bool CheckGrounded()
     {
         if (body.linearVelocity.y > 0.01f) return false;
         return bodyCollider.Cast(Vector2.down, groundFilter, groundHits, groundCheckDistance) > 0;
     }
 
     private static bool AdvancePressed(Keyboard keyboard) =>
-        keyboard.spaceKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame ||
+        keyboard.fKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame ||
         keyboard.numpadEnterKey.wasPressedThisFrame;
+
+    // F 없이 대화를 연다 (NpcInteract의 첫 만남 강제 대화). 이미 대화 중이면 무시한다
+    public void StartTalk(NpcInteract npc)
+    {
+        if (dialogue) dialogue.Open(npc, transform);
+    }
 
     // NpcInteract가 대화 범위에 들어오고 나갈 때 알려 준다
     public void SetNearbyNpc(NpcInteract npc) => nearbyNpc = npc;

@@ -1,0 +1,15 @@
+라이브하우스 / 안쪽 무대 + 오브젝트 포함
+
+사용: 압축을 풀고 전체를 Unity 프로젝트의 Assets 아래 한 새 폴더로 복사하세요. Livehouse_Full.prefab을 씬에 놓으세요.
+5개 구간 아래 소품·NPC가 자식 GameObject로 들어 있습니다. 각 스프라이트를 선택해서 이동·복제·끄기가 가능합니다.
+Objects의 가구·장비 15종, NPC의 정지 포즈 6종, Backgrounds의 배경 5장이 프리팹과 함께 동봉되어 있습니다.
+추가 소품: 입구 체크인 단말대, 바 스툴, 스탠드 기타, 믹싱 콘솔. 배치 예시의 소품은 각각 개별 PNG입니다.
+
+메인 무대의 고정 구조(후면 벽, 양 측벽, 천장 안쪽, 공연 바닥과 앞턱)는 04_MainStage.png에 들어 있습니다.
+뒤쪽의 낮은 드럼 단상은 별도 SET_Stage 스프라이트입니다. 드럼·공연자·모니터·관객의 발 위치를 다른 깊이에 배치했습니다.
+전체 길이 6144×635px, 128 PPU, Point, Scale (1,1,1). 기존 맵과 같은 다섯 구간, 앞쪽 보행선입니다.
+고정 배경은 Background, 정지 인물과 가구는 MapBack에 정렬합니다. 바텐더는 카운터 뒤에 그려집니다.
+프리팹에는 시각 에셋이 들어 있습니다. 충돌·대화·움직임은 프로젝트의 맵/캐릭터 시스템에서 연결하세요.
+Optional/Background_Only.prefab과 Optional/Livehouse_Recessed_Panorama.png는 배경만 쓰는 경우의 대안입니다.
+Previews/Stage_Furnished.png와 Map_Furnished.png는 패키지의 프리팹·스프라이트를 읽어 조립한 PNG입니다.
+머티리얼은 프로젝트에서 사용 중인 URP 패키지의 Sprite-Unlit-Default를 참조하며 신규 PNG에는 독립 GUID가 부여되어 있습니다.

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 // 에디터 상단 메뉴 Tools > CapDemo > 스토리
 public static class StoryMenu
 {
-    internal const string FontPath = "Assets/Fonts/DaeguJunggu/대구중구읍성 Regular SDF.asset";
+    internal const string FontPath = "Assets/Art/Fonts/DaeguJunggu/대구중구읍성 Regular SDF.asset";
     private const string SampleChapterPath = "Assets/Story/Story_Sample.asset";
     private const string IllustFolder = "Assets/image/Illust/";
 

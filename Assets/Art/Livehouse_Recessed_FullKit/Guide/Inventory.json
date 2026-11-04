@@ -1,0 +1,340 @@
+[
+  {
+    "id": "01_Entrance",
+    "name": "입구",
+    "kind": "Backgrounds",
+    "rel": "Backgrounds/01_Entrance.png",
+    "pivot": [
+      0,
+      0
+    ],
+    "width": 1024,
+    "height": 635,
+    "guid": "8ce1ea752151cece29626d066b6d6863"
+  },
+  {
+    "id": "02_RestroomEntry",
+    "name": "화장실 입구",
+    "kind": "Backgrounds",
+    "rel": "Backgrounds/02_RestroomEntry.png",
+    "pivot": [
+      0,
+      0
+    ],
+    "width": 768,
+    "height": 635,
+    "guid": "ffa991f6ecca0b4ce9abcfa3203adae2"
+  },
+  {
+    "id": "03_Bar",
+    "name": "바",
+    "kind": "Backgrounds",
+    "rel": "Backgrounds/03_Bar.png",
+    "pivot": [
+      0,
+      0
+    ],
+    "width": 1280,
+    "height": 635,
+    "guid": "3fcacd0798a641f7245db1ebbedea4f6"
+  },
+  {
+    "id": "04_MainStage",
+    "name": "메인 무대",
+    "kind": "Backgrounds",
+    "rel": "Backgrounds/04_MainStage.png",
+    "pivot": [
+      0,
+      0
+    ],
+    "width": 1792,
+    "height": 635,
+    "guid": "6353c26c74c4aac94fc8f361b3efe883"
+  },
+  {
+    "id": "05_VIP",
+    "name": "VIP룸",
+    "kind": "Backgrounds",
+    "rel": "Backgrounds/05_VIP.png",
+    "pivot": [
+      0,
+      0
+    ],
+    "width": 1280,
+    "height": 635,
+    "guid": "c7e5cbc965adad0577c81b2e719c8333"
+  },
+  {
+    "id": "GEAR_Amp",
+    "name": "기타 앰프",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_Amp.png",
+    "pivot": [
+      0.5047619047619047,
+      0.01680672268907563
+    ],
+    "width": 105,
+    "height": 119,
+    "guid": "1bdc93515947c9ecb8df540f31f1d01e"
+  },
+  {
+    "id": "GEAR_Case",
+    "name": "장비 케이스",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_Case.png",
+    "pivot": [
+      0.5060240963855421,
+      0.022727272727272728
+    ],
+    "width": 83,
+    "height": 88,
+    "guid": "4428cd1dc3fbd1c0f858f6dbb1a72619"
+  },
+  {
+    "id": "GEAR_Drums",
+    "name": "붉은 드럼 세트",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_Drums.png",
+    "pivot": [
+      0.5,
+      0.014492753623188406
+    ],
+    "width": 216,
+    "height": 138,
+    "guid": "d8c95be63f7ea694ed8e62d6d24063b1"
+  },
+  {
+    "id": "GEAR_Microphone",
+    "name": "마이크와 스탠드",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_Microphone.png",
+    "pivot": [
+      0.5058823529411764,
+      0.012903225806451613
+    ],
+    "width": 85,
+    "height": 155,
+    "guid": "e08fc8d99a895c984562a7a96bfac347"
+  },
+  {
+    "id": "GEAR_PA",
+    "name": "대형 PA 스피커",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_PA.png",
+    "pivot": [
+      0.5040650406504065,
+      0.009009009009009009
+    ],
+    "width": 123,
+    "height": 222,
+    "guid": "0f8a2a70dc9cba5b53bd81760c315a19"
+  },
+  {
+    "id": "GEAR_Wedge",
+    "name": "무대 모니터",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_Wedge.png",
+    "pivot": [
+      0.5,
+      0.05
+    ],
+    "width": 86,
+    "height": 40,
+    "guid": "3a44e0a7fe5c800ba0935c8b3a80b038"
+  },
+  {
+    "id": "Lounge_Armchair",
+    "name": "1인 의자",
+    "kind": "Objects",
+    "rel": "Objects/Lounge_Armchair.png",
+    "pivot": [
+      0.5040650406504065,
+      0.018691588785046728
+    ],
+    "width": 123,
+    "height": 107,
+    "guid": "7e29229f3afca278b9283741bbfff7f9"
+  },
+  {
+    "id": "Lounge_Sofa",
+    "name": "3인 소파",
+    "kind": "Objects",
+    "rel": "Objects/Lounge_Sofa.png",
+    "pivot": [
+      0.5,
+      0.018518518518518517
+    ],
+    "width": 286,
+    "height": 108,
+    "guid": "ada150c96534d9a68a5c42d8c1e83cf2"
+  },
+  {
+    "id": "Lounge_Table",
+    "name": "낮은 테이블",
+    "kind": "Objects",
+    "rel": "Objects/Lounge_Table.png",
+    "pivot": [
+      0.5040650406504065,
+      0.0425531914893617
+    ],
+    "width": 123,
+    "height": 47,
+    "guid": "adb454222a68a92368d32b2bf96ec768"
+  },
+  {
+    "id": "SET_Bar",
+    "name": "바 카운터",
+    "kind": "Objects",
+    "rel": "Objects/SET_Bar.png",
+    "pivot": [
+      0.5023696682464455,
+      0.014285714285714285
+    ],
+    "width": 211,
+    "height": 140,
+    "guid": "c9d9dac0e1f00be5e7113b68326859bb"
+  },
+  {
+    "id": "SET_Stage",
+    "name": "철제 무대 단상",
+    "kind": "Objects",
+    "rel": "Objects/SET_Stage.png",
+    "pivot": [
+      0.5,
+      0.029411764705882353
+    ],
+    "width": 504,
+    "height": 68,
+    "guid": "a37e9925ff312460fb07fb0ac7e70ddf"
+  },
+  {
+    "id": "NPC_Bartender",
+    "name": "바텐더",
+    "kind": "NPC",
+    "rel": "NPC/NPC_Bartender.png",
+    "pivot": [
+      0.5,
+      0.046875
+    ],
+    "width": 256,
+    "height": 256,
+    "guid": "3c695288992e38d9c638e8cd671e483e"
+  },
+  {
+    "id": "NPC_Dancer_A",
+    "name": "춤추는 단발 손님",
+    "kind": "NPC",
+    "rel": "NPC/NPC_Dancer_A.png",
+    "pivot": [
+      0.5,
+      0.046875
+    ],
+    "width": 256,
+    "height": 256,
+    "guid": "609b0c666902c1bb4dc53a3d168689e9"
+  },
+  {
+    "id": "NPC_Dancer_B",
+    "name": "춤추는 재킷 손님",
+    "kind": "NPC",
+    "rel": "NPC/NPC_Dancer_B.png",
+    "pivot": [
+      0.5,
+      0.046875
+    ],
+    "width": 256,
+    "height": 256,
+    "guid": "d757be59abf758bb9d84245fc1508198"
+  },
+  {
+    "id": "NPC_Guitarist",
+    "name": "기타리스트",
+    "kind": "NPC",
+    "rel": "NPC/NPC_Guitarist.png",
+    "pivot": [
+      0.5,
+      0.046875
+    ],
+    "width": 256,
+    "height": 256,
+    "guid": "3b10454fd876c73acf257665915b87ed"
+  },
+  {
+    "id": "NPC_Regular",
+    "name": "음료를 든 단골",
+    "kind": "NPC",
+    "rel": "NPC/NPC_Regular.png",
+    "pivot": [
+      0.5,
+      0.046875
+    ],
+    "width": 256,
+    "height": 256,
+    "guid": "ee6dacbe9000c0b4cd60aceebc6e99a6"
+  },
+  {
+    "id": "NPC_Security",
+    "name": "보안요원",
+    "kind": "NPC",
+    "rel": "NPC/NPC_Security.png",
+    "pivot": [
+      0.5,
+      0.046875
+    ],
+    "width": 256,
+    "height": 256,
+    "guid": "09ec0fe642a1f3ff7ba682f5a6affece"
+  },
+  {
+    "id": "PROP_CheckIn",
+    "name": "입구 체크인 단말대",
+    "kind": "Objects",
+    "rel": "Objects/PROP_CheckIn.png",
+    "pivot": [
+      0.5066666666666667,
+      0.014925373134328358
+    ],
+    "width": 75,
+    "height": 134,
+    "guid": "1b590503266008d9e8fbde2109fedc44"
+  },
+  {
+    "id": "PROP_BarStool",
+    "name": "버건디 바 스툴",
+    "kind": "Objects",
+    "rel": "Objects/PROP_BarStool.png",
+    "pivot": [
+      0.5079365079365079,
+      0.021052631578947368
+    ],
+    "width": 63,
+    "height": 95,
+    "guid": "432b30e438454f4a0f4df0ec0fe5d032"
+  },
+  {
+    "id": "GEAR_SpareGuitar",
+    "name": "스탠드에 거치한 기타",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_SpareGuitar.png",
+    "pivot": [
+      0.5063291139240507,
+      0.014084507042253521
+    ],
+    "width": 79,
+    "height": 142,
+    "guid": "2258ef18d5b222f4db02635e6645071a"
+  },
+  {
+    "id": "GEAR_Mixer",
+    "name": "믹싱 콘솔과 테이블",
+    "kind": "Objects",
+    "rel": "Objects/GEAR_Mixer.png",
+    "pivot": [
+      0.5,
+      0.01834862385321101
+    ],
+    "width": 188,
+    "height": 109,
+    "guid": "b1c68b8d1bdcaca8d69e4181f028d06c"
+  }
+]

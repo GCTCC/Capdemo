@@ -2055,7 +2055,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9193c510b57a64f47bf69dd3c068cfad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HubMenuButton
-  targetScene: RhythmScene
+  targetScene: 
   highlightTargets:
   - {fileID: 252160888}
   - {fileID: 17148154}

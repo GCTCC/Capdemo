@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7841708965561460250}
   - component: {fileID: 4526992801862264407}
   - component: {fileID: 3000373985220076198}
+  - component: {fileID: 5053288263722064342}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -107,8 +108,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.6, y: 1.6}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.4, y: 1.4}
+  m_EdgeRadius: 0.1
 --- !u!114 &4526992801862264407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +141,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator2D
   animator: {fileID: 2513268031843239420}
   spriteRenderer: {fileID: 1695219602159518372}
+--- !u!114 &5053288263722064342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176063208027547285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69199d695de121b498b21997b9b1ef06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterShadow
+  source: {fileID: 0}
+  footAlpha: 0.25
+  footLitAlpha: 0.5
+  footWidth: 0.8
+  footHeight: 0.2
+  footShift: 0.25
+  groundSearch: 3
+  wallShadow: 1
+  wallAlpha: 0.35
+  wallShift: 0.4
+  wallGrow: 0.1
+  lightReach: 2.5
 --- !u!1 &609965319034463742
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,9 +243,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 751597202
-  m_SortingLayer: 3
-  m_SortingOrder: 10
+  m_SortingLayerID: 696030444
+  m_SortingLayer: 4
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2088612622, guid: 0955ed2c09ce3a745a6f58537e8e426e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

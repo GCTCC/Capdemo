@@ -30,11 +30,28 @@ public static class SaveData
         PlayerNameChanged?.Invoke();
     }
 
+    // 첫 만남 대화를 끝까지 본 NPC 목록. NPC 이름(Id)을 "|"로 이어 한 키에 저장한다
+    private const string MetNpcsKey = "MetNpcs";
+    private const char MetNpcsSeparator = '|';
+
+    public static bool HasMetNpc(string npcId) =>
+        System.Array.IndexOf(PlayerPrefs.GetString(MetNpcsKey, "").Split(MetNpcsSeparator), npcId) >= 0;
+
+    // NpcInteract가 첫 만남 대화를 마쳤을 때 부른다
+    public static void MarkNpcMet(string npcId)
+    {
+        if (string.IsNullOrEmpty(npcId) || HasMetNpc(npcId)) return;
+        string met = PlayerPrefs.GetString(MetNpcsKey, "");
+        PlayerPrefs.SetString(MetNpcsKey, met.Length == 0 ? npcId : met + MetNpcsSeparator + npcId);
+        PlayerPrefs.Save();
+    }
+
     // 플레이 진행 데이터 초기화 (설정값 같은 다른 키는 건드리지 않는다)
     public static void ResetProgress()
     {
         PlayerPrefs.DeleteKey(TutorialClearedKey);
         PlayerPrefs.DeleteKey(PlayerNameKey);
+        PlayerPrefs.DeleteKey(MetNpcsKey);
         PlayerPrefs.Save();
         PlayerNameChanged?.Invoke();
     }

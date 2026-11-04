@@ -128,7 +128,7 @@ public static class DemoMenu
         go.transform.localPosition = new Vector3(0f, 1.4f, 0f);
         var text = go.GetComponent<TextMeshPro>();
         if (font) text.font = font;
-        text.text = "Space";
+        text.text = "F";
         text.fontSize = 3f;
         text.alignment = TextAlignmentOptions.Center;
         text.color = new Color(0.1f, 0.1f, 0.12f);

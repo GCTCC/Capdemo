@@ -1,0 +1,63 @@
+{
+  "width": 6144,
+  "height": 635,
+  "ppu": 128,
+  "pivot": "bottom left",
+  "walkSurface": [
+    498,
+    552
+  ],
+  "sections": [
+    {
+      "id": "01_Entrance",
+      "name": "입구",
+      "xPixels": 0,
+      "widthPixels": 1024,
+      "unityLocalX": 0,
+      "unityWidth": 8,
+      "unityLocalY": 0
+    },
+    {
+      "id": "02_RestroomEntry",
+      "name": "화장실 입구",
+      "xPixels": 1024,
+      "widthPixels": 768,
+      "unityLocalX": 8,
+      "unityWidth": 6,
+      "unityLocalY": 0
+    },
+    {
+      "id": "03_Bar",
+      "name": "바",
+      "xPixels": 1792,
+      "widthPixels": 1280,
+      "unityLocalX": 14,
+      "unityWidth": 10,
+      "unityLocalY": 0
+    },
+    {
+      "id": "04_MainStage",
+      "name": "메인 무대",
+      "xPixels": 3072,
+      "widthPixels": 1792,
+      "unityLocalX": 24,
+      "unityWidth": 14,
+      "unityLocalY": 0
+    },
+    {
+      "id": "05_VIP",
+      "name": "VIP룸",
+      "xPixels": 4864,
+      "widthPixels": 1280,
+      "unityLocalX": 38,
+      "unityWidth": 10,
+      "unityLocalY": 0
+    }
+  ],
+  "stageDeck": {
+    "backY": 368,
+    "frontY": 444,
+    "fasciaBottomY": 498
+  },
+  "playerFootY": 527
+}

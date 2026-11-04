@@ -1,0 +1,12 @@
+{
+  "sections": 5,
+  "objectSpriteTypes": 15,
+  "npcSpriteTypes": 6,
+  "actualObjectInstances": 17,
+  "actualNPCInstances": 6,
+  "prefabSpriteRenderers": 28,
+  "unresolvedSprites": 0,
+  "backgroundReassemblyMatchesPanorama": true,
+  "projectRenderingMaterial": "URP Sprite-Unlit-Default",
+  "validation": "File-based prefab hierarchy, referenced PNG/meta dependencies, native scale, sorting and archive readback. Previews reconstructed from the furnished prefab data."
+}

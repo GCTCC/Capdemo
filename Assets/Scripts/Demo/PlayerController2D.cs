@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// 횡스크롤 플레이어: A/D·←/→로 좌우 이동, 스페이스바로 점프.
-// NPC 근처에서는 스페이스바가 점프 대신 대화를 연다. 대화 중에는 이동·점프를 막고 스페이스바로 대사를 넘긴다.
+// 횡스크롤 플레이어: A/D·←/→로 좌우 이동, 스페이스바로 점프, NPC 근처에서 F로 대화.
+// 대화 중에는 이동·점프를 막고 F·스페이스바·Enter로 대사를 넘긴다.
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class PlayerController2D : MonoBehaviour
 {
@@ -52,9 +52,8 @@ public class PlayerController2D : MonoBehaviour
         moveInput = ((keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) ? 1f : 0f)
                   - ((keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) ? 1f : 0f);
 
-        if (!keyboard.spaceKey.wasPressedThisFrame) return;
-        if (nearbyNpc && dialogue) dialogue.Open(nearbyNpc, transform);
-        else jumpQueued = true;
+        if (keyboard.fKey.wasPressedThisFrame && nearbyNpc && dialogue) dialogue.Open(nearbyNpc, transform);
+        else if (keyboard.spaceKey.wasPressedThisFrame) jumpQueued = true;
     }
 
     private void FixedUpdate()
@@ -82,8 +81,14 @@ public class PlayerController2D : MonoBehaviour
     }
 
     private static bool AdvancePressed(Keyboard keyboard) =>
-        keyboard.spaceKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame ||
+        keyboard.fKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame ||
         keyboard.numpadEnterKey.wasPressedThisFrame;
+
+    // F 없이 대화를 연다 (NpcInteract의 첫 만남 강제 대화). 이미 대화 중이면 무시한다
+    public void StartTalk(NpcInteract npc)
+    {
+        if (dialogue) dialogue.Open(npc, transform);
+    }
 
     // NpcInteract가 대화 범위에 들어오고 나갈 때 알려 준다
     public void SetNearbyNpc(NpcInteract npc) => nearbyNpc = npc;

@@ -16,6 +16,7 @@ public class DemoDialogue : MonoBehaviour
     private void Awake()
     {
         if (box) box.gameObject.SetActive(false);
+        if (!followCamera && Camera.main) followCamera = Camera.main.GetComponent<FollowCamera2D>();
     }
 
     public void Open(NpcInteract target, Transform player)

@@ -1809,12 +1809,14 @@ MonoBehaviour:
   illustration: {fileID: 1651633157}
   dialogue: {fileID: 1172156790}
   nameInput: {fileID: 1469625377}
+  storyAudio: {fileID: 0}
   playOnStart: 1
   startCut: 0
   fadeOverlay: {fileID: 1526762366}
   fadeInDuration: 1
   fadeOutDuration: 1
   cutFadeDuration: 0.6
+  fadeOutBgmOnFinish: 1
   onFinished:
     m_PersistentCalls:
       m_Calls:

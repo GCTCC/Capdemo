@@ -24,12 +24,17 @@ public class PlayerController2D : MonoBehaviour
     private bool jumpQueued;
     private NpcInteract nearbyNpc;
 
+    // 마지막 FixedUpdate 기준으로 바닥에 서 있는지. 애니메이션이 공중/착지를 고를 때 쓴다.
+    public bool IsGrounded { get; private set; } = true;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         bodyCollider = GetComponent<Collider2D>();
         groundFilter = new ContactFilter2D { useTriggers = false };
         groundFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
+        // 프리팹으로 씬에 끌어다 놓았을 때는 씬에 있는 대화창을 찾아 쓴다
+        if (!dialogue) dialogue = FindAnyObjectByType<DemoDialogue>();
     }
 
     private void Update()
@@ -54,7 +59,8 @@ public class PlayerController2D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (IsGrounded()) lastGroundedTime = Time.time;
+        IsGrounded = CheckGrounded();
+        if (IsGrounded) lastGroundedTime = Time.time;
 
         var velocity = body.linearVelocity;
         velocity.x = moveInput * moveSpeed;
@@ -69,7 +75,7 @@ public class PlayerController2D : MonoBehaviour
     }
 
     // 발밑으로 콜라이더를 살짝 밀어 봐서 닿는 게 있으면 바닥에 서 있는 것
-    private bool IsGrounded()
+    private bool CheckGrounded()
     {
         if (body.linearVelocity.y > 0.01f) return false;
         return bodyCollider.Cast(Vector2.down, groundFilter, groundHits, groundCheckDistance) > 0;

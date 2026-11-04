@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb47d1d9620897b4bbf9fc5f7ceb8332, type: 3}
+  m_Name: Dialogue_Bouncer1
+  m_EditorClassIdentifier: Assembly-CSharp::NpcDialogue
+  memo: 
+  lines:
+  - speaker: "\uBC14\uC6B4\uC11C"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC624\uB79C\uB9CC\uC774\uB124. \uD63C\uC790 \uC628\uAC70\uC57C?"
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC5B4. \uB098 \uC5C6\uB294 \uB3D9\uC548 \uBB34\uB300\uB294 \uC880 \uC788\uC5C8\uC5B4?"
+    pause: 0
+    sounds: []
+  - speaker: "\uBC14\uC6B4\uC11C"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uB531\uD788. \uC9C0\uAE08 \uBCF4\uB294 \uAC83 \uCC98\uB7FC \uADF8\uB0E5
+      \uC0AC\uB78C\uC774 \uBCC4\uB85C \uC5C6\uB2E4\uACE0.\n\uC694\uC998 \uB2E8\uC18D\uB54C\uBB38\uC5D0
+      \uBC16\uC5D0 \uB3CC\uC544\uB2E4\uB2C8\uB294 \uC0AC\uB78C \uC790\uCCB4\uAC00
+      \uC5C6\uC5B4."
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "..\uC5EC\uAE30\uB3C4 \uC774\uC81C \uB05D\uBB3C\uC774\uAD6C\uB9CC"
+    pause: 0
+    sounds: []
+  - speaker: "\uBC14\uC6B4\uC11C"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uBB50\uB77C\uB294\uAC70\uC57C. \uADF8\uB798\uC11C, \uBB34\uC2A8 \uC77C\uC778\uB370?"
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC74C\uBC18 \uAC70\uB798. \uC774 \uC548\uC5D0\uC11C \uB9CC\uB098\uAE30\uB85C
+      \uD574\uC11C."
+    pause: 0
+    sounds: []
+  - speaker: "\uBC14\uC6B4\uC11C"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uADF8\uB7F0\uAC70\uAD6C\uB9CC. \uC7A0\uAE50\uB9CC."
+    pause: 0
+    sounds: []
+  - speaker: "\uBC14\uC6B4\uC11C"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "[\uBC14\uC6B4\uC11C\uAC00 \uC785\uC7A5 \uAC80\uC0AC\uB97C \uC9C4\uD589\uD55C\uB2E4.]"
+    pause: 0
+    sounds:
+    - timing: 0
+      atCharacter: 0
+      atText: 
+      clip: {fileID: 8300000, guid: 55b35b3f5ef93b543b4efbde149b9a1a, type: 3}
+      volume: 1
+      delay: 0
+      loop: 0
+      loopUntil: 0
+      volumeInitialized: 1
+  - speaker: "\uBC14\uC6B4\uC11C"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uB410\uC5B4. \uB4E4\uC5B4\uAC00. \uACF5\uC5F0 \uD560 \uC0DD\uAC01 \uC788\uC73C\uBA74
+      \uBBF8\uB9AC \uB9D0\uD574\uB450\uB77C\uACE0. \uB0A0\uC9DC \uBE44\uC6CC\uB458
+      \uD14C\uB2C8\uAE4C."
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uADF8\uB798. \uC218\uACE0\uD558\uB77C\uACE0."
+    pause: 0
+    sounds: []

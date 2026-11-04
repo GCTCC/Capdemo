@@ -50,8 +50,14 @@ TagManager:
   - name: Characters
     uniqueID: 751597202
     locked: 0
+  - name: Map
+    uniqueID: 696030444
+    locked: 0
   - name: MapFront
     uniqueID: 946478657
+    locked: 0
+  - name: PlatForm
+    uniqueID: 4043369215
     locked: 0
   m_RenderingLayers:
   - Default

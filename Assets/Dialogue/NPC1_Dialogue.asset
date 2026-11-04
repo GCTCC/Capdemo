@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb47d1d9620897b4bbf9fc5f7ceb8332, type: 3}
+  m_Name: NPC1_Dialogue
+  m_EditorClassIdentifier: Assembly-CSharp::NpcDialogue
+  memo: 
+  lines:
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 1
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC5B4\uC774! {player}! \uC5B4\uB514 \uAC00\uB0D0? \uC694\uC998 \uACF5\uC5F0\uC774
+      \uC5C6\uC5B4\uC11C \uC5BC\uAD74 \uBCFC \uC77C\uC774 \uC5C6\uB124."
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 1
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uB0B4\uAC00 \uAC00\uBD24\uC790 \uC5B4\uB51C \uAC00\uACA0\uC5B4.. \uB298
+      \uBE44\uC2B7\uD558\uC9C0. \uC774 \uADFC\uCC98\uB294 \uC694\uC0C8\uB3C4 \uBE44\uC2B7\uD55C\uAC00\uBCF4\uB124?"
+    pause: 0
+    sounds: []
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC5B4. \uC800\uBC88 \uACF5\uC5F0\uC740 \uC798\uBD24\uC5B4. \uC694\uC998
+      \uD65C\uB3D9\uC774 \uB738\uD558\uB358\uB370.. \uB108\uB124\uB3C4 \uC774\uC81C
+      \uC811\uC740\uAC70\uC57C?"
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC811\uAE34 \uBB34\uC2A8. \uC694\uC998 \uAE30\uC5C5 \uAC10\uC2DC\uAC00
+      \uC5EC\uAC04 \uC2EC\uD574\uC57C\uC9C0.. \uB300\uB193\uACE0 \uC704\uD5D8\uD55C
+      \uBB3C\uAC74 \uAC70\uB798\uD558\uB2E4\uAC00 \uAC78\uB9B0 \uC0AC\uB78C\uB4E4\uB3C4
+      \uBA87\uBA85 \uC788\uB2E4\uB358\uB370."
+    pause: 0
+    sounds: []
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uB9DE\uAE34\uD574. \uADF8\uB807\uB2E4\uACE0 \uB108\uBB34 \uC0AC\uB9AC\uC9C0\uB294
+      \uB9C8. \uC774 \uB3D9\uB124\uC5D0\uC11C \uB108\uAE4C\uC9C0 \uC74C\uC545\uC811\uC73C\uBA74
+      \uB77C\uC774\uBE0C\uD558\uC6B0\uC2A4\uB294 \uBB34\uC2A8 \uD074\uB7FD\uC774\uB77C\uB3C4
+      \uB9CC\uB4E4\uC5B4\uC57C\uD560 \uD310\uC774\uB77C\uACE0."
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC0AC\uB824\uC57C\uC9C0.. \uC7A1\uD600\uAC00\uBA74 \uB108\uAC00 \uB300\uC2E0
+      \uACF5\uC5F0\uD558\uB824\uACE0?"
+    pause: 0
+    sounds: []
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC57C\uC57C.. \uB09C \uADF8\uC815\uB3C4 \uAE61\uC740 \uC5C6\uB2E4\uACE0.."
+    pause: 0
+    sounds: []
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uC870\uC2EC\uD574\uC11C \uB098\uC060\uAC74 \uC5C6\uC744\uAC70\uC57C.
+      \uC774\uBC88\uC5D0 \uBCF4\uC548\uBC95 \uC704\uBC18\uC73C\uB85C \uC7A1\uD600\uAC04
+      \uC0AC\uB78C\uB4E4, \uC544\uC9C1 \uC548\uB3CC\uC544\uC628 \uBAA8\uC591\uC774\uC57C."
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uB204\uAC00 \uADF8\uB798?"
+    pause: 0
+    sounds: []
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uAC19\uC774 \uC77C\uD558\uB294 \uC0AC\uB78C \uCABD\uC5D0\uC11C \uADF8\uB7EC\uB354\uB77C.
+      \uC4F0\uB808\uAE30\uC7A5\uC5D0\uC11C \uC544\uBB34\uB3C4 \uBAA8\uB974\uAC8C
+      \uCC98\uB9AC\uD588\uB2E4\uB294 \uC18C\uBB38\uAE4C\uC9C0 \uB3C8\uB2E4\uB358\uB370."
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: ".. \uACE0\uC791 \uAD6C\uC2DC\uB300 \uC74C\uBC18 \uC880 \uAC70\uB798\uD588\uB2E4\uACE0
+      \uADF8\uB7F0\uB2E4\uACE0?"
+    pause: 0
+    sounds: []
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uADF8\uB798. \uADF8\uB807\uB2E4\uB2C8\uAE4C \uADF8\uB7EC\uB124. \uC7A1\uD600\uAC04
+      \uB4A4\uB85C \uC18C\uC2DD\uB3C4 \uC5C6\uC5B4. \uC544\uBB34\uD2BC \uB108\uB3C4
+      \uAC70\uB798\uAC19\uC740\uAC70 \uD558\uAC8C\uB418\uBA74 \uC0AC\uB78C \uC798
+      \uBCF4\uACE0 \uD558\uB77C\uACE0."
+    pause: 0
+    sounds: []
+  - speaker: '{player}'
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "..\uC544\uBB34\uD2BC \uC54C\uACA0\uC5B4. \uB2E4\uC74C\uC5D0 \uD65C\uB3D9
+      \uD558\uAC8C\uB418\uBA74 \uC54C\uB824\uC904\uAC8C."
+    pause: 0
+    sounds: []
+  - speaker: "\uC8FC\uBBFC"
+    standing: {fileID: 0}
+    hideStanding: 0
+    standingPose:
+      position: 0
+      offset: {x: 0, y: 0}
+      scale: 0
+      flip: 0
+    text: "\uADF8\uB798. \uC2DC\uAC04\uB3C4 \uB2A6\uC5C8\uB294\uB370 \uC870\uC2EC\uD558\uB77C\uACE0"
+    pause: 0
+    sounds: []

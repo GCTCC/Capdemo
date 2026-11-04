@@ -13,6 +13,9 @@ using UnityEditor.SceneManagement;
 public class RhythmPlayField : MonoBehaviour
 {
     private const string GeneratedRootName = "Generated Stage";
+    private const string StageVersionMarkerName = "Stage Version 10 - Gate Edge Aligned Rails";
+    private const float FarGateOffset = 0.15f;
+    private const float FarGateHalfDepth = 0.10f;
 
     [Header("Play Field Shape")]
     [SerializeField] private float nearZ = 0.0f;
@@ -41,12 +44,19 @@ public class RhythmPlayField : MonoBehaviour
 
     private Transform generatedRoot;
     private MeshRenderer[] laneGlowRenderers;
+    private int innerRailPixelHeight;
 
     public float NearZ { get { return nearZ; } }
     public float FarZ { get { return farZ; } }
+    public float NoteSpawnZ { get { return FarGateZ; } }
     public float NearHalfWidth { get { return nearHalfWidth; } }
     public float FarHalfWidth { get { return farHalfWidth; } }
+    public float NoteSpawnHalfWidth { get { return HalfWidthAtZ(FarGateZ); } }
     public float JudgeZ { get { return judgeZ; } }
+    private float FarGateZ { get { return farZ - FarGateOffset; } }
+    // 세로선은 Far Gate 면과 겹치지 않고, 플레이어 쪽 가장자리에 맞닿아 끝난다.
+    private float LaneEndZ { get { return FarGateZ - FarGateHalfDepth; } }
+    private float LaneEndHalfWidth { get { return HalfWidthAtZ(LaneEndZ); } }
 
     private void OnEnable()
     {
@@ -190,6 +200,12 @@ public class RhythmPlayField : MonoBehaviour
             return false;
         }
 
+        // 이전 굵은 레일로 생성된 Stage는 한 번만 자동 재생성한다.
+        if (generatedRoot.Find(StageVersionMarkerName) == null)
+        {
+            return false;
+        }
+
         MeshFilter[] filters = generatedRoot.GetComponentsInChildren<MeshFilter>(true);
         if (filters.Length == 0)
         {
@@ -231,6 +247,9 @@ public class RhythmPlayField : MonoBehaviour
 
     private void BuildStage()
     {
+        GameObject versionMarker = new GameObject(StageVersionMarkerName);
+        versionMarker.transform.SetParent(generatedRoot, false);
+
         CreateQuadMesh(
             "Left Cyber Deck",
             new Vector3(-13.0f, -0.03f, nearZ),
@@ -259,9 +278,19 @@ public class RhythmPlayField : MonoBehaviour
         {
             float ratio = (float)i / RhythmGameController.LaneCount;
             float nearX = Mathf.Lerp(-nearHalfWidth, nearHalfWidth, ratio);
-            float farX = Mathf.Lerp(-farHalfWidth, farHalfWidth, ratio);
-            CreateRail("Lane Glow Rail " + i, nearX, farX, 0.085f, railGlowMaterial);
-            CreateRail("Lane Rail " + i, nearX, farX, 0.025f, railMaterial);
+            float farX = Mathf.Lerp(-LaneEndHalfWidth, LaneEndHalfWidth, ratio);
+            bool isOuterRail = i == 0 || i == RhythmGameController.LaneCount;
+
+            if (isOuterRail)
+            {
+                CreateRail("Lane Glow Rail " + i, nearX, farX, 0.085f, railGlowMaterial);
+                CreateRail("Lane Rail " + i, nearX, farX, 0.025f, railMaterial);
+            }
+            else
+            {
+                // 가운데 선을 포함한 내부선은 모두 같은 규칙으로 생성한다.
+                CreateRail("Lane Rail " + i, nearX, farX, 0.008f, gridMaterial);
+            }
         }
 
         for (int lane = 0; lane < RhythmGameController.LaneCount; lane++)
@@ -269,24 +298,80 @@ public class RhythmPlayField : MonoBehaviour
             CreateLaneGlow(lane);
         }
 
-        for (float z = 2.6f; z < farZ - 0.5f; z += 2.45f)
-        {
-            CreateGridBar(z);
-        }
-
-        CreateHorizontalBar("Judgement Line", judgeZ, 0.0f, judgeMaterial);
-        CreateHorizontalBar("Far Gate", farZ - 0.15f, -0.01f, railMaterial);
+        // 일반 그리드는 제거하고 판정선과 먼 쪽 경계선만 유지한다.
+        // 외곽 레일의 글로우 영역과 살짝 맞물려 끝점의 시각적 빈틈을 없앤다.
+        CreateHorizontalBar("Judgement Line", judgeZ, 0.0f, 0.055f, 0.055f, judgeMaterial);
+        CreateHorizontalBar(
+            "Far Gate",
+            FarGateZ,
+            -0.01f,
+            0.055f,
+            FarGateHalfDepth,
+            railMaterial);
         BuildCyberCity();
         BuildHorizonPortal();
+        innerRailPixelHeight = 0;
+    }
+
+    private void LateUpdate()
+    {
+        if (!Application.isPlaying || generatedRoot == null)
+        {
+            return;
+        }
+
+        Camera camera = Camera.main;
+        if (camera == null || camera.pixelHeight <= 0
+            || camera.pixelHeight == innerRailPixelHeight)
+        {
+            return;
+        }
+
+        // 화면상 좌우 0.6픽셀씩 계산한다. 원근에 임의의 폭 배수를 적용하지 않는다.
+        for (int i = 1; i < RhythmGameController.LaneCount; i++)
+        {
+            Transform rail = generatedRoot.Find("Lane Rail " + i);
+            if (rail == null)
+            {
+                continue;
+            }
+
+            MeshFilter filter = rail.GetComponent<MeshFilter>();
+            if (filter == null || filter.sharedMesh == null)
+            {
+                continue;
+            }
+
+            float ratio = i / (float)RhythmGameController.LaneCount;
+            Vector3 nearPoint = camera.WorldToScreenPoint(generatedRoot.TransformPoint(
+                new Vector3(Mathf.Lerp(-nearHalfWidth, nearHalfWidth, ratio), 0.035f, nearZ)));
+            Vector3 farPoint = camera.WorldToScreenPoint(generatedRoot.TransformPoint(
+                new Vector3(
+                    Mathf.Lerp(-LaneEndHalfWidth, LaneEndHalfWidth, ratio),
+                    0.035f,
+                    LaneEndZ)));
+            const float halfPixelWidth = 0.6f;
+            Vector3 offset = new Vector3(halfPixelWidth, 0.0f, 0.0f);
+            filter.sharedMesh.vertices = new Vector3[]
+            {
+                rail.InverseTransformPoint(camera.ScreenToWorldPoint(nearPoint - offset)),
+                rail.InverseTransformPoint(camera.ScreenToWorldPoint(nearPoint + offset)),
+                rail.InverseTransformPoint(camera.ScreenToWorldPoint(farPoint - offset)),
+                rail.InverseTransformPoint(camera.ScreenToWorldPoint(farPoint + offset))
+            };
+            filter.sharedMesh.RecalculateBounds();
+        }
+
+        innerRailPixelHeight = camera.pixelHeight;
     }
 
     private void CreateLaneGlow(int lane)
     {
         float nearLaneWidth = nearHalfWidth * 2.0f / RhythmGameController.LaneCount;
-        float farLaneWidth = farHalfWidth * 2.0f / RhythmGameController.LaneCount;
+        float farLaneWidth = LaneEndHalfWidth * 2.0f / RhythmGameController.LaneCount;
         float nearLeft = -nearHalfWidth + nearLaneWidth * lane + 0.05f;
         float nearRight = nearLeft + nearLaneWidth - 0.10f;
-        float farLeft = -farHalfWidth + farLaneWidth * lane + 0.025f;
+        float farLeft = -LaneEndHalfWidth + farLaneWidth * lane + 0.025f;
         float farRight = farLeft + farLaneWidth - 0.05f;
 
         Material glowMaterial = lane < 3
@@ -297,25 +382,12 @@ public class RhythmPlayField : MonoBehaviour
             "Held Lane Glow " + (lane + 1),
             new Vector3(nearLeft, 0.018f, nearZ),
             new Vector3(nearRight, 0.018f, nearZ),
-            new Vector3(farLeft, 0.018f, farZ),
-            new Vector3(farRight, 0.018f, farZ),
+            new Vector3(farLeft, 0.018f, LaneEndZ),
+            new Vector3(farRight, 0.018f, LaneEndZ),
             glowMaterial);
 
         laneGlowRenderers[lane] = glow.GetComponent<MeshRenderer>();
         laneGlowRenderers[lane].enabled = false;
-    }
-
-    private void CreateGridBar(float z)
-    {
-        float halfWidth = HalfWidthAtZ(z);
-        float depth = 0.025f;
-        CreateQuadMesh(
-            "Cyber Grid " + z,
-            new Vector3(-halfWidth, 0.012f, z - depth),
-            new Vector3(halfWidth, 0.012f, z - depth),
-            new Vector3(-halfWidth, 0.012f, z + depth),
-            new Vector3(halfWidth, 0.012f, z + depth),
-            gridMaterial);
     }
 
     private void BuildCyberCity()
@@ -363,7 +435,7 @@ public class RhythmPlayField : MonoBehaviour
             "Horizon Right",
             new Vector3(farHalfWidth + 0.35f, 1.7f, z),
             new Vector3(0.10f, 3.4f, 0.10f),
-            cityMagentaMaterial);
+            cityCyanMaterial);
         CreateBox(
             "Horizon Top",
             new Vector3(0.0f, 3.4f, z),
@@ -400,12 +472,24 @@ public class RhythmPlayField : MonoBehaviour
         float halfThickness,
         Material material)
     {
+        CreateRail(objectName, nearX, farX,
+            halfThickness, halfThickness * 0.45f, material);
+    }
+
+    private void CreateRail(
+        string objectName,
+        float nearX,
+        float farX,
+        float nearHalfThickness,
+        float farHalfThickness,
+        Material material)
+    {
         CreateQuadMesh(
             objectName,
-            new Vector3(nearX - halfThickness, 0.025f, nearZ),
-            new Vector3(nearX + halfThickness, 0.025f, nearZ),
-            new Vector3(farX - halfThickness * 0.45f, 0.025f, farZ),
-            new Vector3(farX + halfThickness * 0.45f, 0.025f, farZ),
+            new Vector3(nearX - nearHalfThickness, 0.035f, nearZ),
+            new Vector3(nearX + nearHalfThickness, 0.035f, nearZ),
+            new Vector3(farX - farHalfThickness, 0.035f, LaneEndZ),
+            new Vector3(farX + farHalfThickness, 0.035f, LaneEndZ),
             material);
     }
 
@@ -413,16 +497,22 @@ public class RhythmPlayField : MonoBehaviour
         string objectName,
         float z,
         float y,
+        float sideInset,
+        float halfDepth,
         Material material)
     {
-        float halfWidth = HalfWidthAtZ(z);
-        float depth = 0.13f;
+        float nearBarHalfWidth = Mathf.Max(
+            0.0f,
+            HalfWidthAtZ(z - halfDepth) - sideInset);
+        float farBarHalfWidth = Mathf.Max(
+            0.0f,
+            HalfWidthAtZ(z + halfDepth) - sideInset);
         CreateQuadMesh(
             objectName,
-            new Vector3(-halfWidth, y + 0.045f, z - depth),
-            new Vector3(halfWidth, y + 0.045f, z - depth),
-            new Vector3(-halfWidth, y + 0.045f, z + depth),
-            new Vector3(halfWidth, y + 0.045f, z + depth),
+            new Vector3(-nearBarHalfWidth, y + 0.045f, z - halfDepth),
+            new Vector3(nearBarHalfWidth, y + 0.045f, z - halfDepth),
+            new Vector3(-farBarHalfWidth, y + 0.045f, z + halfDepth),
+            new Vector3(farBarHalfWidth, y + 0.045f, z + halfDepth),
             material);
     }
 

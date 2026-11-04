@@ -38,6 +38,9 @@ public class NoteManager : MonoBehaviour
     private int nextRandomNoteId;
 
     private const double MissWindow = 0.18;
+    // 경계 침범을 막는 최소 여백만 두어 레인 폭과 시각적으로 맞춘다.
+    private const float NoteLaneInsetRatio = 0.025f;
+    private const int RoundedCapSegments = 6;
 
     public void Initialize(
         RhythmClock newRhythmClock,
@@ -229,19 +232,73 @@ public class NoteManager : MonoBehaviour
     private void UpdateTapMesh(RuntimeNote note)
     {
         float z = ZAtTime(note.data.hitTime);
-        float halfWidth = HalfWidthAtZ(z);
-        float laneWidth = halfWidth * 2.0f / RhythmGameController.LaneCount;
-        float centerX = -halfWidth + laneWidth * (note.data.lane + 0.5f);
-        float noteHalfWidth = laneWidth * 0.39f;
         float halfDepth = Mathf.Lerp(0.10f, 0.24f, 1.0f - NormalizedZ(z));
-        float y = 0.10f;
+        SetRoundedTapMesh(note.mesh, note.data.lane, z, halfDepth, 0.10f);
+    }
 
-        SetQuad(
-            note.mesh,
-            new Vector3(centerX - noteHalfWidth, y, z - halfDepth),
-            new Vector3(centerX + noteHalfWidth, y, z - halfDepth),
-            new Vector3(centerX - noteHalfWidth, y, z + halfDepth),
-            new Vector3(centerX + noteHalfWidth, y, z + halfDepth));
+    // 좌우 끝이 둥근 캡슐형 메시를 만들되, 각 꼭짓점은 해당 Z의 레인 안에 둔다.
+    private void SetRoundedTapMesh(
+        Mesh mesh,
+        int lane,
+        float centerZ,
+        float halfDepth,
+        float y)
+    {
+        int perimeterCount = (RoundedCapSegments + 1) * 2;
+        Vector3[] vertices = new Vector3[perimeterCount + 1];
+        int[] triangles = new int[perimeterCount * 3];
+        vertices[0] = new Vector3(LaneCenterAtZ(lane, centerZ), y, centerZ);
+
+        int vertexIndex = 1;
+        for (int i = 0; i <= RoundedCapSegments; i++)
+        {
+            float angle = Mathf.Lerp(-90.0f, -270.0f, i / (float)RoundedCapSegments)
+                * Mathf.Deg2Rad;
+            float vertexZ = Mathf.Min(
+                farZ,
+                centerZ + Mathf.Sin(angle) * halfDepth);
+            float left;
+            float right;
+            GetNoteHorizontalBounds(lane, vertexZ, out left, out right);
+            float radiusX = Mathf.Min(halfDepth, (right - left) * 0.22f);
+            vertices[vertexIndex++] = new Vector3(
+                left + radiusX + Mathf.Cos(angle) * radiusX,
+                y,
+                vertexZ);
+        }
+
+        for (int i = 0; i <= RoundedCapSegments; i++)
+        {
+            float angle = Mathf.Lerp(90.0f, -90.0f, i / (float)RoundedCapSegments)
+                * Mathf.Deg2Rad;
+            float vertexZ = Mathf.Min(
+                farZ,
+                centerZ + Mathf.Sin(angle) * halfDepth);
+            float left;
+            float right;
+            GetNoteHorizontalBounds(lane, vertexZ, out left, out right);
+            float radiusX = Mathf.Min(halfDepth, (right - left) * 0.22f);
+            vertices[vertexIndex++] = new Vector3(
+                right - radiusX + Mathf.Cos(angle) * radiusX,
+                y,
+                vertexZ);
+        }
+
+        for (int i = 0; i < perimeterCount; i++)
+        {
+            int triangleIndex = i * 3;
+            triangles[triangleIndex] = 0;
+            triangles[triangleIndex + 1] = i + 1;
+            triangles[triangleIndex + 2] = i + 1 == perimeterCount
+                ? 1
+                : i + 2;
+        }
+
+        mesh.Clear();
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
     }
 
     private void UpdateHoldMesh(RuntimeNote note)
@@ -250,24 +307,100 @@ public class NoteManager : MonoBehaviour
         float tailZ = Mathf.Min(farZ, ZAtTime(note.data.endTime));
         tailZ = Mathf.Max(headZ + 0.12f, tailZ);
 
-        float headHalfWidth = HalfWidthAtZ(headZ);
-        float tailHalfWidth = HalfWidthAtZ(tailZ);
-        float headLaneWidth = headHalfWidth * 2.0f / RhythmGameController.LaneCount;
-        float tailLaneWidth = tailHalfWidth * 2.0f / RhythmGameController.LaneCount;
-        float headCenterX = -headHalfWidth
-            + headLaneWidth * (note.data.lane + 0.5f);
-        float tailCenterX = -tailHalfWidth
-            + tailLaneWidth * (note.data.lane + 0.5f);
-        float headNoteHalfWidth = headLaneWidth * 0.36f;
-        float tailNoteHalfWidth = tailLaneWidth * 0.36f;
+        float capDepth = Mathf.Min(0.10f, (tailZ - headZ) * 0.25f);
         float y = note.isHolding ? 0.14f : 0.11f;
+        SetRoundedHoldMesh(note.mesh, note.data.lane, headZ, tailZ, capDepth, y);
+    }
 
-        SetQuad(
-            note.mesh,
-            new Vector3(headCenterX - headNoteHalfWidth, y, headZ - 0.10f),
-            new Vector3(headCenterX + headNoteHalfWidth, y, headZ - 0.10f),
-            new Vector3(tailCenterX - tailNoteHalfWidth, y, tailZ + 0.10f),
-            new Vector3(tailCenterX + tailNoteHalfWidth, y, tailZ + 0.10f));
+    // 롱노트의 가까운 끝과 먼 끝에도 반원 캡을 만들어 탭 노트와 형태를 통일한다.
+    private void SetRoundedHoldMesh(
+        Mesh mesh,
+        int lane,
+        float headZ,
+        float tailZ,
+        float capDepth,
+        float y)
+    {
+        int perimeterCount = (RoundedCapSegments + 1) * 2;
+        Vector3[] vertices = new Vector3[perimeterCount + 1];
+        int[] triangles = new int[perimeterCount * 3];
+        float centerZ = (headZ + tailZ) * 0.5f;
+        vertices[0] = new Vector3(LaneCenterAtZ(lane, centerZ), y, centerZ);
+
+        int vertexIndex = 1;
+        for (int i = 0; i <= RoundedCapSegments; i++)
+        {
+            float angle = Mathf.Lerp(180.0f, 360.0f, i / (float)RoundedCapSegments)
+                * Mathf.Deg2Rad;
+            float vertexZ = Mathf.Min(
+                farZ,
+                headZ + Mathf.Sin(angle) * capDepth);
+            float left;
+            float right;
+            GetNoteHorizontalBounds(lane, vertexZ, out left, out right);
+            float centerX = (left + right) * 0.5f;
+            float halfNoteWidth = (right - left) * 0.5f;
+            vertices[vertexIndex++] = new Vector3(
+                centerX + Mathf.Cos(angle) * halfNoteWidth,
+                y,
+                vertexZ);
+        }
+
+        for (int i = 0; i <= RoundedCapSegments; i++)
+        {
+            float angle = Mathf.Lerp(0.0f, 180.0f, i / (float)RoundedCapSegments)
+                * Mathf.Deg2Rad;
+            float vertexZ = Mathf.Min(
+                farZ,
+                tailZ + Mathf.Sin(angle) * capDepth);
+            float left;
+            float right;
+            GetNoteHorizontalBounds(lane, vertexZ, out left, out right);
+            float centerX = (left + right) * 0.5f;
+            float halfNoteWidth = (right - left) * 0.5f;
+            vertices[vertexIndex++] = new Vector3(
+                centerX + Mathf.Cos(angle) * halfNoteWidth,
+                y,
+                vertexZ);
+        }
+
+        for (int i = 0; i < perimeterCount; i++)
+        {
+            int triangleIndex = i * 3;
+            triangles[triangleIndex] = 0;
+            triangles[triangleIndex + 1] = i + 1 == perimeterCount
+                ? 1
+                : i + 2;
+            triangles[triangleIndex + 2] = i + 1;
+        }
+
+        mesh.Clear();
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+    }
+
+    // 노트 꼭짓점의 실제 Z 위치에서 레인 폭을 계산해 원근 레일과 정확히 맞춘다.
+    private void GetNoteHorizontalBounds(
+        int lane,
+        float z,
+        out float left,
+        out float right)
+    {
+        float halfWidth = HalfWidthAtZ(z);
+        float laneWidth = halfWidth * 2.0f / RhythmGameController.LaneCount;
+        float laneLeft = -halfWidth + laneWidth * lane;
+        float inset = laneWidth * NoteLaneInsetRatio;
+        left = laneLeft + inset;
+        right = laneLeft + laneWidth - inset;
+    }
+
+    private float LaneCenterAtZ(int lane, float z)
+    {
+        float halfWidth = HalfWidthAtZ(z);
+        float laneWidth = halfWidth * 2.0f / RhythmGameController.LaneCount;
+        return -halfWidth + laneWidth * (lane + 0.5f);
     }
 
     private static void SetQuad(

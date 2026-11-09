@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-// Hub의 싱글 플레이 버튼이나 StoryManager의 UnityEvent에서 RhythmScene을 여는 공용 진입점이다.
+// 허브와 스토리에서 곡 선택 씬 또는 실제 플레이 씬을 여는 공용 진입점이다.
 public class RhythmSceneLauncher : MonoBehaviour, IPointerClickHandler
 {
     private enum PointerLaunchMode
@@ -12,6 +12,7 @@ public class RhythmSceneLauncher : MonoBehaviour, IPointerClickHandler
     }
 
     [SerializeField] private string rhythmSceneName = "RhythmScene";
+    [SerializeField] private string songSelectSceneName = "SongSelectScene";
     [SerializeField] private string songName = "";
     [SerializeField] private string returnSceneName = "";
     [Header("Optional Pointer Click")]
@@ -38,12 +39,14 @@ public class RhythmSceneLauncher : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    // 싱글모드 버튼에 연결한다. songName이 비어 있으면 RhythmScene의 곡 선택 로비가 열린다.
+    // 싱글모드 버튼에 연결한다. 곡이 없으면 곡 선택 전용 씬을 연다.
     public void LaunchSingleMode()
     {
         string returnScene = ResolveReturnScene();
         RhythmLaunchContext.RequestSingle(songName, returnScene);
-        LoadRhythmScene();
+        LoadRequestedScene(string.IsNullOrWhiteSpace(songName)
+            ? songSelectSceneName
+            : rhythmSceneName);
     }
 
     // 스토리의 리듬게임 진입 이벤트에 연결한다. 완료 또는 나가기 시 원래 씬으로 돌아간다.
@@ -51,19 +54,21 @@ public class RhythmSceneLauncher : MonoBehaviour, IPointerClickHandler
     {
         string returnScene = ResolveReturnScene();
         RhythmLaunchContext.RequestStory(songName, returnScene);
-        LoadRhythmScene();
+        LoadRequestedScene(string.IsNullOrWhiteSpace(songName)
+            ? songSelectSceneName
+            : rhythmSceneName);
     }
 
     public void LaunchSingleSong(string selectedSongName)
     {
         RhythmLaunchContext.RequestSingle(selectedSongName, ResolveReturnScene());
-        LoadRhythmScene();
+        LoadRequestedScene(rhythmSceneName);
     }
 
     public void LaunchStorySong(string selectedSongName)
     {
         RhythmLaunchContext.RequestStory(selectedSongName, ResolveReturnScene());
-        LoadRhythmScene();
+        LoadRequestedScene(rhythmSceneName);
     }
 
     private string ResolveReturnScene()
@@ -73,16 +78,16 @@ public class RhythmSceneLauncher : MonoBehaviour, IPointerClickHandler
             : returnSceneName.Trim();
     }
 
-    private void LoadRhythmScene()
+    private void LoadRequestedScene(string sceneName)
     {
-        if (!Application.CanStreamedLevelBeLoaded(rhythmSceneName))
+        if (!Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            Debug.LogError("RhythmSceneLauncher: '" + rhythmSceneName
+            Debug.LogError("RhythmSceneLauncher: '" + sceneName
                 + "' 씬이 Build Settings에 없습니다.");
             RhythmLaunchContext.Clear();
             return;
         }
 
-        SceneManager.LoadScene(rhythmSceneName);
+        SceneManager.LoadScene(sceneName);
     }
 }

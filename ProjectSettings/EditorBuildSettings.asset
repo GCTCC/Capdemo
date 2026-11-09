@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/Scenes/HubScene.unity
     guid: 848b2756e84564246ac7d88a80d38211
   - enabled: 1
+    path: Assets/Scenes/NewHubDemoScene.unity
+    guid: fa3f58cbf69d76342831b61d2526fb65
+  - enabled: 1
+    path: Assets/Scenes/SongSelectScene.unity
+    guid: 1a7d9e5c4b6f4a31a8a9d3e0f2c7b654
+  - enabled: 1
     path: Assets/Scenes/RhythmScene.unity
     guid: 624ac7fad7817234a9aa5b32582aeaff
   - enabled: 1

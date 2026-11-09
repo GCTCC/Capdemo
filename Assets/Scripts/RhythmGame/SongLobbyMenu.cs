@@ -12,7 +12,7 @@ public class SongLobbyMenu : MonoBehaviour
     private static readonly Color DeepRed = new Color(0.55f, 0.075f, 0.08f, 1.0f);
     private static readonly Color Cyan = new Color(0.13f, 0.90f, 0.88f, 1.0f);
 
-    private RhythmGameController controller;
+    private SongSelectSceneController controller;
     private List<ChartAutoLoader.SongEntry> songs
         = new List<ChartAutoLoader.SongEntry>();
     private Vector2 scrollPosition;
@@ -24,7 +24,7 @@ public class SongLobbyMenu : MonoBehaviour
         get { return isVisible; }
     }
 
-    public void Initialize(RhythmGameController newController)
+    public void Initialize(SongSelectSceneController newController)
     {
         controller = newController;
     }
@@ -156,6 +156,14 @@ public class SongLobbyMenu : MonoBehaviour
         refreshStyle.normal.textColor = Cream;
         GUI.backgroundColor = DeepRed;
         if (GUI.Button(
+            new Rect(panel.x + 44.0f, panel.yMax - 58.0f, 154.0f, 38.0f),
+            "이전 화면으로",
+            refreshStyle))
+        {
+            controller.ReturnToPreviousScene();
+        }
+
+        if (GUI.Button(
             new Rect(panel.xMax - 198.0f, panel.yMax - 58.0f, 154.0f, 38.0f),
             "목록 새로고침",
             refreshStyle))
@@ -198,6 +206,14 @@ public class SongLobbyMenu : MonoBehaviour
             buttonStyle))
         {
             controller.PlayRandomWithoutMusic();
+        }
+
+        if (GUI.Button(
+            new Rect(panel.center.x - 150.0f, panel.center.y + 125.0f, 300.0f, 46.0f),
+            "이전 화면으로",
+            buttonStyle))
+        {
+            controller.ReturnToPreviousScene();
         }
         GUI.backgroundColor = Color.white;
     }

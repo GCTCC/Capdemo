@@ -4161,7 +4161,6 @@ GameObject:
   - component: {fileID: 855492052}
   - component: {fileID: 855492053}
   - component: {fileID: 855492054}
-  - component: {fileID: 855492055}
   - component: {fileID: 855492056}
   m_Layer: 0
   m_Name: Rhythm Game Prototype
@@ -4187,6 +4186,7 @@ MonoBehaviour:
   maxSpawnInterval: 0.78
   doubleNoteChance: 0.32
   chartData: {fileID: 0}
+  songSelectSceneName: SongSelectScene
   inputActions: {fileID: -944628639613478452, guid: 3748192f16664aec9c003692b2c15841, type: 3}
   leftNoteMaterial: {fileID: 2100000, guid: 3361820cb54a22a4da7a6ac758b3fed5, type: 2}
   rightNoteMaterial: {fileID: 2100000, guid: 272087a7f10c2ca4ca83b5ab019314b3, type: 2}
@@ -4319,18 +4319,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   countdownSeconds: 3
---- !u!114 &855492055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855492045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1728f3019ca4df2a54f30ebbe6a92f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SongLobbyMenu
 --- !u!114 &855492056
 MonoBehaviour:
   m_ObjectHideFlags: 0

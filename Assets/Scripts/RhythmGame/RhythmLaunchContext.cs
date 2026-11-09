@@ -11,6 +11,7 @@ public sealed class RhythmLaunchRequest
     public RhythmEntryMode mode;
     public string songName;
     public string returnSceneName;
+    public bool forceRandomMode;
 }
 
 // 씬이 바뀌어도 다음 RhythmScene이 한 번 소비할 요청을 보관한다.
@@ -29,15 +30,25 @@ public static class RhythmLaunchContext
         Request(RhythmEntryMode.Story, songName, returnSceneName);
     }
 
+    // 음악이 하나도 없을 때 곡 선택 씬이 플레이 씬으로 무음 랜덤 모드를 요청한다.
+    public static void RequestRandom(
+        RhythmEntryMode mode,
+        string returnSceneName)
+    {
+        Request(mode, string.Empty, returnSceneName, true);
+    }
+
     public static void Request(
         RhythmEntryMode mode,
         string songName,
-        string returnSceneName)
+        string returnSceneName,
+        bool forceRandomMode = false)
     {
         pendingRequest = new RhythmLaunchRequest();
         pendingRequest.mode = mode;
         pendingRequest.songName = songName ?? string.Empty;
         pendingRequest.returnSceneName = returnSceneName ?? string.Empty;
+        pendingRequest.forceRandomMode = forceRandomMode;
     }
 
     public static bool TryConsume(out RhythmLaunchRequest request)

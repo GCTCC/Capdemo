@@ -112,6 +112,15 @@ public class HubMenuBar : MonoBehaviour
             Debug.LogWarning($"[NewHub] '{scene}' 씬을 열 수 없습니다. 씬 이름이 맞는지, Build Settings에 등록되어 있는지 확인하세요.");
             return;
         }
+
+        // 곡 선택 씬으로 들어갈 때 현재 허브를 복귀 지점으로 함께 전달한다.
+        if (scene == "SongSelectScene")
+        {
+            RhythmLaunchContext.RequestSingle(
+                string.Empty,
+                SceneManager.GetActiveScene().name);
+        }
+
         SceneManager.LoadScene(scene);
     }
 }

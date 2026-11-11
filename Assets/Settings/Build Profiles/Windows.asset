@@ -37,6 +37,12 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/Map/Area2_LiveHouse.unity
     m_guid: a1c9203c045fef449934cefaf1417e13
+  - m_enabled: 1
+    m_path: Assets/Scenes/NewHubDemoScene.unity
+    m_guid: fa3f58cbf69d76342831b61d2526fb65
+  - m_enabled: 1
+    m_path: Assets/Scenes/RhythmScene.unity
+    m_guid: 624ac7fad7817234a9aa5b32582aeaff
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:

@@ -12,6 +12,7 @@ using UnityEngine.UI;
 public static class StoryMenu
 {
     internal const string FontPath = "Assets/Art/Fonts/DaeguJunggu/대구중구읍성 Regular SDF.asset";
+    private const string NameInputFontPath = "Assets/Art/Fonts/경기천년제목_Bold SDF.asset";
     private const string SampleChapterPath = "Assets/Story/Story_Sample.asset";
     private const string IllustFolder = "Assets/image/Illust/";
 
@@ -62,7 +63,10 @@ public static class StoryMenu
 
         var dialogueBox = CreateDialogueBox(root, font, standing);
 
-        var nameInput = CreateNameInputPanel(root, font);
+        // 이름 입력 창만 경기천년제목 폰트를 쓴다 (없으면 대사창 폰트)
+        var nameFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(NameInputFontPath);
+        if (!nameFont) Debug.LogWarning($"[CapDemo] {NameInputFontPath} 폰트를 찾지 못해 대사창 폰트를 사용합니다.");
+        var nameInput = CreateNameInputPanel(root, nameFont ? nameFont : font);
 
         // FadeOverlay: 화면 전체를 덮는 검은 Image. 맨 마지막 자식이라 가장 위에 그려진다
         var overlay = CreateImage("FadeOverlay", root, Color.black);
@@ -180,8 +184,11 @@ public static class StoryMenu
         buttonLabel.fontSize = 34;
 
         if (font)
+        {
+            input.fontAsset = font;
             foreach (var text in panel.GetComponentsInChildren<TMP_Text>(true))
                 text.font = font;
+        }
         if (input.placeholder is TMP_Text placeholder) placeholder.text = "이름";
 
         var component = panel.gameObject.AddComponent<NameInputPanel>();

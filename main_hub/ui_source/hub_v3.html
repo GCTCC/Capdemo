@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="fonts2.css">
+<style>@font-face{font-family:GGTitle;src:url(gg_title.ttf)}@font-face{font-family:NeoDGM;src:url(neodgm.ttf)}</style>
+<style>
+:root{
+  --teal:#a3ebd6; --teal-d:#4fa597; --teal-dd:#173a36;
+  --ink:#ebf5f2; --mute:#a8c2bd; --dim:#6a8a85;
+  --red:#ff4d5e; --amber:#ffb45c;
+  --panel:rgba(10,24,24,.72); --panel2:rgba(14,34,33,.82);
+  --line:rgba(115,204,189,.55);
+  --mono:'NeoDGM','JetBrains Mono',monospace; --kr:'Noto Sans KR',sans-serif; --disp:'GGTitle','Chakra Petch',sans-serif; --title:'GGTitle','Noto Sans KR',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:900px;overflow:hidden;background:#071211}
+body{font-family:var(--kr);color:var(--ink);position:relative}
+.bg{position:absolute;inset:0;background:url(BG) center/cover no-repeat}
+/* darken left third for menu, light bottom/top vignette */
+.shade{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(4,12,12,.92) 0%,rgba(4,12,12,.80) 24%,rgba(4,12,12,.35) 40%,rgba(4,12,12,0) 55%),
+  linear-gradient(180deg,rgba(4,12,12,.65) 0%,rgba(4,12,12,0) 16%,rgba(4,12,12,0) 78%,rgba(4,12,12,.8) 100%)}
+.scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px);mix-blend-mode:multiply;pointer-events:none}
+.abs{position:absolute}
+.mono{font-family:var(--mono);letter-spacing:.08em}
+
+/* ---------- top bar ---------- */
+.topline{left:64px;right:64px;top:80px;height:1px;background:linear-gradient(90deg,var(--line),rgba(163,235,214,.12) 60%,var(--line))}
+.topline:before{content:"";position:absolute;left:0;top:-1px;width:320px;height:3px;background:var(--teal-d)}
+.logo{left:64px;top:30px;display:flex;align-items:center;gap:14px}
+.logo .wave{display:flex;gap:2px;align-items:center;height:20px}
+.logo .wave i{display:block;width:2px;background:var(--teal);border-radius:1px}
+.logo b{font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:.04em}
+.logo .sep{width:1px;height:20px;background:var(--dim)}
+.logo small{font-family:var(--mono);font-size:12px;color:var(--mute);letter-spacing:.12em}
+
+/* player card */
+.player{left:64px;top:104px;width:330px;height:76px;display:flex;gap:14px;align-items:center;padding:0 16px 0 10px;
+  background:var(--panel);border:1px solid var(--line);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.avatar{width:56px;height:56px;flex:none;position:relative;
+  clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
+  background:linear-gradient(160deg,#2b5a54,#0d2321)}
+.avatar svg{position:absolute;inset:0}
+.pinfo{flex:1}
+.pname{display:flex;align-items:baseline;gap:8px}
+.pname b{font-family:var(--title);font-size:18px;font-weight:400}
+.pname span{font-family:var(--mono);font-size:11px;color:var(--teal)}
+.ptitle{font-size:11px;color:var(--mute);margin-top:1px}
+.exp{margin-top:7px;height:4px;background:rgba(163,235,214,.15);position:relative}
+.exp i{position:absolute;left:0;top:0;bottom:0;width:68%;background:var(--teal)}
+.expn{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:3px;display:flex;justify-content:space-between}
+
+/* top right */
+.tr{right:64px;top:28px;display:flex;align-items:center;gap:10px}
+.chip{height:32px;display:flex;align-items:center;gap:8px;padding:0 12px 0 10px;background:var(--panel);border:1px solid var(--line);font-family:var(--mono);font-size:13px;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.chip .plus{color:var(--teal);margin-left:4px;font-weight:700}
+.ibtn{width:36px;height:36px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);position:relative;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.badge{position:absolute;right:3px;top:3px;min-width:14px;height:14px;border-radius:7px;background:var(--red);font-family:var(--mono);font-size:9px;font-weight:700;display:grid;place-items:center;padding:0 3px;color:#fff}
+.clock{font-family:var(--mono);font-size:12px;color:var(--mute);text-align:right;line-height:1.35;margin-left:6px}
+.clock b{color:var(--ink);font-size:15px;font-weight:500}
+
+/* ---------- menu ---------- */
+.menuhdr{left:64px;top:228px;display:flex;align-items:center;gap:12px}
+.menuhdr .t{font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:.2em}
+.menuhdr .l{width:150px;height:1px;background:var(--line)}
+.menuhdr .s{font-family:var(--mono);font-size:10px;color:var(--dim)}
+.menu{left:64px;top:252px;width:420px;display:flex;flex-direction:column;gap:12px}
+.item{position:relative;height:74px;display:flex;align-items:center;padding:0 20px 0 18px;background:var(--panel);
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%)}
+.item:after{content:"";position:absolute;inset:0;border:1px solid rgba(163,235,214,.18);pointer-events:none;
+  clip-path:inherit}
+.item .no{font-family:var(--mono);font-size:12px;color:var(--mute);width:36px}
+.item .ic{width:34px;height:34px;margin-right:16px;display:grid;place-items:center;color:var(--teal)}
+.item .tx b{display:block;font-family:var(--title);font-size:25px;font-weight:400;letter-spacing:-.01em}
+.item .tx small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.18em;margin-top:1px}
+.item .arr{margin-left:auto;color:var(--dim);font-family:var(--mono);font-size:14px}
+.item.on{background:linear-gradient(90deg,rgba(163,235,214,.92),rgba(163,235,214,.78));color:#06201c;height:92px}
+.item.on .no,.item.on .tx small{color:#174a42}
+.item.on .ic{color:#06201c}
+.item.on .tx b{font-size:30px}
+.item.on .arr{color:#06201c;font-size:22px}
+.item.on .tag{position:absolute;right:56px;top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;background:#06201c;color:var(--teal);padding:2px 7px}
+.cursor{left:46px;top:252px;width:6px;height:92px;background:var(--teal)}
+/* connector from active item into the scene */
+.conn{left:484px;top:250px}
+.quit{left:64px;top:704px;display:flex;align-items:center;gap:10px;height:36px;padding:0 18px 0 14px;border:1px solid rgba(255,77,94,.45);background:rgba(40,10,14,.55);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%)}
+.quit span{font-family:var(--title);font-size:15px;color:#ffd5d9}
+.quit small{font-family:var(--mono);font-size:10px;color:#c26a74;letter-spacing:.16em}
+
+/* ---------- right side widgets ---------- */
+.story{right:64px;top:104px;width:300px;padding:12px 16px 14px;background:var(--panel);border:1px solid var(--line);
+  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+.story .h{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--teal);letter-spacing:.14em}
+.story .c{font-family:var(--title);font-size:16px;font-weight:400;margin-top:6px}
+.story .c em{font-style:normal;color:var(--mute);font-weight:400;font-size:12px;margin-left:6px}
+.seg{display:flex;gap:3px;margin-top:10px}
+.seg i{flex:1;height:6px;background:rgba(163,235,214,.15)}
+.seg i.f{background:var(--teal)} .seg i.p{background:linear-gradient(90deg,var(--teal) 50%,rgba(163,235,214,.15) 50%)}
+.story .n{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:5px}
+
+.event{right:64px;top:640px;width:360px;height:100px;display:flex;overflow:hidden;background:var(--panel2);border:1px solid rgba(255,77,94,.5);
+  clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px)}
+.event .strip{width:22px;flex:none;background:repeating-linear-gradient(-45deg,var(--red) 0 7px,#2a0b10 7px 14px);opacity:.85}
+.event .body{padding:12px 16px;flex:1;position:relative}
+.event .k{font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.18em;display:flex;gap:8px;align-items:center}
+.event .k i{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red)}
+.event b{display:block;font-family:var(--title);font-size:20px;font-weight:400;margin-top:5px;letter-spacing:-.01em}
+.event small{display:block;font-size:12px;color:var(--mute);margin-top:3px}
+.event .dd{position:absolute;right:16px;bottom:10px;font-family:var(--disp);font-weight:700;font-size:28px;color:var(--red)}
+.dots{right:64px;top:750px;display:flex;gap:6px}
+.dots i{width:16px;height:3px;background:var(--dim)} .dots i.on{background:var(--red);width:28px}
+
+/* side labels / deco */
+.vlabel{left:28px;top:300px;writing-mode:vertical-rl;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.3em}
+.coord{font-family:var(--mono);font-size:10px;color:rgba(143,178,171,.7);letter-spacing:.12em}
+.bracket{width:22px;height:22px;border-color:var(--teal-d);border-style:solid}
+
+/* ---------- bottom ---------- */
+.botline{left:64px;right:64px;bottom:72px;height:1px;background:var(--line)}
+.ticker{left:64px;right:300px;bottom:24px;height:34px;display:flex;align-items:center;background:var(--panel);border:1px solid rgba(163,235,214,.2);overflow:hidden}
+.ticker .lab{height:100%;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--teal);color:#06201c;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.14em;flex:none;
+  clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%);padding-right:22px}
+.ticker .msg{white-space:nowrap;font-size:13px;color:var(--ink);padding-left:16px;display:flex;gap:26px}
+.ticker .msg span{color:var(--mute)}
+.ticker .msg em{font-style:normal;color:var(--teal);font-family:var(--mono);font-size:11px;margin-right:6px}
+.ticker .msg em.r{color:var(--red)}
+.ver{right:64px;bottom:26px;text-align:right;font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.55;letter-spacing:.1em}
+.ver b{color:var(--mute);font-weight:500}
+.net{display:inline-flex;gap:2px;align-items:flex-end;height:10px;margin-right:6px;vertical-align:-1px}
+.net i{width:3px;background:var(--teal)}
+/* ---- v3 additions ---- */
+.logo{top:22px;gap:16px}
+.logo .mk{position:relative;font-family:'Permanent Marker',cursive;font-size:40px;line-height:1;color:var(--ink);transform:rotate(-4deg);text-shadow:2px 2px 0 rgba(0,0,0,.5);padding-bottom:4px}
+.logo .mk .c{color:var(--red)}
+.logo .mk svg{position:absolute;left:-4px;bottom:-8px;overflow:visible}
+.logo small b{color:var(--ink);font-weight:400;font-family:inherit;font-size:inherit;letter-spacing:inherit}
+.logo .sep{margin-left:14px}
+.pname .role{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:11px;color:var(--teal);letter-spacing:.16em}
+.vu{margin-top:8px;display:flex;align-items:flex-end;gap:3px;height:14px}
+.vu i{flex:1;background:var(--teal)} .vu i.o{background:var(--amber)} .vu i.off{background:rgba(163,235,214,.15)}
+.phone{height:36px;display:flex;align-items:center;gap:8px;padding:0 12px 0 10px;background:var(--panel);border:1px solid var(--line);position:relative;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.phone span{font-size:13px;font-weight:500}
+.phone .badge{position:static;margin-left:2px}
+.item .tx small{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:11px;letter-spacing:.22em}
+.event .k{color:var(--red)}
+.event .ln{display:block;font-size:12px;color:var(--mute);margin-top:3px}
+.ticker .lab{background:var(--red);color:#1a0508}
+.ticker .lab i{width:6px;height:6px;border-radius:50%;background:#1a0508}
+.npvu{display:inline-flex;align-items:flex-end;gap:2px;height:10px;margin-right:6px;vertical-align:-1px}.npvu i{width:2px;background:var(--teal)}
+</style></head>
+<body>
+<div class="bg"></div><div class="shade"></div><div class="scan"></div>
+
+<!-- top -->
+<div class="abs logo">
+  <div class="mk">RE<span class="c">:</span>WRITE
+    <svg width="230" height="16" viewBox="0 0 230 16"><path d="M2 10 C 60 4, 140 3, 226 2" fill="none" stroke="#ff4d5e" stroke-width="3.5" stroke-linecap="round"/><path d="M30 14 C 90 9, 160 8, 210 7" fill="none" stroke="#ff4d5e" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></svg>
+  </div>
+  <div class="sep"></div><small><b>7구역 공업단지</b> // 지하 라이브하우스 「RUST」</small>
+</div>
+<div class="abs topline"></div>
+
+<div class="abs player">
+  <div class="avatar"><svg viewBox="0 0 56 56"><circle cx="28" cy="22" r="10" fill="#a3ebd6" opacity=".85"/><path d="M10 52c3-12 11-17 18-17s15 5 18 17z" fill="#a3ebd6" opacity=".85"/><path d="M17 20c0-9 6-13 11-13s12 4 12 12c-3-3-6-5-12-5s-8 3-11 6z" fill="#cfe9ee"/></svg></div>
+  <div class="pinfo">
+    <div class="pname"><b>레이</b><span class="role">VOCAL / GUITAR</span></div>
+    <div class="vu"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><i class="o" style="height:12px"></i><i class="o" style="height:14px"></i><i class="off" style="height:14px"></i><i class="off" style="height:14px"></i></div>
+    <div class="expn"><span>CLEAR</span><span>6 / 8 TRACKS</span></div>
+  </div>
+</div>
+
+<div class="abs tr">
+  <div class="phone"><svg width="15" height="18" viewBox="0 0 18 22" fill="none" stroke="#a3ebd6" stroke-width="1.7"><rect x="2" y="1.5" width="14" height="19" rx="2"/><path d="M7 17.5h4M5.5 6.5h7M5.5 10h5"/></svg><span>홀로폰</span><span class="badge">2</span></div>
+  <div class="clock"><b>23:47</b><br>MON · NOV 16</div>
+</div>
+
+<div class="abs story">
+  <div class="h"><span>STORY</span><span>CH.03</span></div>
+  <div class="c">녹슨 무대 위의 노이즈<em>· 3/6</em></div>
+  <div class="seg"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i></div>
+  <div class="n"><span>NEXT</span><span>리허설 직전, 정전</span></div>
+</div>
+
+<div class="abs menuhdr" style="top:224px"><span class="t">SET LIST</span><span class="l"></span><span class="s">04</span></div>
+<div class="abs cursor" style="top:252px"></div>
+<div class="abs menu">
+  <div class="item on">
+    <span class="no">01</span>
+    <span class="ic"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M10 6l14 9-14 9z" fill="currentColor"/></svg></span>
+    <span class="tx"><b>싱글 플레이</b><small>SINGLE PLAY</small></span>
+    <span class="tag">8곡 수록</span>
+    <span class="arr">→</span>
+  </div>
+  <div class="item"><span class="no">02</span>
+    <span class="ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h8a2 2 0 012 2v15a2 2 0 00-2-2H3zM23 5h-8a2 2 0 00-2 2v15a2 2 0 012-2h8z"/></svg></span>
+    <span class="tx"><b>스토리 모드</b><small>STORY MODE</small></span><span class="arr">›</span></div>
+  <div class="item"><span class="no">03</span>
+    <span class="ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13" cy="13" r="10"/><circle cx="13" cy="13" r="3"/><path d="M13 3a10 10 0 016 2M7 21a10 10 0 01-4-5"/></svg></span>
+    <span class="tx"><b>아카이브</b><small>ARCHIVE</small></span><span class="arr">›</span></div>
+  <div class="item"><span class="no">04</span>
+    <span class="ic"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4v18M13 4v18M21 4v18"/><rect x="2.5" y="14" width="5" height="3" fill="#0a1818"/><rect x="10.5" y="7" width="5" height="3" fill="#0a1818"/><rect x="18.5" y="16" width="5" height="3" fill="#0a1818"/></svg></span>
+    <span class="tx"><b>설정</b><small>SETTINGS</small></span><span class="arr">›</span></div>
+</div>
+<svg class="abs conn" width="200" height="120" viewBox="0 0 200 120"><path d="M0 46H40L80 8H200" fill="none" stroke="#a3ebd6" stroke-width="1.2" opacity=".75"/><rect x="38" y="43" width="5" height="5" fill="#a3ebd6"/></svg>
+<div class="abs coord" style="left:574px;top:242px"><span class="npvu"><i style="height:4px"></i><i style="height:9px"></i><i style="height:6px"></i><i style="height:10px"></i></span>NOW PLAYING · Moonside Howl</div>
+
+<div class="abs quit" style="top:640px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#ff8a96" stroke-width="1.6"><path d="M6 3H3v10h3M10 5l3 3-3 3M13 8H6"/></svg><span>게임 종료</span><small>EXIT</small></div>
+
+<div class="abs event">
+  <div class="strip"></div>
+  <div class="body">
+    <div class="k"><i></i>NEXT SHOW · CH.04</div>
+    <b>폐공장 라이브 나이트</b>
+    <small>신곡 해금 · Ghost District</small>
+    <div class="dd">D-3</div>
+  </div>
+</div>
+
+<div class="abs bracket" style="right:44px;top:92px;border-width:1px 1px 0 0"></div>
+<div class="abs bracket" style="left:44px;bottom:84px;border-width:0 0 1px 1px"></div>
+
+<div class="abs botline"></div>
+<div class="abs ticker">
+  <div class="lab"><i></i>RADIO 7</div>
+  <div class="msg">
+    <div>7구역 공업단지 야간 정전 예보 <span>· 발전기 연료를 확인하세요</span></div>
+    <div>지하 라이브하우스 단속 강화 <span>· 시청 "불법 공연장 이달 내 폐쇄"</span></div>
+    <div>오늘 밤 비 <span>· 강수확률 80%</span></div>
+  </div>
+</div>
+<div class="abs ver"><b>VER 0.3.1</b></div>
+</body></html>

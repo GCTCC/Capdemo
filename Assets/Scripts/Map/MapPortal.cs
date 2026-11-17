@@ -47,9 +47,10 @@ public class MapPortal : MonoBehaviour
             Debug.LogError($"[CapDemo] 포탈 '{name}': 씬 '{targetScene}' 을(를) 열 수 없습니다. 이름이 맞는지, Build Profiles 씬 목록에 있는지 확인하세요.", this);
             return;
         }
+        if (ScreenFader.IsBusy) return;
         leaving = true;
         MapSpawnPoint.NextSpawn = targetSpawn;
-        SceneManager.LoadScene(targetScene);
+        ScreenFader.LoadScene(targetScene); // 검게 어두워졌다가 새 구역에서 밝아진다
     }
 
     private static bool IsPlayer(Collider2D other) =>

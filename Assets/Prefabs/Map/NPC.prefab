@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1649839959724649914}
   - component: {fileID: 612424385093509241}
   - component: {fileID: 7403150279760409475}
+  - component: {fileID: 6635857984068558601}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 696030444
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: -10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
@@ -158,6 +159,9 @@ MonoBehaviour:
   dialogue: {fileID: 0}
   lines: []
   prompt: {fileID: 8706698961402496526}
+  firstMeetDialogue: {fileID: 0}
+  firstMeetDistance: 4
+  firstMeetStory: {fileID: 0}
   canTalk: 1
 --- !u!114 &612424385093509241
 MonoBehaviour:
@@ -201,6 +205,20 @@ MonoBehaviour:
   wallShift: 0.4
   wallGrow: 0.1
   lightReach: 2.5
+--- !u!114 &6635857984068558601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8116927249868812891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7392f37e6a927a64e8f82b4ec4ce9ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpeakerTag
+  speakerName: 
+  headOffset: {x: 0.15, y: -0.25}
 --- !u!1 &8706698961402496526
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,7 +301,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 946478657
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 20
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}

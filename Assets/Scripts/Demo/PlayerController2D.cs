@@ -23,9 +23,13 @@ public class PlayerController2D : MonoBehaviour
     private float moveInput;
     private bool jumpQueued;
     private NpcInteract nearbyNpc;
+    private StoryOverlay storyOverlay; // 맵 위 스토리 화면. 씬에 없으면 null
 
     // 마지막 FixedUpdate 기준으로 바닥에 서 있는지. 애니메이션이 공중/착지를 고를 때 쓴다.
     public bool IsGrounded { get; private set; } = true;
+
+    // NPC와 대화창을 열고 있는지
+    public bool IsTalking => dialogue && dialogue.IsOpen;
 
     private void Awake()
     {
@@ -35,12 +39,29 @@ public class PlayerController2D : MonoBehaviour
         groundFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
         // 프리팹으로 씬에 끌어다 놓았을 때는 씬에 있는 대화창을 찾아 쓴다
         if (!dialogue) dialogue = FindAnyObjectByType<DemoDialogue>();
+        storyOverlay = FindAnyObjectByType<StoryOverlay>();
     }
 
     private void Update()
     {
         var keyboard = Keyboard.current;
         if (keyboard == null) return;
+
+        // 일시정지 창이 떠 있는 동안은 아무 입력도 받지 않는다
+        if (GamePause.IsPaused || HoloPopup.AnyOpen)
+        {
+            moveInput = 0f;
+            jumpQueued = false;
+            return;
+        }
+
+        // 맵 위에 스토리가 재생되는 동안은 움직이지 않는다. 대사 넘기기는 StoryManager가 직접 받는다
+        if (storyOverlay && storyOverlay.IsPlaying)
+        {
+            moveInput = 0f;
+            jumpQueued = false;
+            return;
+        }
 
         if (dialogue && dialogue.IsOpen)
         {

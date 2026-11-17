@@ -1,133 +1,75 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using TMPro;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.UI;
 
-// 에디터 상단 메뉴 Tools > CapDemo
+// 에디터 상단 메뉴 Tools > CapDemo > 플레이 데이터 / 튜토리얼 테스트
+// 저장된 진행 상황(클리어한 챕터 수)을 지우거나 바꾸거나 확인하고,
+// 맵 씬을 바로 Play할 때 튜토리얼을 몇 단계로 시작할지 고른다.
 public static class CapDemoMenu
 {
-    private const string TitleScenePath = "Assets/Scenes/TitleScene.unity";
-    private const string TutoScenePath = "Assets/Scenes/TutoScene.unity";
-    private const string HubScenePath = "Assets/Scenes/HubScene.unity";
-    private const string PressAnyKeyFontPath = "Assets/neodgm SDF.asset";
-
-    [MenuItem("Tools/CapDemo/플레이 데이터 초기화")]
+    [MenuItem("Tools/CapDemo/플레이 데이터/초기화")]
     private static void ResetProgress()
     {
         SaveData.ResetProgress();
-        Debug.Log("[CapDemo] 플레이 데이터를 초기화했습니다. 다음 시작은 TutoScene입니다.");
+        Debug.Log("[CapDemo] 플레이 데이터를 초기화했습니다. 다음 시작은 튜토리얼(TutoScene)입니다.");
     }
 
-    [MenuItem("Tools/CapDemo/튜토리얼 완료로 표시")]
+    [MenuItem("Tools/CapDemo/플레이 데이터/튜토리얼 완료로 표시")]
     private static void MarkTutorialCleared()
     {
         SaveData.MarkTutorialCleared();
-        Debug.Log("[CapDemo] 튜토리얼 완료로 표시했습니다. 다음 시작은 HubScene입니다.");
+        Debug.Log("[CapDemo] 튜토리얼 챕터 완료(챕터 1개 클리어)로 표시했습니다. 다음 시작은 HoloHubScene입니다.");
     }
 
-    [MenuItem("Tools/CapDemo/플레이 데이터 확인")]
+    [MenuItem("Tools/CapDemo/플레이 데이터/확인")]
     private static void LogProgress()
     {
-        Debug.Log($"[CapDemo] 튜토리얼 완료: {SaveData.IsTutorialCleared()}");
+        Debug.Log($"[CapDemo] 클리어한 챕터: {SaveData.GetChaptersCleared()}, 이름: '{SaveData.GetPlayerName()}', " +
+                  $"맵 바로 Play 시 튜토리얼 단계: {TestStep}");
     }
 
-    [MenuItem("Tools/CapDemo/타이틀·튜토리얼 씬 만들기")]
-    private static void CreateScenes()
-    {
-        var existing = new[] { TitleScenePath, TutoScenePath }.Where(File.Exists).ToArray();
-        if (existing.Length > 0 && !EditorUtility.DisplayDialog("씬 덮어쓰기",
-                "이미 있는 씬을 새로 만듭니다:\n" + string.Join("\n", existing), "덮어쓰기", "취소"))
-            return;
-        if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+    // ── 튜토리얼 테스트: 맵 씬을 바로 Play할 때의 시작 단계 (타이틀부터 Play하면 무시된다) ──
+    private const string TestMenu = "Tools/CapDemo/튜토리얼 테스트/";
 
-        CreateTutoScene();
-        CreateTitleScene();
-        RegisterBuildScenes();
-        EditorSceneManager.OpenScene(TitleScenePath);
-        Debug.Log("[CapDemo] TitleScene, TutoScene을 만들고 Build Settings에 등록했습니다.");
+    private static TutorialStep TestStep
+    {
+        get => (TutorialStep)EditorPrefs.GetInt(TutorialRun.TestStepPrefKey, (int)TutorialStep.Exploring);
+        set => EditorPrefs.SetInt(TutorialRun.TestStepPrefKey, (int)value);
     }
 
-    private static void CreateTutoScene()
+    [MenuItem(TestMenu + "프롤로그 (집)", false, 0)]
+    private static void TestPrologue() => SetTest(TutorialStep.Prologue);
+
+    [MenuItem(TestMenu + "맵 이동 · NPC 대화 (기본)", false, 1)]
+    private static void TestExploring() => SetTest(TutorialStep.Exploring);
+
+    [MenuItem(TestMenu + "첫 곡 끝난 직후 (공연 후 장면)", false, 2)]
+    private static void TestAfterSong() => SetTest(TutorialStep.FirstSong);
+
+    [MenuItem(TestMenu + "튜토리얼 끝 (장면 없음)", false, 3)]
+    private static void TestDone() => SetTest(TutorialStep.Done);
+
+    [MenuItem(TestMenu + "프롤로그 (집)", true)]
+    private static bool CheckPrologue() => Check(TestMenu + "프롤로그 (집)", TutorialStep.Prologue);
+
+    [MenuItem(TestMenu + "맵 이동 · NPC 대화 (기본)", true)]
+    private static bool CheckExploring() => Check(TestMenu + "맵 이동 · NPC 대화 (기본)", TutorialStep.Exploring);
+
+    [MenuItem(TestMenu + "첫 곡 끝난 직후 (공연 후 장면)", true)]
+    private static bool CheckAfterSong() => Check(TestMenu + "첫 곡 끝난 직후 (공연 후 장면)", TutorialStep.FirstSong);
+
+    [MenuItem(TestMenu + "튜토리얼 끝 (장면 없음)", true)]
+    private static bool CheckDone() => Check(TestMenu + "튜토리얼 끝 (장면 없음)", TutorialStep.Done);
+
+    private static void SetTest(TutorialStep step)
     {
-        var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        CreateCamera();
-        EditorSceneManager.SaveScene(scene, TutoScenePath);
+        TestStep = step;
+        if (Application.isPlaying) TutorialRun.Step = step; // Play 중이면 바로 바꾼다
+        Debug.Log($"[CapDemo] 맵 씬을 바로 Play하면 튜토리얼 '{step}' 단계로 시작합니다.");
     }
 
-    private static void CreateTitleScene()
+    private static bool Check(string path, TutorialStep step)
     {
-        var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        CreateCamera();
-        new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-
-        // TitleCanvas: 1920x1080 기준으로 해상도에 맞춰 늘어난다
-        var canvasGo = new GameObject("TitleCanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster),
-            typeof(CanvasGroup), typeof(TitleScreen));
-        canvasGo.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = canvasGo.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.matchWidthOrHeight = 0.5f;
-
-        // PressAnyKey: 화면 아래 가운데
-        var textGo = new GameObject("PressAnyKey", typeof(RectTransform), typeof(CanvasGroup), typeof(TextMeshProUGUI),
-            typeof(PressAnyKeyBlink));
-        var rect = textGo.GetComponent<RectTransform>();
-        rect.SetParent(canvasGo.transform, false);
-        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0f);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = new Vector2(0f, 150f);
-        rect.sizeDelta = new Vector2(1200f, 100f);
-
-        var text = textGo.GetComponent<TextMeshProUGUI>();
-        text.text = "아무 키나 눌러 시작";
-        text.fontSize = 44;
-        text.alignment = TextAlignmentOptions.Center;
-        text.color = Color.white;
-        var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(PressAnyKeyFontPath);
-        if (font) text.font = font;
-        else Debug.LogWarning($"[CapDemo] {PressAnyKeyFontPath} 폰트를 찾지 못해 기본 폰트를 사용합니다.");
-
-        // FadeOverlay: 화면 전체를 덮는 검은 Image. 맨 마지막 자식이라 가장 위에 그려진다
-        var overlayGo = new GameObject("FadeOverlay", typeof(RectTransform), typeof(CanvasGroup), typeof(Image));
-        var overlayRect = overlayGo.GetComponent<RectTransform>();
-        overlayRect.SetParent(canvasGo.transform, false);
-        overlayRect.anchorMin = Vector2.zero;
-        overlayRect.anchorMax = Vector2.one;
-        overlayRect.offsetMin = overlayRect.offsetMax = Vector2.zero;
-        overlayGo.GetComponent<Image>().color = Color.black;
-
-        var title = new SerializedObject(canvasGo.GetComponent<TitleScreen>());
-        title.FindProperty("fadeOverlay").objectReferenceValue = overlayGo.GetComponent<CanvasGroup>();
-        title.ApplyModifiedPropertiesWithoutUndo();
-
-        EditorSceneManager.SaveScene(scene, TitleScenePath);
-    }
-
-    private static void CreateCamera()
-    {
-        var go = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener)) { tag = "MainCamera" };
-        go.transform.position = new Vector3(0f, 0f, -10f);
-        var cam = go.GetComponent<Camera>();
-        cam.orthographic = true;
-        cam.clearFlags = CameraClearFlags.SolidColor;
-        cam.backgroundColor = Color.black;
-    }
-
-    // TitleScene(0) → TutoScene(1) → HubScene(2) 순서로 두고, 기존에 있던 씬은 뒤에 유지한다
-    private static void RegisterBuildScenes()
-    {
-        var ordered = new[] { TitleScenePath, TutoScenePath, HubScenePath };
-        var scenes = new List<EditorBuildSettingsScene>();
-        foreach (var path in ordered)
-            if (File.Exists(path)) scenes.Add(new EditorBuildSettingsScene(path, true));
-        scenes.AddRange(EditorBuildSettings.scenes.Where(s => !ordered.Contains(s.path)));
-        EditorBuildSettings.scenes = scenes.ToArray();
+        Menu.SetChecked(path, TestStep == step);
+        return true;
     }
 }

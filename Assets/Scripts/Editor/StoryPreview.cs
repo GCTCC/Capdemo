@@ -15,7 +15,10 @@ public static class StoryPreview
     private static readonly List<TextState> texts = new List<TextState>();
     private static GameObject namePlate;
     private static bool namePlateActive;
+    private static IntroCard introCard;
+    private static bool introCardActive;
     private static CanvasGroup overlay;
+    private static HoloPhone holo;
     private static float overlayAlpha;
 
     public static bool IsActive => activeManager;
@@ -72,7 +75,25 @@ public static class StoryPreview
             {
                 lineIndex = Mathf.Clamp(lineIndex, 0, lines.Count - 1);
                 for (int l = 0; l < lineIndex; l++) dialogue.ApplyStanding(lines[l]);
-                dialogue.ShowInstant(lines[lineIndex]);
+
+                // 홀로그램 구간이면 Holo Start 줄의 자리·크기에 그 줄까지 쌓인 말풍선을 띄운다
+                int startCut = -1, startLine = -1;
+                bool inHolo = holo != null && chapter.TryGetHoloStart(cutIndex, lineIndex, out startCut, out startLine);
+                if (inHolo)
+                {
+                    var start = chapter.Cuts[startCut].Lines[startLine];
+                    holo.SetPlacement(start.HoloPosition, start.HoloScale);
+                    holo.ShowInstant(chapter.FindHoloContact(startCut, startLine),
+                                     chapter.HoloMessagesUpTo(startCut, startLine, cutIndex, lineIndex));
+                    dialogue.SetHoloMode(true);
+                }
+
+                if (inHolo && lines[lineIndex].HoloMessage)
+                {
+                    dialogue.ApplyStanding(lines[lineIndex]);
+                    dialogue.Clear(); // 말풍선 줄: 아래 대화창은 비운다
+                }
+                else dialogue.ShowInstant(lines[lineIndex]);
             }
         }
 
@@ -90,7 +111,9 @@ public static class StoryPreview
         graphics.Clear();
         texts.Clear();
         namePlate = null;
+        introCard = null;
         overlay = null;
+        holo = null;
         UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
     }
 
@@ -116,10 +139,13 @@ public static class StoryPreview
             Capture(box.FindProperty("bodyText").objectReferenceValue as TMP_Text);
             namePlate = box.FindProperty("namePlate").objectReferenceValue as GameObject;
             if (namePlate) namePlateActive = namePlate.activeSelf;
+            introCard = manager.Dialogue.IntroCard;
+            if (introCard) introCardActive = introCard.gameObject.activeSelf;
         }
 
         overlay = manager.FadeOverlay;
         if (overlay) overlayAlpha = overlay.alpha;
+        holo = manager.Holo ? manager.Holo : manager.GetComponentInChildren<HoloPhone>(true);
     }
 
     private static void Restore()
@@ -127,7 +153,14 @@ public static class StoryPreview
         foreach (var g in graphics) g.Restore();
         foreach (var t in texts) t.Restore();
         if (namePlate) namePlate.SetActive(namePlateActive);
+        if (introCard) introCard.gameObject.SetActive(introCardActive);
         if (overlay) overlay.alpha = overlayAlpha;
+        if (holo)
+        {
+            holo.HideNow(); // 미리보기로 만든 말풍선을 지우고 꺼 둔다
+            holo.ResetPlacement();
+        }
+        if (activeManager && activeManager.Dialogue) activeManager.Dialogue.SetHoloMode(false);
     }
 
     private static void Capture(Graphic graphic)

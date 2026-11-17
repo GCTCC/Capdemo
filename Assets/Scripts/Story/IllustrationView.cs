@@ -67,7 +67,7 @@ public class IllustrationView : MonoBehaviour
         backFraming = framing;
         ApplyFraming(back, framing);
         back.transform.SetAsLastSibling();
-        for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+        for (float t = 0f; t < duration; t += GamePause.Delta)
         {
             SetAlpha(back, t / duration);
             yield return null;
@@ -80,7 +80,7 @@ public class IllustrationView : MonoBehaviour
 
     private IEnumerator FadeOut(float duration)
     {
-        for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+        for (float t = 0f; t < duration; t += GamePause.Delta)
         {
             SetAlpha(front, 1f - t / duration);
             yield return null;

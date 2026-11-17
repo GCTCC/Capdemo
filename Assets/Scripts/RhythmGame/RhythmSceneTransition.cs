@@ -39,6 +39,14 @@ public class RhythmSceneTransition : MonoBehaviour
         blackAlpha = 1.0f;
     }
 
+    // 다른 전환(허브의 지직 전환 등)이 이미 화면을 켜 주고 있을 때, 검은 화면을 바로 걷는다.
+    public void HideImmediately()
+    {
+        isVisible = false;
+        showCover = false;
+        blackAlpha = 0.0f;
+    }
+
     public IEnumerator RevealScene()
     {
         if (isBusy)

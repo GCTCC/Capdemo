@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 public class SongSelectSceneController : MonoBehaviour
 {
     [SerializeField] private string gameplaySceneName = "RhythmScene";
-    [SerializeField] private string fallbackReturnSceneName = "NewHubDemoScene";
+    [SerializeField] private string fallbackReturnSceneName = "HoloHubScene";
 
     private ChartAutoLoader chartAutoLoader;
     private SongLobbyMenu songLobbyMenu;

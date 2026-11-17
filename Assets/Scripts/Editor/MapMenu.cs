@@ -5,7 +5,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
 
 // 에디터 상단 메뉴 Tools > CapDemo > 맵
 // 구역(씬)을 만들고, 맵 부품 프리팹(플레이어·대화창·맵 오브젝트·NPC·포탈·도착 지점)과 그리기 순서(Sorting Layer)를 준비한다.
@@ -26,6 +25,8 @@ public static class MapMenu
     private const string NpcPrefab = PrefabFolder + "/NPC.prefab";
     private const string PortalPrefab = PrefabFolder + "/Portal.prefab";
     private const string SpawnPrefab = PrefabFolder + "/SpawnPoint.prefab";
+    // 공중에서 벽 쪽으로 이동할 때 벽에 걸려 멈추는 것을 막는 마찰 0 재질 (Player 프리팹이 쓴다)
+    private const string NoFrictionPath = "Assets/Art/Physics/NoFriction.physicsMaterial2D";
 
     // 뒤에 있을수록 먼저(뒤에) 그린다. Default는 맨 뒤에 남는다.
     // 배경을 뺀 맵 그림은 모두 Map 한 층에 두고 Order로 앞뒤를 정한다. MapFront는 NPC 안내 표시처럼 늘 맨 앞에 둘 것
@@ -88,122 +89,6 @@ public static class MapMenu
             Debug.Log($"[CapDemo] 맵 부품을 준비했습니다. 프리팹은 {PrefabFolder} 에 있습니다.");
     }
 
-    // 예전 맵을 지금 방식으로 바꾼다. 여러 번 눌러도 이미 바뀐 것은 그대로 둔다.
-    //   그리기 순서: 캐릭터 뒤/앞 층을 따로 쓰던 오브젝트·NPC·플레이어를 한 층(Map)에 모으고 Order 하나로 앞뒤를 정한다(플레이어 0).
-    //   그림자: Unity 2D 그림자(Shadow Caster 2D)를 떼고, 발밑·벽에 깔리는 가짜 그림자(CharacterShadow)를 붙인다.
-    // 씬 안의 것을 먼저 옮기고 프리팹을 나중에 옮겨야, 프리팹을 쓰는 씬 오브젝트가 두 번 옮겨지거나 빠지지 않는다.
-    [MenuItem("Tools/CapDemo/맵/예전 맵 업데이트 (그리기 순서 한 층으로·캐릭터 그림자)", priority = 2)]
-    private static void UpgradeMaps()
-    {
-        EnsureSortingLayers();
-
-        foreach (string path in Directory.GetFiles(SceneFolder, "*.unity").Select(p => p.Replace('\\', '/')))
-        {
-            var scene = SceneManager.GetSceneByPath(path);
-            bool opened = !scene.isLoaded;
-            if (opened) scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);
-            int changed = UpgradeScene(scene);
-            if (changed > 0)
-            {
-                Debug.Log($"[CapDemo] {path}: {changed}곳을 바꿨습니다.");
-                // 열려 있던 씬은 작업 중일 수 있어 저장하지 않고 변경 표시만 한다
-                if (opened) EditorSceneManager.SaveScene(scene);
-                else EditorSceneManager.MarkSceneDirty(scene);
-            }
-            if (opened) EditorSceneManager.CloseScene(scene, true);
-        }
-
-        EditPrefab(ObjectPrefab, root => root.GetComponent<MapObject>().MigrateLayout());
-        EditPrefab(NpcPrefab, root =>
-        {
-            root.GetComponent<NpcLayout>().MigrateLayout();
-            SwapShadow(root);
-        });
-        EditPrefab(PlayerPrefab, root =>
-        {
-            SwapShadow(root);
-            var renderer = FindPlayerSprite(root);
-            if (renderer) SetPlayerSorting(renderer);
-        });
-        Debug.Log("[CapDemo] 맵 업데이트를 마쳤습니다. 열려 있던 씬은 확인 후 저장하세요.");
-    }
-
-    private static int UpgradeScene(Scene scene)
-    {
-        int changed = 0;
-        foreach (var root in scene.GetRootGameObjects())
-        {
-            foreach (var obj in root.GetComponentsInChildren<MapObject>(true))
-                if (obj.MigrateLayout()) { MarkChanged(obj); changed++; }
-            foreach (var npc in root.GetComponentsInChildren<NpcLayout>(true))
-                if (npc.MigrateLayout()) { MarkChanged(npc); changed++; }
-            // 씬에서 캐릭터에 따로 붙인 Shadow Caster 2D (프리팹 것은 프리팹에서 뗀다)
-            foreach (var caster in root.GetComponentsInChildren<ShadowCaster2D>(true))
-            {
-                if (!PrefabUtility.IsAddedComponentOverride(caster)) continue;
-                if (!caster.GetComponent<NpcLayout>() && !caster.GetComponent<PlayerController2D>()) continue;
-                Object.DestroyImmediate(caster);
-                changed++;
-            }
-            // 조명은 Target Sorting Layers에 든 층만 비춘다. 예전 오브젝트·캐릭터 층을 비추던 조명은 새 Map 층도 비추게 한다
-            int mapLayerId = UnityEngine.SortingLayer.NameToID(MapObject.Layer);
-            int[] oldLayerIds =
-            {
-                UnityEngine.SortingLayer.NameToID(MapObject.OldBackLayer),
-                UnityEngine.SortingLayer.NameToID(NpcLayout.OldCharacterLayer),
-            };
-            foreach (var light in root.GetComponentsInChildren<Light2D>(true))
-            {
-                var targets = light.targetSortingLayers;
-                if (targets.Contains(mapLayerId) || !targets.Any(id => oldLayerIds.Contains(id))) continue;
-                light.AddTargetSortingLayer(mapLayerId);
-                MarkChanged(light);
-                changed++;
-            }
-            foreach (var player in root.GetComponentsInChildren<PlayerController2D>(true))
-            {
-                var renderer = FindPlayerSprite(player.gameObject);
-                if (!renderer || (renderer.sortingLayerName == MapObject.Layer && renderer.sortingOrder == MapObject.PlayerOrder)) continue;
-                SetPlayerSorting(renderer);
-                MarkChanged(renderer);
-                changed++;
-            }
-        }
-        return changed;
-    }
-
-    private static SpriteRenderer FindPlayerSprite(GameObject player) =>
-        player.GetComponentsInChildren<SpriteRenderer>(true).FirstOrDefault(r => !r.name.StartsWith("Shadow_"));
-
-    private static void SetPlayerSorting(SpriteRenderer renderer)
-    {
-        renderer.sortingLayerName = MapObject.Layer;
-        renderer.sortingOrder = MapObject.PlayerOrder;
-    }
-
-    // 프리팹 루트의 Shadow Caster 2D를 떼고 가짜 그림자를 붙인다
-    private static void SwapShadow(GameObject root)
-    {
-        foreach (var caster in root.GetComponents<ShadowCaster2D>()) Object.DestroyImmediate(caster);
-        if (!root.GetComponent<CharacterShadow>()) root.AddComponent<CharacterShadow>();
-    }
-
-    // 씬에 놓인 프리팹 오브젝트를 코드로 바꾼 값이 씬에 저장되게 한다
-    private static void MarkChanged(Object target)
-    {
-        PrefabUtility.RecordPrefabInstancePropertyModifications(target);
-        EditorUtility.SetDirty(target);
-    }
-
-    private static void EditPrefab(string path, System.Action<GameObject> edit)
-    {
-        if (!Load(path)) return;
-        var root = PrefabUtility.LoadPrefabContents(path);
-        edit(root);
-        PrefabUtility.SaveAsPrefabAsset(root, path);
-        PrefabUtility.UnloadPrefabContents(root);
-    }
-
     // 선택한 오브젝트를 아래로 내려 발밑(그림 아래끝)을 바로 아래 바닥·오브젝트 윗면에 붙인다
     [MenuItem("Tools/CapDemo/맵/선택한 오브젝트 바닥에 붙이기", priority = 20)]
     private static void DropSelectionToGround()
@@ -233,7 +118,7 @@ public static class MapMenu
     {
         if (!AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(PlayerControllerPath))
         {
-            Debug.LogError("[CapDemo] 플레이어 애니메이션이 없습니다. 먼저 Tools > CapDemo > 데모 > 플레이어 애니메이션 적용을 실행하세요.");
+            Debug.LogError("[CapDemo] 플레이어 애니메이션이 없습니다. 먼저 Tools > CapDemo > 맵 > 플레이어 애니메이션 만들기를 실행하세요.");
             return false;
         }
         foreach (var folder in new[] { MapImageImporter.BackgroundFolder, MapImageImporter.ObjectFolder,
@@ -243,12 +128,15 @@ public static class MapMenu
         EnsureSortingLayers();
 
         var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontPath);
+        // 대화창·플레이어·NPC 중 하나라도 새로 만들면 대화창 새 스타일(화자 옆 이름표 포함)을 입힌다
+        bool styleNeeded = !Load(PlayerPrefab) || !Load(DialoguePrefab) || !Load(NpcPrefab);
         if (!Load(PlayerPrefab)) CreatePlayerPrefab();
         if (!Load(DialoguePrefab)) CreateDialoguePrefab(font);
         if (!Load(ObjectPrefab)) CreateObjectPrefab();
         if (!Load(NpcPrefab)) CreateNpcPrefab(font);
         if (!Load(PortalPrefab)) CreatePortalPrefab();
         if (!Load(SpawnPrefab)) CreateSpawnPrefab();
+        if (styleNeeded) DialogueStyleMenu.ApplyMapStyle(true);
         return true;
     }
 
@@ -260,7 +148,7 @@ public static class MapMenu
         body.freezeRotation = true;
         body.interpolation = RigidbodyInterpolation2D.Interpolate;
         body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-        body.sharedMaterial = DemoMenu.LoadOrCreateNoFriction();
+        body.sharedMaterial = LoadOrCreateNoFriction();
         // 모서리를 둥글게(edgeRadius) 해서 바닥 이음새의 작은 턱에 걸리지 않게 한다. 바깥 크기는 0.6 x 1.6
         var box = player.AddComponent<BoxCollider2D>();
         box.edgeRadius = 0.1f;
@@ -310,11 +198,45 @@ public static class MapMenu
             typeof(NpcLayout));
         npc.GetComponent<BoxCollider2D>().isTrigger = true;
         npc.AddComponent<CharacterShadow>();
-        var prompt = DemoMenu.CreatePrompt(npc.transform, font);
+        var prompt = CreatePrompt(npc.transform, font);
         prompt.GetComponent<MeshRenderer>().sortingLayerName = MapObject.FrontLayer;
         Assign(npc.GetComponent<NpcInteract>(), "prompt", prompt);
         Assign(npc.GetComponent<NpcLayout>(), "prompt", prompt.transform);
         SavePrefab(npc, NpcPrefab);
+    }
+
+    private static void SetPlayerSorting(SpriteRenderer renderer)
+    {
+        renderer.sortingLayerName = MapObject.Layer;
+        renderer.sortingOrder = MapObject.PlayerOrder;
+    }
+
+    private static PhysicsMaterial2D LoadOrCreateNoFriction()
+    {
+        var material = AssetDatabase.LoadAssetAtPath<PhysicsMaterial2D>(NoFrictionPath);
+        if (material) return material;
+        Directory.CreateDirectory(Path.GetDirectoryName(NoFrictionPath));
+        material = new PhysicsMaterial2D("NoFriction") { friction = 0f, bounciness = 0f };
+        AssetDatabase.CreateAsset(material, NoFrictionPath);
+        return material;
+    }
+
+    // NPC 머리 위 "F" 안내 표시. 플레이어가 가까이 오면 NpcInteract가 켠다
+    private static GameObject CreatePrompt(Transform npc, TMP_FontAsset font)
+    {
+        var go = new GameObject("Prompt", typeof(TextMeshPro));
+        go.transform.SetParent(npc, false);
+        go.transform.localPosition = new Vector3(0f, 1.4f, 0f);
+        var text = go.GetComponent<TextMeshPro>();
+        if (font) text.font = font;
+        text.text = "F";
+        text.fontSize = 3f;
+        text.alignment = TextAlignmentOptions.Center;
+        text.color = new Color(0.1f, 0.1f, 0.12f);
+        text.rectTransform.sizeDelta = new Vector2(3f, 1f);
+        text.sortingOrder = 20;
+        go.SetActive(false);
+        return go;
     }
 
     private static void CreatePortalPrefab()

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="fonts2.css">
+<style>@font-face{font-family:GGTitle;src:url(gg_title.ttf)}@font-face{font-family:NeoDGM;src:url(neodgm.ttf)}</style>
+<style>
+:root{
+  --mint:#a3ebd6; --mint-d:#4fa597; --line:rgba(115,204,189,.55); --line2:rgba(115,204,189,.25);
+  --ink:#ebf5f2; --mute:#a8c2bd; --dim:#6a8a85; --bgink:#0a1717;
+  --red:#ff4d5e; --amber:#ffb45c; --tape:#d9d2bf;
+  --panel:rgba(10,23,23,.74);
+  --mono:'NeoDGM',monospace; --title:'GGTitle','Noto Sans KR',sans-serif; --en:'Chakra Petch',sans-serif; --kr:'Noto Sans KR',sans-serif;
+  --marker:'Permanent Marker',cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:900px;overflow:hidden;background:#071211}
+body{font-family:var(--kr);color:var(--ink);position:relative}
+.abs{position:absolute}
+.bg{position:absolute;inset:0;background:url(BG) center/cover no-repeat}
+.shade{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(4,12,12,.93) 0%,rgba(4,12,12,.82) 25%,rgba(4,12,12,.35) 41%,rgba(4,12,12,0) 56%),
+  linear-gradient(180deg,rgba(4,12,12,.55) 0%,rgba(4,12,12,0) 15%,rgba(4,12,12,0) 80%,rgba(4,12,12,.82) 100%)}
+.grain{position:absolute;inset:0;opacity:.08;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+
+/* ---------- LOGO ---------- */
+.logo{left:58px;top:20px;width:440px;height:110px}
+.logo .word{position:absolute;left:6px;top:8px;font-family:var(--marker);font-size:64px;line-height:1;color:var(--ink);transform:rotate(-5deg);transform-origin:left bottom;letter-spacing:.01em;
+  text-shadow:2px 2px 0 rgba(0,0,0,.55)}
+.logo .word .c{color:var(--red)}
+.logo svg{position:absolute;left:0;top:0;overflow:visible}
+.logo .tag{position:absolute;left:300px;top:24px;font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.14em;transform:rotate(-5deg)}
+.loc{left:64px;top:132px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--mute);letter-spacing:.06em}
+.loc i{width:7px;height:7px;background:var(--red);box-shadow:0 0 8px var(--red)}
+.loc b{color:var(--ink);font-weight:400}
+.topline{left:64px;right:64px;top:160px;height:1px;background:linear-gradient(90deg,var(--line),var(--line2) 55%,transparent)}
+.topline:before{content:"";position:absolute;left:0;top:-1px;width:260px;height:3px;background:var(--mint-d)}
+
+/* ---------- top right ---------- */
+.tr{right:64px;top:40px;display:flex;align-items:center;gap:16px}
+.clock{font-family:var(--mono);text-align:right;line-height:1.25}
+.clock b{display:block;font-size:22px;font-weight:400;color:var(--ink);letter-spacing:.06em}
+.clock span{display:block;font-size:11px;color:var(--mute);letter-spacing:.12em}
+.phone{position:relative;height:44px;display:flex;align-items:center;gap:10px;padding:0 16px 0 12px;border:1px solid var(--line);background:var(--panel);
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.phone .t{font-family:var(--title);font-size:15px}
+.phone .n{font-family:var(--mono);font-size:12px;color:#06201c;background:var(--mint);padding:1px 6px}
+
+/* ---------- player (name + cleared tracks as VU meter) ---------- */
+.player{left:64px;top:184px;display:flex;align-items:center;gap:16px}
+.player .nm{font-family:var(--title);font-size:22px}
+.player .nm small{font-family:var(--en);font-size:12px;font-weight:600;color:var(--mint);letter-spacing:.18em;margin-left:8px;vertical-align:3px}
+.vu{display:flex;align-items:flex-end;gap:3px;height:18px}
+.vu i{width:5px;background:var(--mint)}
+.vu i.o{background:var(--amber)} .vu i.r{background:var(--red)} .vu i.off{background:rgba(163,235,214,.14)}
+.player .cnt{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.08em}
+
+/* ---------- menu ---------- */
+.setlist{left:64px;top:236px;height:26px;display:flex;align-items:center;padding:0 14px;background:var(--tape);color:#1d1b16;font-family:var(--marker);font-size:16px;transform:rotate(-1.5deg);
+  box-shadow:0 2px 0 rgba(0,0,0,.35);clip-path:polygon(2px 0,100% 3px,99% 100%,0 96%)}
+.menu{left:64px;top:276px;width:420px;display:flex;flex-direction:column;gap:10px}
+.item{position:relative;height:70px;display:flex;align-items:center;padding:0 20px 0 18px;background:rgba(10,23,23,.55);border-left:2px solid rgba(163,235,214,.25)}
+.item .no{font-family:var(--mono);font-size:13px;color:var(--dim);width:38px}
+.item .tx b{display:block;font-family:var(--title);font-weight:400;font-size:26px;line-height:1.1}
+.item .tx small{display:block;font-family:var(--en);font-weight:600;font-size:12px;color:var(--dim);letter-spacing:.24em;margin-top:2px}
+.item .arr{margin-left:auto;color:var(--dim);font-size:16px}
+.item.on{height:96px;background:var(--mint);color:#06201c;border-left:none;
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%)}
+.item.on .no{color:#2c6a5f}
+.item.on .tx b{font-size:34px}
+.item.on .tx small{color:#2c6a5f}
+.item.on .arr{color:#06201c}
+.item.on .hint{position:absolute;right:58px;bottom:14px;font-family:var(--mono);font-size:11px;color:#2c6a5f;letter-spacing:.08em}
+.cursor{left:46px;top:276px;width:6px;height:96px;background:var(--mint)}
+.quit{left:64px;top:640px;display:flex;align-items:center;gap:10px;height:34px;padding:0 16px 0 12px;border:1px solid rgba(255,77,94,.45);background:rgba(40,10,14,.5)}
+.quit span{font-family:var(--title);font-size:15px;color:#ffd5d9}
+.quit small{font-family:var(--en);font-weight:600;font-size:11px;color:#c26a74;letter-spacing:.2em}
+
+/* now playing connector */
+.np{left:500px;top:268px}
+.nptx{left:620px;top:262px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;color:var(--mute)}
+.nptx b{color:var(--ink);font-weight:400}
+.nptx .vu{height:12px}.nptx .vu i{width:3px}
+
+/* ---------- right ---------- */
+.story{right:64px;top:110px;width:300px;padding:12px 16px 12px 16px;border-left:2px solid var(--mint-d);background:linear-gradient(90deg,rgba(6,16,16,.85),rgba(6,16,16,.6))}
+.story .h{font-family:var(--en);font-weight:600;font-size:11px;color:var(--mint);letter-spacing:.22em;display:flex;justify-content:space-between;padding-right:2px}
+.story .c{font-family:var(--title);font-size:17px;margin-top:6px;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.story .c em{font-style:normal;font-family:var(--mono);color:var(--mute);font-size:12px;margin-left:6px}
+.seg{display:flex;gap:3px;margin-top:10px}
+.seg i{flex:1;height:5px;background:rgba(163,235,214,.18)}
+.seg i.f{background:var(--mint)}
+.story .n{font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:6px;text-shadow:0 1px 4px #000}
+
+/* next show — a taped setlist note */
+.show{right:70px;top:610px;width:330px;transform:rotate(1.2deg)}
+.show .paper{position:relative;background:#e9e3d2;color:#1d1b16;padding:16px 18px 14px;box-shadow:4px 6px 0 rgba(0,0,0,.45);
+  clip-path:polygon(0 2px,100% 0,99.5% 100%,1px 98%)}
+.show .tp{position:absolute;top:-10px;width:70px;height:20px;background:rgba(217,210,191,.75);border:1px solid rgba(0,0,0,.08)}
+.show .k{font-family:var(--en);font-weight:700;font-size:11px;letter-spacing:.24em;color:#b02a37;display:flex;justify-content:space-between}
+.show b{display:block;font-family:var(--title);font-weight:400;font-size:22px;margin-top:6px}
+.show .ln{font-family:var(--kr);font-size:12.5px;color:#4a463c;margin-top:4px}
+.show .ln s{color:#8a8578}
+.show .scr{position:absolute;right:14px;bottom:10px;font-family:var(--marker);font-size:26px;color:#c8303f;transform:rotate(-8deg)}
+
+/* ---------- bottom ---------- */
+.botline{left:64px;right:64px;bottom:72px;height:1px;background:var(--line2)}
+.ticker{left:64px;right:260px;bottom:24px;height:32px;display:flex;align-items:center;overflow:hidden}
+.ticker .lab{height:100%;display:flex;align-items:center;gap:8px;padding:0 20px 0 12px;background:var(--red);color:#1a0508;font-family:var(--en);font-weight:700;font-size:12px;letter-spacing:.16em;flex:none;
+  clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.ticker .lab i{width:6px;height:6px;border-radius:50%;background:#1a0508}
+.ticker .msg{white-space:nowrap;font-size:13px;color:var(--ink);padding-left:16px;display:flex;gap:30px}
+.ticker .msg span{color:var(--mute)}
+.ver{right:64px;bottom:30px;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.12em}
+</style></head>
+<body>
+<div class="bg"></div><div class="shade"></div><div class="grain"></div>
+
+<!-- LOGO -->
+<div class="abs logo">
+  <svg width="440" height="110" viewBox="0 0 440 110">
+    <!-- scribbled red underline + correction strike -->
+    <path d="M8 96 C 90 84, 200 80, 300 74 S 380 70, 392 66" fill="none" stroke="#ff4d5e" stroke-width="5" stroke-linecap="round" opacity=".92"/>
+    <path d="M40 101 C 120 92, 230 88, 330 82" fill="none" stroke="#ff4d5e" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>
+    <path d="M384 30 l14 -12 M390 38 l18 -14" stroke="#ff4d5e" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+  </svg>
+  <div class="word">RE<span class="c">:</span>WRITE</div>
+</div>
+<div class="abs loc"><i></i><b>7구역 공업단지</b> · 지하 라이브하우스 「RUST」</div>
+<div class="abs topline"></div>
+
+<div class="abs tr">
+  <div class="phone">
+    <svg width="18" height="22" viewBox="0 0 18 22" fill="none" stroke="#a3ebd6" stroke-width="1.6"><rect x="2" y="1.5" width="14" height="19" rx="2"/><path d="M7 17.5h4"/><path d="M5.5 6.5h7M5.5 10h5"/></svg>
+    <span class="t">홀로폰</span><span class="n">2</span>
+  </div>
+  <div class="clock"><b>23:47</b><span>MON · NOV 16</span></div>
+</div>
+
+<!-- player -->
+<div class="abs player">
+  <div class="nm">레이<small>VOCAL / GUITAR</small></div>
+  <div class="vu"><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><i style="height:12px"></i><i class="o" style="height:14px"></i><i class="o" style="height:16px"></i><i class="off" style="height:17px"></i><i class="off" style="height:18px"></i></div>
+  <div class="cnt">CLEAR 6 / 8 TRACKS</div>
+</div>
+
+<!-- story (right top) -->
+<div class="abs story">
+  <div class="h"><span>STORY</span><span>CH.03</span></div>
+  <div class="c">녹슨 무대 위의 노이즈<em>3 / 6</em></div>
+  <div class="seg"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i></div>
+  <div class="n">다음 · 리허설 직전, 정전</div>
+</div>
+
+<!-- menu -->
+<div class="abs setlist">SET LIST</div>
+<div class="abs cursor"></div>
+<div class="abs menu">
+  <div class="item on"><span class="no">01</span><span class="tx"><b>싱글 플레이</b><small>SINGLE PLAY</small></span><span class="hint">8곡 수록</span><span class="arr">▶</span></div>
+  <div class="item"><span class="no">02</span><span class="tx"><b>스토리 모드</b><small>STORY MODE</small></span><span class="arr">›</span></div>
+  <div class="item"><span class="no">03</span><span class="tx"><b>아카이브</b><small>ARCHIVE</small></span><span class="arr">›</span></div>
+  <div class="item"><span class="no">04</span><span class="tx"><b>설정</b><small>SETTINGS</small></span><span class="arr">›</span></div>
+</div>
+<div class="abs quit"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#ff8a96" stroke-width="1.6"><path d="M6 3H3v10h3M10 5l3 3-3 3M13 8H6"/></svg><span>게임 종료</span><small>EXIT</small></div>
+
+<!-- now playing -->
+<svg class="abs np" width="120" height="60" viewBox="0 0 120 60"><path d="M0 52H30L64 10H120" fill="none" stroke="#a3ebd6" stroke-width="1.2" opacity=".7"/><rect x="28" y="49" width="5" height="5" fill="#a3ebd6"/></svg>
+<div class="abs nptx"><span class="vu"><i style="height:5px"></i><i style="height:11px"></i><i style="height:8px"></i><i style="height:12px"></i><i style="height:4px"></i></span>NOW PLAYING · <b>Moonside Howl</b></div>
+
+<!-- next show note -->
+<div class="abs show">
+  <div class="paper">
+    <div class="tp" style="left:24px;transform:rotate(-6deg)"></div><div class="tp" style="right:24px;transform:rotate(5deg)"></div>
+    <div class="k"><span>NEXT SHOW</span><span>CH.04</span></div>
+    <b>폐공장 라이브 나이트</b>
+    <div class="ln">신곡 해금 · Ghost District</div>
+    <div class="ln"><s>리허설</s> → 발전기부터 고칠 것</div>
+    <div class="scr">D-3!</div>
+  </div>
+</div>
+
+<!-- bottom -->
+<div class="abs botline"></div>
+<div class="abs ticker">
+  <div class="lab"><i></i>RADIO 7</div>
+  <div class="msg">
+    <div>7구역 공업단지 야간 정전 예보 <span>· 발전기 연료를 확인하세요</span></div>
+    <div>지하 라이브하우스 단속 강화 <span>· 시청 "불법 공연장 이달 내 폐쇄"</span></div>
+    <div>오늘 밤 비 <span>· 강수확률 80%</span></div>
+  </div>
+</div>
+<div class="abs ver">VER 0.3.1</div>
+</body></html>

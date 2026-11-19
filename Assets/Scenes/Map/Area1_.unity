@@ -3313,6 +3313,7 @@ MonoBehaviour:
   closeUpOffset: {x: 0, y: -0.6}
   closeUpPadding: 1
   closeUpSmoothTime: 0.4
+  holoShift: 0.15
   bounds: {fileID: 0}
 --- !u!81 &621682776
 AudioListener:
@@ -3876,7 +3877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3995836900630092248, guid: 684162d9864308549ae7f21405850fd1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -25.7
       objectReference: {fileID: 0}
     - target: {fileID: 3995836900630092248, guid: 684162d9864308549ae7f21405850fd1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4789,7 +4790,19 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 97034223089873756, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 1094136920530631958, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 1976237169967248712, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294112747
+      objectReference: {fileID: 0}
+    - target: {fileID: 1976237169967248712, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
       propertyPath: m_TextStyleHashCode
       value: -1183493901
       objectReference: {fileID: 0}
@@ -4884,6 +4897,18 @@ PrefabInstance:
     - target: {fileID: 6944879379439759765, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7882023360627573508, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294112747
+      objectReference: {fileID: 0}
+    - target: {fileID: 7882023360627573508, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 8081585178249038265, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 8868255131488038257, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
       propertyPath: m_TextStyleHashCode

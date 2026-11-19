@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f7699fb830fdef408857507a61b7d83, type: 3}
+  m_Name: SongTransitionSettings
+  m_EditorClassIdentifier: Assembly-CSharp::SongTransitionSettings
+  bandLines:
+  - songName: 
+    speaker: BASS
+    line: "\uAE34\uC7A5 \uD480\uC5B4. \uB298 \uD558\uB358 \uB300\uB85C, \uCCAB \uBC15\uB9CC
+      \uAC19\uC774 \uB4E4\uC5B4\uAC00\uC790."
+  artistText: "RE:WRITE  \xB7  ORIGINAL"
+  stageBackgroundName: bg_live_teal
+  loadingSound: {fileID: 0}
+  loadingVolume: 0.8
+  loadingFadeOut: 0.8
+  countInClick: {fileID: 0}
+  countInVolume: 0.8
+  countInterval: 0.6
+  oxaniumBold: {fileID: 12800000, guid: 3dc374e228f281843b271dfa6bb1dd04, type: 3}
+  oxaniumSemiBold: {fileID: 12800000, guid: 13d1fc48ce720544a80e5ea8cd949f9c, type: 3}
+  oxaniumExtraBold: {fileID: 12800000, guid: 348612ee1ab1a1844b303f9f8aecf1a5, type: 3}
+  sairaCondensed: {fileID: 12800000, guid: 0a5d3d91b922b06448d86735ae771d1b, type: 3}
+  jetBrainsMono: {fileID: 12800000, guid: e016883b723786e41823de8593dcd9c1, type: 3}
+  notoSansKr: {fileID: 12800000, guid: ba4bd715237358541b2d27631ae41b3e, type: 3}
+  noCover: {fileID: 2800000, guid: 9c1aa9c5087782740b118f11b6c68386, type: 3}
+  discShader: {fileID: 4800000, guid: 8a8fc2ce10712d34b9012e9e8e7dac26, type: 3}
+  testExtraLoadSeconds: 0

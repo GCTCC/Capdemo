@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 // 타이틀 화면: 검은 화면에서 페이드 인한 뒤, 아무 키나 누르면 페이드 아웃하며 다음 씬으로 넘어간다.
-// 튜토리얼 미완료 → TutoScene, 완료 → HubScene
+// 튜토리얼 챕터(첫 곡까지) 미완료 → TutoScene (처음부터 다시), 완료 → HoloHubScene
 public class TitleScreen : MonoBehaviour
 {
     [SerializeField] private string tutorialSceneName = "TutoScene";
-    [SerializeField] private string hubSceneName = "HubScene";
+    [SerializeField] private string hubSceneName = "HoloHubScene";
 
     [Tooltip("페이드 인이 끝난 뒤 이 시간(초) 동안은 입력을 무시한다.")]
     [SerializeField, Min(0f)] private float inputDelay = 0.3f;
@@ -56,13 +56,22 @@ public class TitleScreen : MonoBehaviour
 
     private IEnumerator StartGame()
     {
-        string next = SaveData.IsTutorialCleared() ? hubSceneName : tutorialSceneName;
+        bool tutorialCleared = SaveData.IsTutorialCleared();
+        string next = tutorialCleared ? hubSceneName : tutorialSceneName;
         if (!Application.CanStreamedLevelBeLoaded(next))
         {
-            Debug.LogError($"[TitleScreen] '{next}' 씬이 Build Settings에 없습니다.");
+            Debug.LogError($"[TitleScreen] '{next}' 씬이 Build Profiles 씬 목록에 없습니다.");
             started = false;
             yield break;
         }
+
+        if (!tutorialCleared)
+        {
+            // 튜토리얼 챕터는 중간 저장이 없다. 중간에 껐다 켜면 이름·NPC 첫 만남까지 지우고 처음부터 한다
+            SaveData.ResetProgress();
+            TutorialRun.Step = TutorialStep.Prologue;
+        }
+        else TutorialRun.Step = TutorialStep.Done;
 
         // 페이드하는 동안 다음 씬을 미리 불러 둔다
         var load = SceneManager.LoadSceneAsync(next);

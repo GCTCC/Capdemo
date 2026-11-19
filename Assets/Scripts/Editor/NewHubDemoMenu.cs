@@ -15,7 +15,8 @@ using UnityEngine.UI;
 // 다시 실행하면 씬을 처음부터 새로 만들므로, 손으로 다듬은 뒤에는 실행하지 않는다.
 public static class NewHubDemoMenu
 {
-    private const string ScenePath = "Assets/Scenes/NewHubDemoScene.unity";
+    // 예전 데모 허브 (2026-11-17부터 허브는 HoloHubScene. 이 씬은 OldDemo 폴더로 정리됨)
+    private const string ScenePath = "Assets/Scenes/OldDemo/NewHubDemoScene.unity";
     private const string ArtFolder = "Assets/image/Hub/Backstage/";
     private const string FontPath = "Assets/Art/Fonts/경기천년제목_Bold SDF.asset";
 

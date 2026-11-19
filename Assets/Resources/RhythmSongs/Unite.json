@@ -1,0 +1,4124 @@
+{
+ "format": "capdemo-neutral-v1",
+ "songId": "Unite",
+ "title": "Unite",
+ "initialBpm": 117.74,
+ "musicOffset": 0,
+ "bpmEvents": [
+  {
+   "beat": 0,
+   "bpm": 117.74
+  }
+ ],
+ "notes": [
+  {
+   "noteId": 0,
+   "lane": 2,
+   "hitTime": 2.2251,
+   "type": "Tap",
+   "endTime": 2.2251
+  },
+  {
+   "noteId": 1,
+   "lane": 3,
+   "hitTime": 2.2251,
+   "type": "Tap",
+   "endTime": 2.2251
+  },
+  {
+   "noteId": 2,
+   "lane": 3,
+   "hitTime": 2.481,
+   "type": "Tap",
+   "endTime": 2.481
+  },
+  {
+   "noteId": 3,
+   "lane": 4,
+   "hitTime": 2.7369,
+   "type": "Tap",
+   "endTime": 2.7369
+  },
+  {
+   "noteId": 4,
+   "lane": 2,
+   "hitTime": 2.9929,
+   "type": "Tap",
+   "endTime": 2.9929
+  },
+  {
+   "noteId": 5,
+   "lane": 1,
+   "hitTime": 3.2488,
+   "type": "Tap",
+   "endTime": 3.2488
+  },
+  {
+   "noteId": 6,
+   "lane": 2,
+   "hitTime": 3.5047,
+   "type": "Tap",
+   "endTime": 3.5047
+  },
+  {
+   "noteId": 7,
+   "lane": 3,
+   "hitTime": 3.7607,
+   "type": "Tap",
+   "endTime": 3.7607
+  },
+  {
+   "noteId": 8,
+   "lane": 2,
+   "hitTime": 4.0166,
+   "type": "Tap",
+   "endTime": 4.0166
+  },
+  {
+   "noteId": 9,
+   "lane": 2,
+   "hitTime": 4.2724,
+   "type": "Tap",
+   "endTime": 4.2724
+  },
+  {
+   "noteId": 10,
+   "lane": 3,
+   "hitTime": 4.2724,
+   "type": "Tap",
+   "endTime": 4.2724
+  },
+  {
+   "noteId": 11,
+   "lane": 4,
+   "hitTime": 4.5282,
+   "type": "Tap",
+   "endTime": 4.5282
+  },
+  {
+   "noteId": 12,
+   "lane": 2,
+   "hitTime": 4.784,
+   "type": "Tap",
+   "endTime": 4.784
+  },
+  {
+   "noteId": 13,
+   "lane": 0,
+   "hitTime": 5.2957,
+   "type": "Tap",
+   "endTime": 5.2957
+  },
+  {
+   "noteId": 14,
+   "lane": 2,
+   "hitTime": 5.5515,
+   "type": "Tap",
+   "endTime": 5.5515
+  },
+  {
+   "noteId": 15,
+   "lane": 3,
+   "hitTime": 5.8073,
+   "type": "Tap",
+   "endTime": 5.8073
+  },
+  {
+   "noteId": 16,
+   "lane": 2,
+   "hitTime": 6.063,
+   "type": "Tap",
+   "endTime": 6.063
+  },
+  {
+   "noteId": 17,
+   "lane": 3,
+   "hitTime": 6.3184,
+   "type": "Tap",
+   "endTime": 6.3184
+  },
+  {
+   "noteId": 18,
+   "lane": 4,
+   "hitTime": 6.5738,
+   "type": "Tap",
+   "endTime": 6.5738
+  },
+  {
+   "noteId": 19,
+   "lane": 2,
+   "hitTime": 6.8292,
+   "type": "Tap",
+   "endTime": 6.8292
+  },
+  {
+   "noteId": 20,
+   "lane": 4,
+   "hitTime": 7.3401,
+   "type": "Tap",
+   "endTime": 7.3401
+  },
+  {
+   "noteId": 21,
+   "lane": 3,
+   "hitTime": 7.5955,
+   "type": "Tap",
+   "endTime": 7.5955
+  },
+  {
+   "noteId": 22,
+   "lane": 4,
+   "hitTime": 7.8509,
+   "type": "Tap",
+   "endTime": 7.8509
+  },
+  {
+   "noteId": 23,
+   "lane": 2,
+   "hitTime": 8.1061,
+   "type": "Tap",
+   "endTime": 8.1061
+  },
+  {
+   "noteId": 24,
+   "lane": 0,
+   "hitTime": 8.3612,
+   "type": "Tap",
+   "endTime": 8.3612
+  },
+  {
+   "noteId": 25,
+   "lane": 2,
+   "hitTime": 8.6162,
+   "type": "Tap",
+   "endTime": 8.6162
+  },
+  {
+   "noteId": 26,
+   "lane": 0,
+   "hitTime": 8.8712,
+   "type": "Tap",
+   "endTime": 8.8712
+  },
+  {
+   "noteId": 27,
+   "lane": 2,
+   "hitTime": 9.1263,
+   "type": "Tap",
+   "endTime": 9.1263
+  },
+  {
+   "noteId": 28,
+   "lane": 1,
+   "hitTime": 9.3813,
+   "type": "Tap",
+   "endTime": 9.3813
+  },
+  {
+   "noteId": 29,
+   "lane": 4,
+   "hitTime": 9.3813,
+   "type": "Tap",
+   "endTime": 9.3813
+  },
+  {
+   "noteId": 30,
+   "lane": 3,
+   "hitTime": 9.6364,
+   "type": "Tap",
+   "endTime": 9.6364
+  },
+  {
+   "noteId": 31,
+   "lane": 5,
+   "hitTime": 9.8914,
+   "type": "Tap",
+   "endTime": 9.8914
+  },
+  {
+   "noteId": 32,
+   "lane": 3,
+   "hitTime": 10.1463,
+   "type": "Tap",
+   "endTime": 10.1463
+  },
+  {
+   "noteId": 33,
+   "lane": 5,
+   "hitTime": 10.4011,
+   "type": "Tap",
+   "endTime": 10.4011
+  },
+  {
+   "noteId": 34,
+   "lane": 3,
+   "hitTime": 10.6559,
+   "type": "Tap",
+   "endTime": 10.6559
+  },
+  {
+   "noteId": 35,
+   "lane": 5,
+   "hitTime": 10.9108,
+   "type": "Tap",
+   "endTime": 10.9108
+  },
+  {
+   "noteId": 36,
+   "lane": 3,
+   "hitTime": 11.1656,
+   "type": "Tap",
+   "endTime": 11.1656
+  },
+  {
+   "noteId": 37,
+   "lane": 1,
+   "hitTime": 11.4204,
+   "type": "Tap",
+   "endTime": 11.4204
+  },
+  {
+   "noteId": 38,
+   "lane": 4,
+   "hitTime": 11.4204,
+   "type": "Tap",
+   "endTime": 11.4204
+  },
+  {
+   "noteId": 39,
+   "lane": 5,
+   "hitTime": 11.93,
+   "type": "Tap",
+   "endTime": 11.93
+  },
+  {
+   "noteId": 40,
+   "lane": 4,
+   "hitTime": 12.4394,
+   "type": "Tap",
+   "endTime": 12.4394
+  },
+  {
+   "noteId": 41,
+   "lane": 2,
+   "hitTime": 12.9488,
+   "type": "Tap",
+   "endTime": 12.9488
+  },
+  {
+   "noteId": 42,
+   "lane": 1,
+   "hitTime": 13.2034,
+   "type": "Tap",
+   "endTime": 13.2034
+  },
+  {
+   "noteId": 43,
+   "lane": 2,
+   "hitTime": 13.4581,
+   "type": "Tap",
+   "endTime": 13.4581
+  },
+  {
+   "noteId": 44,
+   "lane": 3,
+   "hitTime": 13.4581,
+   "type": "Tap",
+   "endTime": 13.4581
+  },
+  {
+   "noteId": 45,
+   "lane": 0,
+   "hitTime": 13.7128,
+   "type": "Tap",
+   "endTime": 13.7128
+  },
+  {
+   "noteId": 46,
+   "lane": 2,
+   "hitTime": 13.9675,
+   "type": "Tap",
+   "endTime": 13.9675
+  },
+  {
+   "noteId": 47,
+   "lane": 1,
+   "hitTime": 14.2221,
+   "type": "Tap",
+   "endTime": 14.2221
+  },
+  {
+   "noteId": 48,
+   "lane": 3,
+   "hitTime": 14.4767,
+   "type": "Tap",
+   "endTime": 14.4767
+  },
+  {
+   "noteId": 49,
+   "lane": 2,
+   "hitTime": 14.7313,
+   "type": "Tap",
+   "endTime": 14.7313
+  },
+  {
+   "noteId": 50,
+   "lane": 4,
+   "hitTime": 14.9859,
+   "type": "Tap",
+   "endTime": 14.9859
+  },
+  {
+   "noteId": 51,
+   "lane": 2,
+   "hitTime": 15.2405,
+   "type": "Tap",
+   "endTime": 15.2405
+  },
+  {
+   "noteId": 52,
+   "lane": 4,
+   "hitTime": 15.4951,
+   "type": "Tap",
+   "endTime": 15.4951
+  },
+  {
+   "noteId": 53,
+   "lane": 3,
+   "hitTime": 15.7497,
+   "type": "Tap",
+   "endTime": 15.7497
+  },
+  {
+   "noteId": 54,
+   "lane": 4,
+   "hitTime": 16.0043,
+   "type": "Tap",
+   "endTime": 16.0043
+  },
+  {
+   "noteId": 55,
+   "lane": 5,
+   "hitTime": 16.5133,
+   "type": "Tap",
+   "endTime": 16.5133
+  },
+  {
+   "noteId": 56,
+   "lane": 4,
+   "hitTime": 17.0223,
+   "type": "Hold",
+   "endTime": 17.5313
+  },
+  {
+   "noteId": 57,
+   "lane": 2,
+   "hitTime": 17.7858,
+   "type": "Tap",
+   "endTime": 17.7858
+  },
+  {
+   "noteId": 58,
+   "lane": 1,
+   "hitTime": 18.0403,
+   "type": "Tap",
+   "endTime": 18.0403
+  },
+  {
+   "noteId": 59,
+   "lane": 2,
+   "hitTime": 18.5492,
+   "type": "Tap",
+   "endTime": 18.5492
+  },
+  {
+   "noteId": 60,
+   "lane": 3,
+   "hitTime": 18.8036,
+   "type": "Tap",
+   "endTime": 18.8036
+  },
+  {
+   "noteId": 61,
+   "lane": 1,
+   "hitTime": 19.0581,
+   "type": "Tap",
+   "endTime": 19.0581
+  },
+  {
+   "noteId": 62,
+   "lane": 0,
+   "hitTime": 19.3125,
+   "type": "Tap",
+   "endTime": 19.3125
+  },
+  {
+   "noteId": 63,
+   "lane": 1,
+   "hitTime": 19.5669,
+   "type": "Tap",
+   "endTime": 19.5669
+  },
+  {
+   "noteId": 64,
+   "lane": 3,
+   "hitTime": 19.8214,
+   "type": "Tap",
+   "endTime": 19.8214
+  },
+  {
+   "noteId": 65,
+   "lane": 4,
+   "hitTime": 20.0758,
+   "type": "Tap",
+   "endTime": 20.0758
+  },
+  {
+   "noteId": 66,
+   "lane": 3,
+   "hitTime": 20.3302,
+   "type": "Tap",
+   "endTime": 20.3302
+  },
+  {
+   "noteId": 67,
+   "lane": 1,
+   "hitTime": 20.5847,
+   "type": "Tap",
+   "endTime": 20.5847
+  },
+  {
+   "noteId": 68,
+   "lane": 4,
+   "hitTime": 20.5847,
+   "type": "Tap",
+   "endTime": 20.5847
+  },
+  {
+   "noteId": 69,
+   "lane": 5,
+   "hitTime": 21.0936,
+   "type": "Tap",
+   "endTime": 21.0936
+  },
+  {
+   "noteId": 70,
+   "lane": 4,
+   "hitTime": 21.6024,
+   "type": "Tap",
+   "endTime": 21.6024
+  },
+  {
+   "noteId": 71,
+   "lane": 2,
+   "hitTime": 21.8569,
+   "type": "Tap",
+   "endTime": 21.8569
+  },
+  {
+   "noteId": 72,
+   "lane": 3,
+   "hitTime": 22.1114,
+   "type": "Tap",
+   "endTime": 22.1114
+  },
+  {
+   "noteId": 73,
+   "lane": 1,
+   "hitTime": 22.6204,
+   "type": "Tap",
+   "endTime": 22.6204
+  },
+  {
+   "noteId": 74,
+   "lane": 0,
+   "hitTime": 22.8749,
+   "type": "Tap",
+   "endTime": 22.8749
+  },
+  {
+   "noteId": 75,
+   "lane": 2,
+   "hitTime": 23.1294,
+   "type": "Tap",
+   "endTime": 23.1294
+  },
+  {
+   "noteId": 76,
+   "lane": 3,
+   "hitTime": 23.3839,
+   "type": "Tap",
+   "endTime": 23.3839
+  },
+  {
+   "noteId": 77,
+   "lane": 5,
+   "hitTime": 23.6384,
+   "type": "Tap",
+   "endTime": 23.6384
+  },
+  {
+   "noteId": 78,
+   "lane": 4,
+   "hitTime": 24.1475,
+   "type": "Tap",
+   "endTime": 24.1475
+  },
+  {
+   "noteId": 79,
+   "lane": 3,
+   "hitTime": 24.4021,
+   "type": "Tap",
+   "endTime": 24.4021
+  },
+  {
+   "noteId": 80,
+   "lane": 2,
+   "hitTime": 24.6567,
+   "type": "Tap",
+   "endTime": 24.6567
+  },
+  {
+   "noteId": 81,
+   "lane": 4,
+   "hitTime": 24.9113,
+   "type": "Tap",
+   "endTime": 24.9113
+  },
+  {
+   "noteId": 82,
+   "lane": 3,
+   "hitTime": 25.1659,
+   "type": "Hold",
+   "endTime": 25.6751
+  },
+  {
+   "noteId": 83,
+   "lane": 2,
+   "hitTime": 25.9297,
+   "type": "Tap",
+   "endTime": 25.9297
+  },
+  {
+   "noteId": 84,
+   "lane": 3,
+   "hitTime": 26.1844,
+   "type": "Tap",
+   "endTime": 26.1844
+  },
+  {
+   "noteId": 85,
+   "lane": 1,
+   "hitTime": 26.6938,
+   "type": "Tap",
+   "endTime": 26.6938
+  },
+  {
+   "noteId": 86,
+   "lane": 3,
+   "hitTime": 27.2032,
+   "type": "Tap",
+   "endTime": 27.2032
+  },
+  {
+   "noteId": 87,
+   "lane": 4,
+   "hitTime": 27.4579,
+   "type": "Tap",
+   "endTime": 27.4579
+  },
+  {
+   "noteId": 88,
+   "lane": 2,
+   "hitTime": 27.7126,
+   "type": "Tap",
+   "endTime": 27.7126
+  },
+  {
+   "noteId": 89,
+   "lane": 1,
+   "hitTime": 27.9673,
+   "type": "Tap",
+   "endTime": 27.9673
+  },
+  {
+   "noteId": 90,
+   "lane": 2,
+   "hitTime": 28.2221,
+   "type": "Tap",
+   "endTime": 28.2221
+  },
+  {
+   "noteId": 91,
+   "lane": 3,
+   "hitTime": 28.477,
+   "type": "Tap",
+   "endTime": 28.477
+  },
+  {
+   "noteId": 92,
+   "lane": 2,
+   "hitTime": 28.7318,
+   "type": "Tap",
+   "endTime": 28.7318
+  },
+  {
+   "noteId": 93,
+   "lane": 3,
+   "hitTime": 29.2414,
+   "type": "Tap",
+   "endTime": 29.2414
+  },
+  {
+   "noteId": 94,
+   "lane": 1,
+   "hitTime": 29.4963,
+   "type": "Tap",
+   "endTime": 29.4963
+  },
+  {
+   "noteId": 95,
+   "lane": 2,
+   "hitTime": 30.0059,
+   "type": "Tap",
+   "endTime": 30.0059
+  },
+  {
+   "noteId": 96,
+   "lane": 1,
+   "hitTime": 30.2609,
+   "type": "Tap",
+   "endTime": 30.2609
+  },
+  {
+   "noteId": 97,
+   "lane": 2,
+   "hitTime": 30.7709,
+   "type": "Tap",
+   "endTime": 30.7709
+  },
+  {
+   "noteId": 98,
+   "lane": 1,
+   "hitTime": 31.0258,
+   "type": "Tap",
+   "endTime": 31.0258
+  },
+  {
+   "noteId": 99,
+   "lane": 2,
+   "hitTime": 31.5358,
+   "type": "Tap",
+   "endTime": 31.5358
+  },
+  {
+   "noteId": 100,
+   "lane": 0,
+   "hitTime": 31.7908,
+   "type": "Tap",
+   "endTime": 31.7908
+  },
+  {
+   "noteId": 101,
+   "lane": 1,
+   "hitTime": 32.3008,
+   "type": "Tap",
+   "endTime": 32.3008
+  },
+  {
+   "noteId": 102,
+   "lane": 3,
+   "hitTime": 32.5558,
+   "type": "Tap",
+   "endTime": 32.5558
+  },
+  {
+   "noteId": 103,
+   "lane": 0,
+   "hitTime": 32.8109,
+   "type": "Tap",
+   "endTime": 32.8109
+  },
+  {
+   "noteId": 104,
+   "lane": 5,
+   "hitTime": 32.8109,
+   "type": "Tap",
+   "endTime": 32.8109
+  },
+  {
+   "noteId": 105,
+   "lane": 3,
+   "hitTime": 33.3209,
+   "type": "Tap",
+   "endTime": 33.3209
+  },
+  {
+   "noteId": 106,
+   "lane": 5,
+   "hitTime": 33.576,
+   "type": "Tap",
+   "endTime": 33.576
+  },
+  {
+   "noteId": 107,
+   "lane": 4,
+   "hitTime": 34.086,
+   "type": "Tap",
+   "endTime": 34.086
+  },
+  {
+   "noteId": 108,
+   "lane": 3,
+   "hitTime": 34.341,
+   "type": "Tap",
+   "endTime": 34.341
+  },
+  {
+   "noteId": 109,
+   "lane": 1,
+   "hitTime": 34.851,
+   "type": "Tap",
+   "endTime": 34.851
+  },
+  {
+   "noteId": 110,
+   "lane": 4,
+   "hitTime": 34.851,
+   "type": "Tap",
+   "endTime": 34.851
+  },
+  {
+   "noteId": 111,
+   "lane": 2,
+   "hitTime": 35.106,
+   "type": "Tap",
+   "endTime": 35.106
+  },
+  {
+   "noteId": 112,
+   "lane": 0,
+   "hitTime": 35.361,
+   "type": "Tap",
+   "endTime": 35.361
+  },
+  {
+   "noteId": 113,
+   "lane": 2,
+   "hitTime": 35.6159,
+   "type": "Tap",
+   "endTime": 35.6159
+  },
+  {
+   "noteId": 114,
+   "lane": 1,
+   "hitTime": 35.8709,
+   "type": "Tap",
+   "endTime": 35.8709
+  },
+  {
+   "noteId": 115,
+   "lane": 0,
+   "hitTime": 36.3808,
+   "type": "Tap",
+   "endTime": 36.3808
+  },
+  {
+   "noteId": 116,
+   "lane": 2,
+   "hitTime": 36.6356,
+   "type": "Tap",
+   "endTime": 36.6356
+  },
+  {
+   "noteId": 117,
+   "lane": 0,
+   "hitTime": 36.8905,
+   "type": "Tap",
+   "endTime": 36.8905
+  },
+  {
+   "noteId": 118,
+   "lane": 5,
+   "hitTime": 36.8905,
+   "type": "Tap",
+   "endTime": 36.8905
+  },
+  {
+   "noteId": 119,
+   "lane": 1,
+   "hitTime": 37.1454,
+   "type": "Tap",
+   "endTime": 37.1454
+  },
+  {
+   "noteId": 120,
+   "lane": 0,
+   "hitTime": 37.4003,
+   "type": "Tap",
+   "endTime": 37.4003
+  },
+  {
+   "noteId": 121,
+   "lane": 2,
+   "hitTime": 37.6552,
+   "type": "Tap",
+   "endTime": 37.6552
+  },
+  {
+   "noteId": 122,
+   "lane": 0,
+   "hitTime": 37.9101,
+   "type": "Tap",
+   "endTime": 37.9101
+  },
+  {
+   "noteId": 123,
+   "lane": 1,
+   "hitTime": 38.165,
+   "type": "Tap",
+   "endTime": 38.165
+  },
+  {
+   "noteId": 124,
+   "lane": 3,
+   "hitTime": 38.4198,
+   "type": "Tap",
+   "endTime": 38.4198
+  },
+  {
+   "noteId": 125,
+   "lane": 2,
+   "hitTime": 38.9294,
+   "type": "Tap",
+   "endTime": 38.9294
+  },
+  {
+   "noteId": 126,
+   "lane": 1,
+   "hitTime": 39.439,
+   "type": "Tap",
+   "endTime": 39.439
+  },
+  {
+   "noteId": 127,
+   "lane": 2,
+   "hitTime": 39.9487,
+   "type": "Tap",
+   "endTime": 39.9487
+  },
+  {
+   "noteId": 128,
+   "lane": 3,
+   "hitTime": 39.9487,
+   "type": "Tap",
+   "endTime": 39.9487
+  },
+  {
+   "noteId": 129,
+   "lane": 4,
+   "hitTime": 40.4582,
+   "type": "Tap",
+   "endTime": 40.4582
+  },
+  {
+   "noteId": 130,
+   "lane": 2,
+   "hitTime": 40.713,
+   "type": "Tap",
+   "endTime": 40.713
+  },
+  {
+   "noteId": 131,
+   "lane": 0,
+   "hitTime": 40.9677,
+   "type": "Tap",
+   "endTime": 40.9677
+  },
+  {
+   "noteId": 132,
+   "lane": 1,
+   "hitTime": 41.4772,
+   "type": "Tap",
+   "endTime": 41.4772
+  },
+  {
+   "noteId": 133,
+   "lane": 3,
+   "hitTime": 41.732,
+   "type": "Tap",
+   "endTime": 41.732
+  },
+  {
+   "noteId": 134,
+   "lane": 2,
+   "hitTime": 41.9868,
+   "type": "Tap",
+   "endTime": 41.9868
+  },
+  {
+   "noteId": 135,
+   "lane": 0,
+   "hitTime": 42.4962,
+   "type": "Hold",
+   "endTime": 43.0057
+  },
+  {
+   "noteId": 136,
+   "lane": 1,
+   "hitTime": 43.2605,
+   "type": "Tap",
+   "endTime": 43.2605
+  },
+  {
+   "noteId": 137,
+   "lane": 0,
+   "hitTime": 43.5152,
+   "type": "Tap",
+   "endTime": 43.5152
+  },
+  {
+   "noteId": 138,
+   "lane": 2,
+   "hitTime": 43.7699,
+   "type": "Tap",
+   "endTime": 43.7699
+  },
+  {
+   "noteId": 139,
+   "lane": 3,
+   "hitTime": 44.0247,
+   "type": "Tap",
+   "endTime": 44.0247
+  },
+  {
+   "noteId": 140,
+   "lane": 2,
+   "hitTime": 44.2794,
+   "type": "Tap",
+   "endTime": 44.2794
+  },
+  {
+   "noteId": 141,
+   "lane": 3,
+   "hitTime": 44.5342,
+   "type": "Tap",
+   "endTime": 44.5342
+  },
+  {
+   "noteId": 142,
+   "lane": 5,
+   "hitTime": 44.7889,
+   "type": "Tap",
+   "endTime": 44.7889
+  },
+  {
+   "noteId": 143,
+   "lane": 2,
+   "hitTime": 45.0437,
+   "type": "Tap",
+   "endTime": 45.0437
+  },
+  {
+   "noteId": 144,
+   "lane": 3,
+   "hitTime": 45.0437,
+   "type": "Tap",
+   "endTime": 45.0437
+  },
+  {
+   "noteId": 145,
+   "lane": 5,
+   "hitTime": 45.5532,
+   "type": "Tap",
+   "endTime": 45.5532
+  },
+  {
+   "noteId": 146,
+   "lane": 4,
+   "hitTime": 45.808,
+   "type": "Tap",
+   "endTime": 45.808
+  },
+  {
+   "noteId": 147,
+   "lane": 2,
+   "hitTime": 46.0627,
+   "type": "Tap",
+   "endTime": 46.0627
+  },
+  {
+   "noteId": 148,
+   "lane": 3,
+   "hitTime": 46.3176,
+   "type": "Tap",
+   "endTime": 46.3176
+  },
+  {
+   "noteId": 149,
+   "lane": 2,
+   "hitTime": 46.5724,
+   "type": "Tap",
+   "endTime": 46.5724
+  },
+  {
+   "noteId": 150,
+   "lane": 1,
+   "hitTime": 46.8272,
+   "type": "Tap",
+   "endTime": 46.8272
+  },
+  {
+   "noteId": 151,
+   "lane": 3,
+   "hitTime": 47.082,
+   "type": "Tap",
+   "endTime": 47.082
+  },
+  {
+   "noteId": 152,
+   "lane": 2,
+   "hitTime": 47.3368,
+   "type": "Tap",
+   "endTime": 47.3368
+  },
+  {
+   "noteId": 153,
+   "lane": 3,
+   "hitTime": 47.5917,
+   "type": "Tap",
+   "endTime": 47.5917
+  },
+  {
+   "noteId": 154,
+   "lane": 2,
+   "hitTime": 48.1014,
+   "type": "Tap",
+   "endTime": 48.1014
+  },
+  {
+   "noteId": 155,
+   "lane": 1,
+   "hitTime": 48.3563,
+   "type": "Tap",
+   "endTime": 48.3563
+  },
+  {
+   "noteId": 156,
+   "lane": 3,
+   "hitTime": 48.6112,
+   "type": "Tap",
+   "endTime": 48.6112
+  },
+  {
+   "noteId": 157,
+   "lane": 0,
+   "hitTime": 49.1211,
+   "type": "Tap",
+   "endTime": 49.1211
+  },
+  {
+   "noteId": 158,
+   "lane": 5,
+   "hitTime": 49.1211,
+   "type": "Tap",
+   "endTime": 49.1211
+  },
+  {
+   "noteId": 159,
+   "lane": 4,
+   "hitTime": 49.631,
+   "type": "Tap",
+   "endTime": 49.631
+  },
+  {
+   "noteId": 160,
+   "lane": 5,
+   "hitTime": 50.1409,
+   "type": "Tap",
+   "endTime": 50.1409
+  },
+  {
+   "noteId": 161,
+   "lane": 4,
+   "hitTime": 50.396,
+   "type": "Tap",
+   "endTime": 50.396
+  },
+  {
+   "noteId": 162,
+   "lane": 5,
+   "hitTime": 50.6511,
+   "type": "Tap",
+   "endTime": 50.6511
+  },
+  {
+   "noteId": 163,
+   "lane": 4,
+   "hitTime": 50.9062,
+   "type": "Tap",
+   "endTime": 50.9062
+  },
+  {
+   "noteId": 164,
+   "lane": 3,
+   "hitTime": 51.1612,
+   "type": "Tap",
+   "endTime": 51.1612
+  },
+  {
+   "noteId": 165,
+   "lane": 2,
+   "hitTime": 51.6714,
+   "type": "Tap",
+   "endTime": 51.6714
+  },
+  {
+   "noteId": 166,
+   "lane": 1,
+   "hitTime": 52.3092,
+   "type": "Tap",
+   "endTime": 52.3092
+  },
+  {
+   "noteId": 167,
+   "lane": 3,
+   "hitTime": 52.4368,
+   "type": "Tap",
+   "endTime": 52.4368
+  },
+  {
+   "noteId": 168,
+   "lane": 4,
+   "hitTime": 52.692,
+   "type": "Tap",
+   "endTime": 52.692
+  },
+  {
+   "noteId": 169,
+   "lane": 5,
+   "hitTime": 53.2024,
+   "type": "Tap",
+   "endTime": 53.2024
+  },
+  {
+   "noteId": 170,
+   "lane": 4,
+   "hitTime": 53.7128,
+   "type": "Tap",
+   "endTime": 53.7128
+  },
+  {
+   "noteId": 171,
+   "lane": 5,
+   "hitTime": 54.2232,
+   "type": "Tap",
+   "endTime": 54.2232
+  },
+  {
+   "noteId": 172,
+   "lane": 4,
+   "hitTime": 54.7336,
+   "type": "Tap",
+   "endTime": 54.7336
+  },
+  {
+   "noteId": 173,
+   "lane": 2,
+   "hitTime": 55.244,
+   "type": "Tap",
+   "endTime": 55.244
+  },
+  {
+   "noteId": 174,
+   "lane": 3,
+   "hitTime": 55.244,
+   "type": "Tap",
+   "endTime": 55.244
+  },
+  {
+   "noteId": 175,
+   "lane": 0,
+   "hitTime": 55.4992,
+   "type": "Tap",
+   "endTime": 55.4992
+  },
+  {
+   "noteId": 176,
+   "lane": 1,
+   "hitTime": 55.7544,
+   "type": "Tap",
+   "endTime": 55.7544
+  },
+  {
+   "noteId": 177,
+   "lane": 2,
+   "hitTime": 56.0096,
+   "type": "Tap",
+   "endTime": 56.0096
+  },
+  {
+   "noteId": 178,
+   "lane": 4,
+   "hitTime": 56.2648,
+   "type": "Tap",
+   "endTime": 56.2648
+  },
+  {
+   "noteId": 179,
+   "lane": 3,
+   "hitTime": 56.7751,
+   "type": "Tap",
+   "endTime": 56.7751
+  },
+  {
+   "noteId": 180,
+   "lane": 2,
+   "hitTime": 57.0302,
+   "type": "Tap",
+   "endTime": 57.0302
+  },
+  {
+   "noteId": 181,
+   "lane": 1,
+   "hitTime": 57.2853,
+   "type": "Tap",
+   "endTime": 57.2853
+  },
+  {
+   "noteId": 182,
+   "lane": 2,
+   "hitTime": 57.7956,
+   "type": "Tap",
+   "endTime": 57.7956
+  },
+  {
+   "noteId": 183,
+   "lane": 3,
+   "hitTime": 58.3057,
+   "type": "Tap",
+   "endTime": 58.3057
+  },
+  {
+   "noteId": 184,
+   "lane": 2,
+   "hitTime": 58.5608,
+   "type": "Tap",
+   "endTime": 58.5608
+  },
+  {
+   "noteId": 185,
+   "lane": 3,
+   "hitTime": 58.8158,
+   "type": "Tap",
+   "endTime": 58.8158
+  },
+  {
+   "noteId": 186,
+   "lane": 2,
+   "hitTime": 59.3258,
+   "type": "Tap",
+   "endTime": 59.3258
+  },
+  {
+   "noteId": 187,
+   "lane": 0,
+   "hitTime": 59.5808,
+   "type": "Tap",
+   "endTime": 59.5808
+  },
+  {
+   "noteId": 188,
+   "lane": 1,
+   "hitTime": 59.8359,
+   "type": "Hold",
+   "endTime": 60.3458
+  },
+  {
+   "noteId": 189,
+   "lane": 0,
+   "hitTime": 60.6007,
+   "type": "Tap",
+   "endTime": 60.6007
+  },
+  {
+   "noteId": 190,
+   "lane": 1,
+   "hitTime": 60.8557,
+   "type": "Tap",
+   "endTime": 60.8557
+  },
+  {
+   "noteId": 191,
+   "lane": 3,
+   "hitTime": 61.1106,
+   "type": "Tap",
+   "endTime": 61.1106
+  },
+  {
+   "noteId": 192,
+   "lane": 1,
+   "hitTime": 61.3655,
+   "type": "Tap",
+   "endTime": 61.3655
+  },
+  {
+   "noteId": 193,
+   "lane": 2,
+   "hitTime": 61.8754,
+   "type": "Hold",
+   "endTime": 62.6402
+  },
+  {
+   "noteId": 194,
+   "lane": 3,
+   "hitTime": 62.8951,
+   "type": "Tap",
+   "endTime": 62.8951
+  },
+  {
+   "noteId": 195,
+   "lane": 4,
+   "hitTime": 63.15,
+   "type": "Tap",
+   "endTime": 63.15
+  },
+  {
+   "noteId": 196,
+   "lane": 5,
+   "hitTime": 63.4049,
+   "type": "Tap",
+   "endTime": 63.4049
+  },
+  {
+   "noteId": 197,
+   "lane": 3,
+   "hitTime": 63.6598,
+   "type": "Tap",
+   "endTime": 63.6598
+  },
+  {
+   "noteId": 198,
+   "lane": 1,
+   "hitTime": 63.9148,
+   "type": "Tap",
+   "endTime": 63.9148
+  },
+  {
+   "noteId": 199,
+   "lane": 3,
+   "hitTime": 64.4247,
+   "type": "Tap",
+   "endTime": 64.4247
+  },
+  {
+   "noteId": 200,
+   "lane": 5,
+   "hitTime": 64.6796,
+   "type": "Tap",
+   "endTime": 64.6796
+  },
+  {
+   "noteId": 201,
+   "lane": 4,
+   "hitTime": 64.9346,
+   "type": "Tap",
+   "endTime": 64.9346
+  },
+  {
+   "noteId": 202,
+   "lane": 2,
+   "hitTime": 65.1895,
+   "type": "Tap",
+   "endTime": 65.1895
+  },
+  {
+   "noteId": 203,
+   "lane": 0,
+   "hitTime": 65.4445,
+   "type": "Tap",
+   "endTime": 65.4445
+  },
+  {
+   "noteId": 204,
+   "lane": 1,
+   "hitTime": 65.6995,
+   "type": "Tap",
+   "endTime": 65.6995
+  },
+  {
+   "noteId": 205,
+   "lane": 3,
+   "hitTime": 65.9544,
+   "type": "Tap",
+   "endTime": 65.9544
+  },
+  {
+   "noteId": 206,
+   "lane": 5,
+   "hitTime": 66.2095,
+   "type": "Tap",
+   "endTime": 66.2095
+  },
+  {
+   "noteId": 207,
+   "lane": 4,
+   "hitTime": 66.4645,
+   "type": "Tap",
+   "endTime": 66.4645
+  },
+  {
+   "noteId": 208,
+   "lane": 3,
+   "hitTime": 66.7195,
+   "type": "Tap",
+   "endTime": 66.7195
+  },
+  {
+   "noteId": 209,
+   "lane": 4,
+   "hitTime": 66.9746,
+   "type": "Tap",
+   "endTime": 66.9746
+  },
+  {
+   "noteId": 210,
+   "lane": 5,
+   "hitTime": 67.4846,
+   "type": "Tap",
+   "endTime": 67.4846
+  },
+  {
+   "noteId": 211,
+   "lane": 3,
+   "hitTime": 67.7396,
+   "type": "Tap",
+   "endTime": 67.7396
+  },
+  {
+   "noteId": 212,
+   "lane": 4,
+   "hitTime": 67.9947,
+   "type": "Tap",
+   "endTime": 67.9947
+  },
+  {
+   "noteId": 213,
+   "lane": 2,
+   "hitTime": 68.5048,
+   "type": "Tap",
+   "endTime": 68.5048
+  },
+  {
+   "noteId": 214,
+   "lane": 1,
+   "hitTime": 69.015,
+   "type": "Tap",
+   "endTime": 69.015
+  },
+  {
+   "noteId": 215,
+   "lane": 2,
+   "hitTime": 69.2701,
+   "type": "Tap",
+   "endTime": 69.2701
+  },
+  {
+   "noteId": 216,
+   "lane": 0,
+   "hitTime": 69.5252,
+   "type": "Tap",
+   "endTime": 69.5252
+  },
+  {
+   "noteId": 217,
+   "lane": 1,
+   "hitTime": 69.7803,
+   "type": "Tap",
+   "endTime": 69.7803
+  },
+  {
+   "noteId": 218,
+   "lane": 3,
+   "hitTime": 70.0353,
+   "type": "Tap",
+   "endTime": 70.0353
+  },
+  {
+   "noteId": 219,
+   "lane": 4,
+   "hitTime": 70.2904,
+   "type": "Hold",
+   "endTime": 70.8006
+  },
+  {
+   "noteId": 220,
+   "lane": 3,
+   "hitTime": 71.0557,
+   "type": "Tap",
+   "endTime": 71.0557
+  },
+  {
+   "noteId": 221,
+   "lane": 5,
+   "hitTime": 71.3108,
+   "type": "Tap",
+   "endTime": 71.3108
+  },
+  {
+   "noteId": 222,
+   "lane": 4,
+   "hitTime": 71.5659,
+   "type": "Tap",
+   "endTime": 71.5659
+  },
+  {
+   "noteId": 223,
+   "lane": 5,
+   "hitTime": 71.8209,
+   "type": "Tap",
+   "endTime": 71.8209
+  },
+  {
+   "noteId": 224,
+   "lane": 4,
+   "hitTime": 72.076,
+   "type": "Tap",
+   "endTime": 72.076
+  },
+  {
+   "noteId": 225,
+   "lane": 3,
+   "hitTime": 72.3311,
+   "type": "Tap",
+   "endTime": 72.3311
+  },
+  {
+   "noteId": 226,
+   "lane": 2,
+   "hitTime": 72.5861,
+   "type": "Tap",
+   "endTime": 72.5861
+  },
+  {
+   "noteId": 227,
+   "lane": 3,
+   "hitTime": 72.5861,
+   "type": "Tap",
+   "endTime": 72.5861
+  },
+  {
+   "noteId": 228,
+   "lane": 1,
+   "hitTime": 72.8412,
+   "type": "Tap",
+   "endTime": 72.8412
+  },
+  {
+   "noteId": 229,
+   "lane": 3,
+   "hitTime": 73.0962,
+   "type": "Tap",
+   "endTime": 73.0962
+  },
+  {
+   "noteId": 230,
+   "lane": 2,
+   "hitTime": 73.3513,
+   "type": "Tap",
+   "endTime": 73.3513
+  },
+  {
+   "noteId": 231,
+   "lane": 1,
+   "hitTime": 73.6063,
+   "type": "Tap",
+   "endTime": 73.6063
+  },
+  {
+   "noteId": 232,
+   "lane": 2,
+   "hitTime": 73.8614,
+   "type": "Tap",
+   "endTime": 73.8614
+  },
+  {
+   "noteId": 233,
+   "lane": 3,
+   "hitTime": 74.1164,
+   "type": "Tap",
+   "endTime": 74.1164
+  },
+  {
+   "noteId": 234,
+   "lane": 2,
+   "hitTime": 74.6264,
+   "type": "Tap",
+   "endTime": 74.6264
+  },
+  {
+   "noteId": 235,
+   "lane": 1,
+   "hitTime": 74.8814,
+   "type": "Tap",
+   "endTime": 74.8814
+  },
+  {
+   "noteId": 236,
+   "lane": 2,
+   "hitTime": 75.1364,
+   "type": "Tap",
+   "endTime": 75.1364
+  },
+  {
+   "noteId": 237,
+   "lane": 3,
+   "hitTime": 75.6464,
+   "type": "Tap",
+   "endTime": 75.6464
+  },
+  {
+   "noteId": 238,
+   "lane": 2,
+   "hitTime": 76.1564,
+   "type": "Tap",
+   "endTime": 76.1564
+  },
+  {
+   "noteId": 239,
+   "lane": 1,
+   "hitTime": 76.4113,
+   "type": "Tap",
+   "endTime": 76.4113
+  },
+  {
+   "noteId": 240,
+   "lane": 3,
+   "hitTime": 76.6663,
+   "type": "Tap",
+   "endTime": 76.6663
+  },
+  {
+   "noteId": 241,
+   "lane": 1,
+   "hitTime": 76.9213,
+   "type": "Tap",
+   "endTime": 76.9213
+  },
+  {
+   "noteId": 242,
+   "lane": 2,
+   "hitTime": 77.1762,
+   "type": "Tap",
+   "endTime": 77.1762
+  },
+  {
+   "noteId": 243,
+   "lane": 0,
+   "hitTime": 77.4312,
+   "type": "Tap",
+   "endTime": 77.4312
+  },
+  {
+   "noteId": 244,
+   "lane": 1,
+   "hitTime": 77.6862,
+   "type": "Tap",
+   "endTime": 77.6862
+  },
+  {
+   "noteId": 245,
+   "lane": 4,
+   "hitTime": 77.6862,
+   "type": "Tap",
+   "endTime": 77.6862
+  },
+  {
+   "noteId": 246,
+   "lane": 2,
+   "hitTime": 78.1961,
+   "type": "Tap",
+   "endTime": 78.1961
+  },
+  {
+   "noteId": 247,
+   "lane": 3,
+   "hitTime": 78.451,
+   "type": "Tap",
+   "endTime": 78.451
+  },
+  {
+   "noteId": 248,
+   "lane": 1,
+   "hitTime": 78.706,
+   "type": "Tap",
+   "endTime": 78.706
+  },
+  {
+   "noteId": 249,
+   "lane": 0,
+   "hitTime": 79.2159,
+   "type": "Tap",
+   "endTime": 79.2159
+  },
+  {
+   "noteId": 250,
+   "lane": 1,
+   "hitTime": 79.4708,
+   "type": "Tap",
+   "endTime": 79.4708
+  },
+  {
+   "noteId": 251,
+   "lane": 2,
+   "hitTime": 79.7258,
+   "type": "Tap",
+   "endTime": 79.7258
+  },
+  {
+   "noteId": 252,
+   "lane": 3,
+   "hitTime": 79.7258,
+   "type": "Tap",
+   "endTime": 79.7258
+  },
+  {
+   "noteId": 253,
+   "lane": 0,
+   "hitTime": 79.9807,
+   "type": "Tap",
+   "endTime": 79.9807
+  },
+  {
+   "noteId": 254,
+   "lane": 1,
+   "hitTime": 80.2357,
+   "type": "Tap",
+   "endTime": 80.2357
+  },
+  {
+   "noteId": 255,
+   "lane": 0,
+   "hitTime": 80.4906,
+   "type": "Tap",
+   "endTime": 80.4906
+  },
+  {
+   "noteId": 256,
+   "lane": 1,
+   "hitTime": 80.7455,
+   "type": "Tap",
+   "endTime": 80.7455
+  },
+  {
+   "noteId": 257,
+   "lane": 0,
+   "hitTime": 81.0005,
+   "type": "Tap",
+   "endTime": 81.0005
+  },
+  {
+   "noteId": 258,
+   "lane": 1,
+   "hitTime": 81.2554,
+   "type": "Tap",
+   "endTime": 81.2554
+  },
+  {
+   "noteId": 259,
+   "lane": 3,
+   "hitTime": 81.5104,
+   "type": "Tap",
+   "endTime": 81.5104
+  },
+  {
+   "noteId": 260,
+   "lane": 4,
+   "hitTime": 81.7653,
+   "type": "Tap",
+   "endTime": 81.7653
+  },
+  {
+   "noteId": 261,
+   "lane": 5,
+   "hitTime": 82.2752,
+   "type": "Tap",
+   "endTime": 82.2752
+  },
+  {
+   "noteId": 262,
+   "lane": 3,
+   "hitTime": 82.5301,
+   "type": "Tap",
+   "endTime": 82.5301
+  },
+  {
+   "noteId": 263,
+   "lane": 5,
+   "hitTime": 82.785,
+   "type": "Tap",
+   "endTime": 82.785
+  },
+  {
+   "noteId": 264,
+   "lane": 4,
+   "hitTime": 83.2948,
+   "type": "Tap",
+   "endTime": 83.2948
+  },
+  {
+   "noteId": 265,
+   "lane": 3,
+   "hitTime": 83.5498,
+   "type": "Tap",
+   "endTime": 83.5498
+  },
+  {
+   "noteId": 266,
+   "lane": 0,
+   "hitTime": 83.8047,
+   "type": "Tap",
+   "endTime": 83.8047
+  },
+  {
+   "noteId": 267,
+   "lane": 5,
+   "hitTime": 83.8047,
+   "type": "Tap",
+   "endTime": 83.8047
+  },
+  {
+   "noteId": 268,
+   "lane": 3,
+   "hitTime": 84.3145,
+   "type": "Tap",
+   "endTime": 84.3145
+  },
+  {
+   "noteId": 269,
+   "lane": 1,
+   "hitTime": 84.5694,
+   "type": "Tap",
+   "endTime": 84.5694
+  },
+  {
+   "noteId": 270,
+   "lane": 2,
+   "hitTime": 84.8243,
+   "type": "Tap",
+   "endTime": 84.8243
+  },
+  {
+   "noteId": 271,
+   "lane": 3,
+   "hitTime": 84.8243,
+   "type": "Tap",
+   "endTime": 84.8243
+  },
+  {
+   "noteId": 272,
+   "lane": 2,
+   "hitTime": 85.0792,
+   "type": "Tap",
+   "endTime": 85.0792
+  },
+  {
+   "noteId": 273,
+   "lane": 0,
+   "hitTime": 85.3341,
+   "type": "Tap",
+   "endTime": 85.3341
+  },
+  {
+   "noteId": 274,
+   "lane": 2,
+   "hitTime": 85.589,
+   "type": "Tap",
+   "endTime": 85.589
+  },
+  {
+   "noteId": 275,
+   "lane": 4,
+   "hitTime": 85.8439,
+   "type": "Tap",
+   "endTime": 85.8439
+  },
+  {
+   "noteId": 276,
+   "lane": 2,
+   "hitTime": 86.0988,
+   "type": "Tap",
+   "endTime": 86.0988
+  },
+  {
+   "noteId": 277,
+   "lane": 1,
+   "hitTime": 86.3536,
+   "type": "Tap",
+   "endTime": 86.3536
+  },
+  {
+   "noteId": 278,
+   "lane": 3,
+   "hitTime": 86.6085,
+   "type": "Tap",
+   "endTime": 86.6085
+  },
+  {
+   "noteId": 279,
+   "lane": 5,
+   "hitTime": 86.8634,
+   "type": "Tap",
+   "endTime": 86.8634
+  },
+  {
+   "noteId": 280,
+   "lane": 3,
+   "hitTime": 87.1183,
+   "type": "Tap",
+   "endTime": 87.1183
+  },
+  {
+   "noteId": 281,
+   "lane": 1,
+   "hitTime": 87.3732,
+   "type": "Tap",
+   "endTime": 87.3732
+  },
+  {
+   "noteId": 282,
+   "lane": 2,
+   "hitTime": 87.6281,
+   "type": "Tap",
+   "endTime": 87.6281
+  },
+  {
+   "noteId": 283,
+   "lane": 2,
+   "hitTime": 87.883,
+   "type": "Tap",
+   "endTime": 87.883
+  },
+  {
+   "noteId": 284,
+   "lane": 3,
+   "hitTime": 87.883,
+   "type": "Tap",
+   "endTime": 87.883
+  },
+  {
+   "noteId": 285,
+   "lane": 4,
+   "hitTime": 88.1378,
+   "type": "Tap",
+   "endTime": 88.1378
+  },
+  {
+   "noteId": 286,
+   "lane": 5,
+   "hitTime": 88.3927,
+   "type": "Tap",
+   "endTime": 88.3927
+  },
+  {
+   "noteId": 287,
+   "lane": 3,
+   "hitTime": 88.6476,
+   "type": "Tap",
+   "endTime": 88.6476
+  },
+  {
+   "noteId": 288,
+   "lane": 5,
+   "hitTime": 88.9025,
+   "type": "Tap",
+   "endTime": 88.9025
+  },
+  {
+   "noteId": 289,
+   "lane": 4,
+   "hitTime": 89.1574,
+   "type": "Tap",
+   "endTime": 89.1574
+  },
+  {
+   "noteId": 290,
+   "lane": 3,
+   "hitTime": 89.4122,
+   "type": "Tap",
+   "endTime": 89.4122
+  },
+  {
+   "noteId": 291,
+   "lane": 1,
+   "hitTime": 89.6671,
+   "type": "Tap",
+   "endTime": 89.6671
+  },
+  {
+   "noteId": 292,
+   "lane": 2,
+   "hitTime": 89.922,
+   "type": "Tap",
+   "endTime": 89.922
+  },
+  {
+   "noteId": 293,
+   "lane": 3,
+   "hitTime": 90.1769,
+   "type": "Tap",
+   "endTime": 90.1769
+  },
+  {
+   "noteId": 294,
+   "lane": 2,
+   "hitTime": 90.4317,
+   "type": "Tap",
+   "endTime": 90.4317
+  },
+  {
+   "noteId": 295,
+   "lane": 3,
+   "hitTime": 90.6866,
+   "type": "Tap",
+   "endTime": 90.6866
+  },
+  {
+   "noteId": 296,
+   "lane": 5,
+   "hitTime": 90.9415,
+   "type": "Tap",
+   "endTime": 90.9415
+  },
+  {
+   "noteId": 297,
+   "lane": 4,
+   "hitTime": 91.1963,
+   "type": "Tap",
+   "endTime": 91.1963
+  },
+  {
+   "noteId": 298,
+   "lane": 2,
+   "hitTime": 91.4512,
+   "type": "Tap",
+   "endTime": 91.4512
+  },
+  {
+   "noteId": 299,
+   "lane": 4,
+   "hitTime": 91.7061,
+   "type": "Tap",
+   "endTime": 91.7061
+  },
+  {
+   "noteId": 300,
+   "lane": 0,
+   "hitTime": 91.9609,
+   "type": "Tap",
+   "endTime": 91.9609
+  },
+  {
+   "noteId": 301,
+   "lane": 5,
+   "hitTime": 91.9609,
+   "type": "Tap",
+   "endTime": 91.9609
+  },
+  {
+   "noteId": 302,
+   "lane": 4,
+   "hitTime": 92.2158,
+   "type": "Tap",
+   "endTime": 92.2158
+  },
+  {
+   "noteId": 303,
+   "lane": 2,
+   "hitTime": 92.4706,
+   "type": "Tap",
+   "endTime": 92.4706
+  },
+  {
+   "noteId": 304,
+   "lane": 3,
+   "hitTime": 92.7255,
+   "type": "Tap",
+   "endTime": 92.7255
+  },
+  {
+   "noteId": 305,
+   "lane": 2,
+   "hitTime": 92.9803,
+   "type": "Tap",
+   "endTime": 92.9803
+  },
+  {
+   "noteId": 306,
+   "lane": 1,
+   "hitTime": 93.2352,
+   "type": "Tap",
+   "endTime": 93.2352
+  },
+  {
+   "noteId": 307,
+   "lane": 2,
+   "hitTime": 93.49,
+   "type": "Tap",
+   "endTime": 93.49
+  },
+  {
+   "noteId": 308,
+   "lane": 1,
+   "hitTime": 93.7449,
+   "type": "Tap",
+   "endTime": 93.7449
+  },
+  {
+   "noteId": 309,
+   "lane": 0,
+   "hitTime": 93.9997,
+   "type": "Tap",
+   "endTime": 93.9997
+  },
+  {
+   "noteId": 310,
+   "lane": 5,
+   "hitTime": 93.9997,
+   "type": "Tap",
+   "endTime": 93.9997
+  },
+  {
+   "noteId": 311,
+   "lane": 1,
+   "hitTime": 94.2546,
+   "type": "Tap",
+   "endTime": 94.2546
+  },
+  {
+   "noteId": 312,
+   "lane": 3,
+   "hitTime": 94.5094,
+   "type": "Tap",
+   "endTime": 94.5094
+  },
+  {
+   "noteId": 313,
+   "lane": 4,
+   "hitTime": 94.7642,
+   "type": "Tap",
+   "endTime": 94.7642
+  },
+  {
+   "noteId": 314,
+   "lane": 2,
+   "hitTime": 95.019,
+   "type": "Tap",
+   "endTime": 95.019
+  },
+  {
+   "noteId": 315,
+   "lane": 3,
+   "hitTime": 95.019,
+   "type": "Tap",
+   "endTime": 95.019
+  },
+  {
+   "noteId": 316,
+   "lane": 2,
+   "hitTime": 95.2739,
+   "type": "Tap",
+   "endTime": 95.2739
+  },
+  {
+   "noteId": 317,
+   "lane": 3,
+   "hitTime": 95.5287,
+   "type": "Tap",
+   "endTime": 95.5287
+  },
+  {
+   "noteId": 318,
+   "lane": 4,
+   "hitTime": 95.7835,
+   "type": "Tap",
+   "endTime": 95.7835
+  },
+  {
+   "noteId": 319,
+   "lane": 2,
+   "hitTime": 96.0383,
+   "type": "Tap",
+   "endTime": 96.0383
+  },
+  {
+   "noteId": 320,
+   "lane": 1,
+   "hitTime": 96.2931,
+   "type": "Tap",
+   "endTime": 96.2931
+  },
+  {
+   "noteId": 321,
+   "lane": 2,
+   "hitTime": 96.5479,
+   "type": "Tap",
+   "endTime": 96.5479
+  },
+  {
+   "noteId": 322,
+   "lane": 3,
+   "hitTime": 96.8027,
+   "type": "Tap",
+   "endTime": 96.8027
+  },
+  {
+   "noteId": 323,
+   "lane": 2,
+   "hitTime": 97.0574,
+   "type": "Tap",
+   "endTime": 97.0574
+  },
+  {
+   "noteId": 324,
+   "lane": 3,
+   "hitTime": 97.0574,
+   "type": "Tap",
+   "endTime": 97.0574
+  },
+  {
+   "noteId": 325,
+   "lane": 3,
+   "hitTime": 97.3122,
+   "type": "Tap",
+   "endTime": 97.3122
+  },
+  {
+   "noteId": 326,
+   "lane": 2,
+   "hitTime": 97.567,
+   "type": "Tap",
+   "endTime": 97.567
+  },
+  {
+   "noteId": 327,
+   "lane": 0,
+   "hitTime": 97.8217,
+   "type": "Tap",
+   "endTime": 97.8217
+  },
+  {
+   "noteId": 328,
+   "lane": 2,
+   "hitTime": 98.0765,
+   "type": "Tap",
+   "endTime": 98.0765
+  },
+  {
+   "noteId": 329,
+   "lane": 3,
+   "hitTime": 98.0765,
+   "type": "Tap",
+   "endTime": 98.0765
+  },
+  {
+   "noteId": 330,
+   "lane": 0,
+   "hitTime": 98.5858,
+   "type": "Tap",
+   "endTime": 98.5858
+  },
+  {
+   "noteId": 331,
+   "lane": 1,
+   "hitTime": 98.8405,
+   "type": "Tap",
+   "endTime": 98.8405
+  },
+  {
+   "noteId": 332,
+   "lane": 2,
+   "hitTime": 99.0951,
+   "type": "Tap",
+   "endTime": 99.0951
+  },
+  {
+   "noteId": 333,
+   "lane": 0,
+   "hitTime": 99.6045,
+   "type": "Tap",
+   "endTime": 99.6045
+  },
+  {
+   "noteId": 334,
+   "lane": 2,
+   "hitTime": 99.8591,
+   "type": "Tap",
+   "endTime": 99.8591
+  },
+  {
+   "noteId": 335,
+   "lane": 1,
+   "hitTime": 100.1137,
+   "type": "Tap",
+   "endTime": 100.1137
+  },
+  {
+   "noteId": 336,
+   "lane": 4,
+   "hitTime": 100.1137,
+   "type": "Tap",
+   "endTime": 100.1137
+  },
+  {
+   "noteId": 337,
+   "lane": 2,
+   "hitTime": 100.6228,
+   "type": "Tap",
+   "endTime": 100.6228
+  },
+  {
+   "noteId": 338,
+   "lane": 4,
+   "hitTime": 100.8773,
+   "type": "Tap",
+   "endTime": 100.8773
+  },
+  {
+   "noteId": 339,
+   "lane": 2,
+   "hitTime": 101.1319,
+   "type": "Tap",
+   "endTime": 101.1319
+  },
+  {
+   "noteId": 340,
+   "lane": 1,
+   "hitTime": 101.6409,
+   "type": "Tap",
+   "endTime": 101.6409
+  },
+  {
+   "noteId": 341,
+   "lane": 3,
+   "hitTime": 101.8955,
+   "type": "Tap",
+   "endTime": 101.8955
+  },
+  {
+   "noteId": 342,
+   "lane": 5,
+   "hitTime": 102.15,
+   "type": "Tap",
+   "endTime": 102.15
+  },
+  {
+   "noteId": 343,
+   "lane": 4,
+   "hitTime": 102.6589,
+   "type": "Tap",
+   "endTime": 102.6589
+  },
+  {
+   "noteId": 344,
+   "lane": 3,
+   "hitTime": 102.9134,
+   "type": "Tap",
+   "endTime": 102.9134
+  },
+  {
+   "noteId": 345,
+   "lane": 4,
+   "hitTime": 103.1679,
+   "type": "Tap",
+   "endTime": 103.1679
+  },
+  {
+   "noteId": 346,
+   "lane": 2,
+   "hitTime": 103.6768,
+   "type": "Tap",
+   "endTime": 103.6768
+  },
+  {
+   "noteId": 347,
+   "lane": 1,
+   "hitTime": 103.9313,
+   "type": "Tap",
+   "endTime": 103.9313
+  },
+  {
+   "noteId": 348,
+   "lane": 2,
+   "hitTime": 104.1858,
+   "type": "Tap",
+   "endTime": 104.1858
+  },
+  {
+   "noteId": 349,
+   "lane": 3,
+   "hitTime": 104.1858,
+   "type": "Tap",
+   "endTime": 104.1858
+  },
+  {
+   "noteId": 350,
+   "lane": 4,
+   "hitTime": 104.4403,
+   "type": "Tap",
+   "endTime": 104.4403
+  },
+  {
+   "noteId": 351,
+   "lane": 5,
+   "hitTime": 104.6949,
+   "type": "Tap",
+   "endTime": 104.6949
+  },
+  {
+   "noteId": 352,
+   "lane": 3,
+   "hitTime": 104.9494,
+   "type": "Tap",
+   "endTime": 104.9494
+  },
+  {
+   "noteId": 353,
+   "lane": 2,
+   "hitTime": 105.2039,
+   "type": "Tap",
+   "endTime": 105.2039
+  },
+  {
+   "noteId": 354,
+   "lane": 1,
+   "hitTime": 105.4584,
+   "type": "Tap",
+   "endTime": 105.4584
+  },
+  {
+   "noteId": 355,
+   "lane": 2,
+   "hitTime": 105.7129,
+   "type": "Tap",
+   "endTime": 105.7129
+  },
+  {
+   "noteId": 356,
+   "lane": 0,
+   "hitTime": 105.9675,
+   "type": "Tap",
+   "endTime": 105.9675
+  },
+  {
+   "noteId": 357,
+   "lane": 1,
+   "hitTime": 106.2221,
+   "type": "Tap",
+   "endTime": 106.2221
+  },
+  {
+   "noteId": 358,
+   "lane": 4,
+   "hitTime": 106.2221,
+   "type": "Tap",
+   "endTime": 106.2221
+  },
+  {
+   "noteId": 359,
+   "lane": 2,
+   "hitTime": 106.7313,
+   "type": "Tap",
+   "endTime": 106.7313
+  },
+  {
+   "noteId": 360,
+   "lane": 0,
+   "hitTime": 106.9859,
+   "type": "Tap",
+   "endTime": 106.9859
+  },
+  {
+   "noteId": 361,
+   "lane": 2,
+   "hitTime": 107.2405,
+   "type": "Tap",
+   "endTime": 107.2405
+  },
+  {
+   "noteId": 362,
+   "lane": 0,
+   "hitTime": 107.4951,
+   "type": "Tap",
+   "endTime": 107.4951
+  },
+  {
+   "noteId": 363,
+   "lane": 1,
+   "hitTime": 107.7497,
+   "type": "Tap",
+   "endTime": 107.7497
+  },
+  {
+   "noteId": 364,
+   "lane": 3,
+   "hitTime": 108.0043,
+   "type": "Tap",
+   "endTime": 108.0043
+  },
+  {
+   "noteId": 365,
+   "lane": 0,
+   "hitTime": 108.259,
+   "type": "Tap",
+   "endTime": 108.259
+  },
+  {
+   "noteId": 366,
+   "lane": 5,
+   "hitTime": 108.259,
+   "type": "Tap",
+   "endTime": 108.259
+  },
+  {
+   "noteId": 367,
+   "lane": 4,
+   "hitTime": 108.7683,
+   "type": "Tap",
+   "endTime": 108.7683
+  },
+  {
+   "noteId": 368,
+   "lane": 5,
+   "hitTime": 109.023,
+   "type": "Tap",
+   "endTime": 109.023
+  },
+  {
+   "noteId": 369,
+   "lane": 4,
+   "hitTime": 109.2776,
+   "type": "Tap",
+   "endTime": 109.2776
+  },
+  {
+   "noteId": 370,
+   "lane": 2,
+   "hitTime": 109.5323,
+   "type": "Tap",
+   "endTime": 109.5323
+  },
+  {
+   "noteId": 371,
+   "lane": 0,
+   "hitTime": 109.787,
+   "type": "Tap",
+   "endTime": 109.787
+  },
+  {
+   "noteId": 372,
+   "lane": 1,
+   "hitTime": 110.0417,
+   "type": "Tap",
+   "endTime": 110.0417
+  },
+  {
+   "noteId": 373,
+   "lane": 0,
+   "hitTime": 110.2964,
+   "type": "Tap",
+   "endTime": 110.2964
+  },
+  {
+   "noteId": 374,
+   "lane": 5,
+   "hitTime": 110.2964,
+   "type": "Tap",
+   "endTime": 110.2964
+  },
+  {
+   "noteId": 375,
+   "lane": 1,
+   "hitTime": 110.5511,
+   "type": "Tap",
+   "endTime": 110.5511
+  },
+  {
+   "noteId": 376,
+   "lane": 2,
+   "hitTime": 110.8058,
+   "type": "Tap",
+   "endTime": 110.8058
+  },
+  {
+   "noteId": 377,
+   "lane": 1,
+   "hitTime": 111.0605,
+   "type": "Tap",
+   "endTime": 111.0605
+  },
+  {
+   "noteId": 378,
+   "lane": 2,
+   "hitTime": 111.3152,
+   "type": "Tap",
+   "endTime": 111.3152
+  },
+  {
+   "noteId": 379,
+   "lane": 3,
+   "hitTime": 111.3152,
+   "type": "Tap",
+   "endTime": 111.3152
+  },
+  {
+   "noteId": 380,
+   "lane": 1,
+   "hitTime": 111.5699,
+   "type": "Tap",
+   "endTime": 111.5699
+  },
+  {
+   "noteId": 381,
+   "lane": 2,
+   "hitTime": 111.8246,
+   "type": "Tap",
+   "endTime": 111.8246
+  },
+  {
+   "noteId": 382,
+   "lane": 4,
+   "hitTime": 112.0793,
+   "type": "Tap",
+   "endTime": 112.0793
+  },
+  {
+   "noteId": 383,
+   "lane": 0,
+   "hitTime": 112.334,
+   "type": "Tap",
+   "endTime": 112.334
+  },
+  {
+   "noteId": 384,
+   "lane": 5,
+   "hitTime": 112.334,
+   "type": "Tap",
+   "endTime": 112.334
+  },
+  {
+   "noteId": 385,
+   "lane": 4,
+   "hitTime": 112.5887,
+   "type": "Tap",
+   "endTime": 112.5887
+  },
+  {
+   "noteId": 386,
+   "lane": 3,
+   "hitTime": 112.8434,
+   "type": "Tap",
+   "endTime": 112.8434
+  },
+  {
+   "noteId": 387,
+   "lane": 5,
+   "hitTime": 113.0981,
+   "type": "Tap",
+   "endTime": 113.0981
+  },
+  {
+   "noteId": 388,
+   "lane": 4,
+   "hitTime": 113.3529,
+   "type": "Tap",
+   "endTime": 113.3529
+  },
+  {
+   "noteId": 389,
+   "lane": 3,
+   "hitTime": 113.8623,
+   "type": "Tap",
+   "endTime": 113.8623
+  },
+  {
+   "noteId": 390,
+   "lane": 1,
+   "hitTime": 114.117,
+   "type": "Tap",
+   "endTime": 114.117
+  },
+  {
+   "noteId": 391,
+   "lane": 2,
+   "hitTime": 114.3717,
+   "type": "Tap",
+   "endTime": 114.3717
+  },
+  {
+   "noteId": 392,
+   "lane": 3,
+   "hitTime": 114.3717,
+   "type": "Tap",
+   "endTime": 114.3717
+  },
+  {
+   "noteId": 393,
+   "lane": 4,
+   "hitTime": 114.6263,
+   "type": "Tap",
+   "endTime": 114.6263
+  },
+  {
+   "noteId": 394,
+   "lane": 2,
+   "hitTime": 115.1357,
+   "type": "Tap",
+   "endTime": 115.1357
+  },
+  {
+   "noteId": 395,
+   "lane": 3,
+   "hitTime": 115.3904,
+   "type": "Tap",
+   "endTime": 115.3904
+  },
+  {
+   "noteId": 396,
+   "lane": 1,
+   "hitTime": 115.8997,
+   "type": "Tap",
+   "endTime": 115.8997
+  },
+  {
+   "noteId": 397,
+   "lane": 0,
+   "hitTime": 116.1544,
+   "type": "Tap",
+   "endTime": 116.1544
+  },
+  {
+   "noteId": 398,
+   "lane": 1,
+   "hitTime": 116.409,
+   "type": "Tap",
+   "endTime": 116.409
+  },
+  {
+   "noteId": 399,
+   "lane": 2,
+   "hitTime": 116.6635,
+   "type": "Tap",
+   "endTime": 116.6635
+  },
+  {
+   "noteId": 400,
+   "lane": 3,
+   "hitTime": 116.9181,
+   "type": "Tap",
+   "endTime": 116.9181
+  },
+  {
+   "noteId": 401,
+   "lane": 2,
+   "hitTime": 117.1727,
+   "type": "Tap",
+   "endTime": 117.1727
+  },
+  {
+   "noteId": 402,
+   "lane": 3,
+   "hitTime": 117.4273,
+   "type": "Tap",
+   "endTime": 117.4273
+  },
+  {
+   "noteId": 403,
+   "lane": 2,
+   "hitTime": 117.6819,
+   "type": "Tap",
+   "endTime": 117.6819
+  },
+  {
+   "noteId": 404,
+   "lane": 4,
+   "hitTime": 117.9365,
+   "type": "Tap",
+   "endTime": 117.9365
+  },
+  {
+   "noteId": 405,
+   "lane": 3,
+   "hitTime": 118.191,
+   "type": "Tap",
+   "endTime": 118.191
+  },
+  {
+   "noteId": 406,
+   "lane": 5,
+   "hitTime": 118.3182,
+   "type": "Tap",
+   "endTime": 118.3182
+  },
+  {
+   "noteId": 407,
+   "lane": 4,
+   "hitTime": 118.6999,
+   "type": "Tap",
+   "endTime": 118.6999
+  },
+  {
+   "noteId": 408,
+   "lane": 5,
+   "hitTime": 118.9543,
+   "type": "Tap",
+   "endTime": 118.9543
+  },
+  {
+   "noteId": 409,
+   "lane": 4,
+   "hitTime": 119.2088,
+   "type": "Tap",
+   "endTime": 119.2088
+  },
+  {
+   "noteId": 410,
+   "lane": 2,
+   "hitTime": 119.4632,
+   "type": "Tap",
+   "endTime": 119.4632
+  },
+  {
+   "noteId": 411,
+   "lane": 1,
+   "hitTime": 119.7177,
+   "type": "Tap",
+   "endTime": 119.7177
+  },
+  {
+   "noteId": 412,
+   "lane": 0,
+   "hitTime": 119.9722,
+   "type": "Tap",
+   "endTime": 119.9722
+  },
+  {
+   "noteId": 413,
+   "lane": 1,
+   "hitTime": 120.2265,
+   "type": "Tap",
+   "endTime": 120.2265
+  },
+  {
+   "noteId": 414,
+   "lane": 2,
+   "hitTime": 120.4808,
+   "type": "Tap",
+   "endTime": 120.4808
+  },
+  {
+   "noteId": 415,
+   "lane": 3,
+   "hitTime": 120.4808,
+   "type": "Tap",
+   "endTime": 120.4808
+  },
+  {
+   "noteId": 416,
+   "lane": 4,
+   "hitTime": 120.7352,
+   "type": "Tap",
+   "endTime": 120.7352
+  },
+  {
+   "noteId": 417,
+   "lane": 3,
+   "hitTime": 120.9895,
+   "type": "Tap",
+   "endTime": 120.9895
+  },
+  {
+   "noteId": 418,
+   "lane": 2,
+   "hitTime": 121.2439,
+   "type": "Tap",
+   "endTime": 121.2439
+  },
+  {
+   "noteId": 419,
+   "lane": 4,
+   "hitTime": 121.4982,
+   "type": "Tap",
+   "endTime": 121.4982
+  },
+  {
+   "noteId": 420,
+   "lane": 3,
+   "hitTime": 121.7526,
+   "type": "Tap",
+   "endTime": 121.7526
+  },
+  {
+   "noteId": 421,
+   "lane": 4,
+   "hitTime": 122.0069,
+   "type": "Tap",
+   "endTime": 122.0069
+  },
+  {
+   "noteId": 422,
+   "lane": 5,
+   "hitTime": 122.2612,
+   "type": "Tap",
+   "endTime": 122.2612
+  },
+  {
+   "noteId": 423,
+   "lane": 4,
+   "hitTime": 122.5155,
+   "type": "Tap",
+   "endTime": 122.5155
+  },
+  {
+   "noteId": 424,
+   "lane": 3,
+   "hitTime": 122.7699,
+   "type": "Tap",
+   "endTime": 122.7699
+  },
+  {
+   "noteId": 425,
+   "lane": 4,
+   "hitTime": 123.0242,
+   "type": "Tap",
+   "endTime": 123.0242
+  },
+  {
+   "noteId": 426,
+   "lane": 5,
+   "hitTime": 123.2785,
+   "type": "Tap",
+   "endTime": 123.2785
+  },
+  {
+   "noteId": 427,
+   "lane": 4,
+   "hitTime": 123.5329,
+   "type": "Tap",
+   "endTime": 123.5329
+  },
+  {
+   "noteId": 428,
+   "lane": 3,
+   "hitTime": 123.7872,
+   "type": "Tap",
+   "endTime": 123.7872
+  },
+  {
+   "noteId": 429,
+   "lane": 5,
+   "hitTime": 124.0415,
+   "type": "Tap",
+   "endTime": 124.0415
+  },
+  {
+   "noteId": 430,
+   "lane": 4,
+   "hitTime": 124.2959,
+   "type": "Tap",
+   "endTime": 124.2959
+  },
+  {
+   "noteId": 431,
+   "lane": 2,
+   "hitTime": 124.5503,
+   "type": "Tap",
+   "endTime": 124.5503
+  },
+  {
+   "noteId": 432,
+   "lane": 3,
+   "hitTime": 124.5503,
+   "type": "Tap",
+   "endTime": 124.5503
+  },
+  {
+   "noteId": 433,
+   "lane": 1,
+   "hitTime": 124.8047,
+   "type": "Tap",
+   "endTime": 124.8047
+  },
+  {
+   "noteId": 434,
+   "lane": 0,
+   "hitTime": 125.0591,
+   "type": "Tap",
+   "endTime": 125.0591
+  },
+  {
+   "noteId": 435,
+   "lane": 1,
+   "hitTime": 125.3135,
+   "type": "Tap",
+   "endTime": 125.3135
+  },
+  {
+   "noteId": 436,
+   "lane": 2,
+   "hitTime": 125.5679,
+   "type": "Tap",
+   "endTime": 125.5679
+  },
+  {
+   "noteId": 437,
+   "lane": 1,
+   "hitTime": 125.8223,
+   "type": "Tap",
+   "endTime": 125.8223
+  },
+  {
+   "noteId": 438,
+   "lane": 2,
+   "hitTime": 126.0767,
+   "type": "Tap",
+   "endTime": 126.0767
+  },
+  {
+   "noteId": 439,
+   "lane": 0,
+   "hitTime": 126.3312,
+   "type": "Tap",
+   "endTime": 126.3312
+  },
+  {
+   "noteId": 440,
+   "lane": 1,
+   "hitTime": 126.5856,
+   "type": "Tap",
+   "endTime": 126.5856
+  },
+  {
+   "noteId": 441,
+   "lane": 0,
+   "hitTime": 126.8401,
+   "type": "Tap",
+   "endTime": 126.8401
+  },
+  {
+   "noteId": 442,
+   "lane": 2,
+   "hitTime": 127.0945,
+   "type": "Tap",
+   "endTime": 127.0945
+  },
+  {
+   "noteId": 443,
+   "lane": 3,
+   "hitTime": 127.349,
+   "type": "Tap",
+   "endTime": 127.349
+  },
+  {
+   "noteId": 444,
+   "lane": 2,
+   "hitTime": 127.6034,
+   "type": "Tap",
+   "endTime": 127.6034
+  },
+  {
+   "noteId": 445,
+   "lane": 1,
+   "hitTime": 127.8579,
+   "type": "Tap",
+   "endTime": 127.8579
+  },
+  {
+   "noteId": 446,
+   "lane": 3,
+   "hitTime": 128.1124,
+   "type": "Tap",
+   "endTime": 128.1124
+  },
+  {
+   "noteId": 447,
+   "lane": 2,
+   "hitTime": 128.3668,
+   "type": "Tap",
+   "endTime": 128.3668
+  },
+  {
+   "noteId": 448,
+   "lane": 1,
+   "hitTime": 128.6213,
+   "type": "Tap",
+   "endTime": 128.6213
+  },
+  {
+   "noteId": 449,
+   "lane": 4,
+   "hitTime": 128.6213,
+   "type": "Tap",
+   "endTime": 128.6213
+  },
+  {
+   "noteId": 450,
+   "lane": 3,
+   "hitTime": 128.8758,
+   "type": "Tap",
+   "endTime": 128.8758
+  },
+  {
+   "noteId": 451,
+   "lane": 5,
+   "hitTime": 129.1302,
+   "type": "Tap",
+   "endTime": 129.1302
+  },
+  {
+   "noteId": 452,
+   "lane": 4,
+   "hitTime": 129.3847,
+   "type": "Tap",
+   "endTime": 129.3847
+  },
+  {
+   "noteId": 453,
+   "lane": 5,
+   "hitTime": 129.6392,
+   "type": "Tap",
+   "endTime": 129.6392
+  },
+  {
+   "noteId": 454,
+   "lane": 4,
+   "hitTime": 129.8936,
+   "type": "Tap",
+   "endTime": 129.8936
+  },
+  {
+   "noteId": 455,
+   "lane": 5,
+   "hitTime": 130.1481,
+   "type": "Tap",
+   "endTime": 130.1481
+  },
+  {
+   "noteId": 456,
+   "lane": 4,
+   "hitTime": 130.4025,
+   "type": "Tap",
+   "endTime": 130.4025
+  },
+  {
+   "noteId": 457,
+   "lane": 3,
+   "hitTime": 130.6569,
+   "type": "Tap",
+   "endTime": 130.6569
+  },
+  {
+   "noteId": 458,
+   "lane": 1,
+   "hitTime": 130.9114,
+   "type": "Tap",
+   "endTime": 130.9114
+  },
+  {
+   "noteId": 459,
+   "lane": 2,
+   "hitTime": 131.1658,
+   "type": "Tap",
+   "endTime": 131.1658
+  },
+  {
+   "noteId": 460,
+   "lane": 1,
+   "hitTime": 131.4202,
+   "type": "Tap",
+   "endTime": 131.4202
+  },
+  {
+   "noteId": 461,
+   "lane": 2,
+   "hitTime": 131.9291,
+   "type": "Tap",
+   "endTime": 131.9291
+  },
+  {
+   "noteId": 462,
+   "lane": 3,
+   "hitTime": 132.1835,
+   "type": "Tap",
+   "endTime": 132.1835
+  },
+  {
+   "noteId": 463,
+   "lane": 4,
+   "hitTime": 132.4379,
+   "type": "Tap",
+   "endTime": 132.4379
+  },
+  {
+   "noteId": 464,
+   "lane": 2,
+   "hitTime": 132.6923,
+   "type": "Tap",
+   "endTime": 132.6923
+  },
+  {
+   "noteId": 465,
+   "lane": 3,
+   "hitTime": 132.6923,
+   "type": "Tap",
+   "endTime": 132.6923
+  },
+  {
+   "noteId": 466,
+   "lane": 3,
+   "hitTime": 133.2011,
+   "type": "Tap",
+   "endTime": 133.2011
+  },
+  {
+   "noteId": 467,
+   "lane": 4,
+   "hitTime": 133.4556,
+   "type": "Tap",
+   "endTime": 133.4556
+  },
+  {
+   "noteId": 468,
+   "lane": 3,
+   "hitTime": 133.71,
+   "type": "Tap",
+   "endTime": 133.71
+  },
+  {
+   "noteId": 469,
+   "lane": 4,
+   "hitTime": 133.9644,
+   "type": "Tap",
+   "endTime": 133.9644
+  },
+  {
+   "noteId": 470,
+   "lane": 5,
+   "hitTime": 134.2188,
+   "type": "Tap",
+   "endTime": 134.2188
+  },
+  {
+   "noteId": 471,
+   "lane": 4,
+   "hitTime": 134.4732,
+   "type": "Tap",
+   "endTime": 134.4732
+  },
+  {
+   "noteId": 472,
+   "lane": 5,
+   "hitTime": 134.7277,
+   "type": "Tap",
+   "endTime": 134.7277
+  },
+  {
+   "noteId": 473,
+   "lane": 4,
+   "hitTime": 134.9821,
+   "type": "Tap",
+   "endTime": 134.9821
+  },
+  {
+   "noteId": 474,
+   "lane": 3,
+   "hitTime": 135.2365,
+   "type": "Tap",
+   "endTime": 135.2365
+  },
+  {
+   "noteId": 475,
+   "lane": 4,
+   "hitTime": 135.491,
+   "type": "Tap",
+   "endTime": 135.491
+  },
+  {
+   "noteId": 476,
+   "lane": 2,
+   "hitTime": 135.7454,
+   "type": "Tap",
+   "endTime": 135.7454
+  },
+  {
+   "noteId": 477,
+   "lane": 3,
+   "hitTime": 135.9998,
+   "type": "Tap",
+   "endTime": 135.9998
+  },
+  {
+   "noteId": 478,
+   "lane": 4,
+   "hitTime": 136.2543,
+   "type": "Tap",
+   "endTime": 136.2543
+  },
+  {
+   "noteId": 479,
+   "lane": 3,
+   "hitTime": 136.5088,
+   "type": "Tap",
+   "endTime": 136.5088
+  },
+  {
+   "noteId": 480,
+   "lane": 1,
+   "hitTime": 136.7633,
+   "type": "Tap",
+   "endTime": 136.7633
+  },
+  {
+   "noteId": 481,
+   "lane": 4,
+   "hitTime": 136.7633,
+   "type": "Tap",
+   "endTime": 136.7633
+  },
+  {
+   "noteId": 482,
+   "lane": 2,
+   "hitTime": 137.0178,
+   "type": "Tap",
+   "endTime": 137.0178
+  },
+  {
+   "noteId": 483,
+   "lane": 3,
+   "hitTime": 137.2723,
+   "type": "Tap",
+   "endTime": 137.2723
+  },
+  {
+   "noteId": 484,
+   "lane": 4,
+   "hitTime": 137.5268,
+   "type": "Tap",
+   "endTime": 137.5268
+  },
+  {
+   "noteId": 485,
+   "lane": 5,
+   "hitTime": 137.7813,
+   "type": "Tap",
+   "endTime": 137.7813
+  },
+  {
+   "noteId": 486,
+   "lane": 3,
+   "hitTime": 138.0358,
+   "type": "Tap",
+   "endTime": 138.0358
+  },
+  {
+   "noteId": 487,
+   "lane": 5,
+   "hitTime": 138.2904,
+   "type": "Tap",
+   "endTime": 138.2904
+  },
+  {
+   "noteId": 488,
+   "lane": 3,
+   "hitTime": 138.5449,
+   "type": "Tap",
+   "endTime": 138.5449
+  },
+  {
+   "noteId": 489,
+   "lane": 1,
+   "hitTime": 138.7995,
+   "type": "Tap",
+   "endTime": 138.7995
+  },
+  {
+   "noteId": 490,
+   "lane": 4,
+   "hitTime": 138.7995,
+   "type": "Tap",
+   "endTime": 138.7995
+  },
+  {
+   "noteId": 491,
+   "lane": 0,
+   "hitTime": 139.054,
+   "type": "Tap",
+   "endTime": 139.054
+  },
+  {
+   "noteId": 492,
+   "lane": 1,
+   "hitTime": 139.3085,
+   "type": "Tap",
+   "endTime": 139.3085
+  },
+  {
+   "noteId": 493,
+   "lane": 3,
+   "hitTime": 139.5631,
+   "type": "Tap",
+   "endTime": 139.5631
+  },
+  {
+   "noteId": 494,
+   "lane": 4,
+   "hitTime": 139.8176,
+   "type": "Tap",
+   "endTime": 139.8176
+  },
+  {
+   "noteId": 495,
+   "lane": 2,
+   "hitTime": 140.0722,
+   "type": "Tap",
+   "endTime": 140.0722
+  },
+  {
+   "noteId": 496,
+   "lane": 4,
+   "hitTime": 140.3267,
+   "type": "Tap",
+   "endTime": 140.3267
+  },
+  {
+   "noteId": 497,
+   "lane": 2,
+   "hitTime": 140.5813,
+   "type": "Tap",
+   "endTime": 140.5813
+  },
+  {
+   "noteId": 498,
+   "lane": 4,
+   "hitTime": 140.8358,
+   "type": "Tap",
+   "endTime": 140.8358
+  },
+  {
+   "noteId": 499,
+   "lane": 3,
+   "hitTime": 141.2176,
+   "type": "Tap",
+   "endTime": 141.2176
+  },
+  {
+   "noteId": 500,
+   "lane": 2,
+   "hitTime": 141.3449,
+   "type": "Tap",
+   "endTime": 141.3449
+  },
+  {
+   "noteId": 501,
+   "lane": 4,
+   "hitTime": 141.5994,
+   "type": "Tap",
+   "endTime": 141.5994
+  },
+  {
+   "noteId": 502,
+   "lane": 5,
+   "hitTime": 141.854,
+   "type": "Tap",
+   "endTime": 141.854
+  },
+  {
+   "noteId": 503,
+   "lane": 4,
+   "hitTime": 142.1085,
+   "type": "Tap",
+   "endTime": 142.1085
+  },
+  {
+   "noteId": 504,
+   "lane": 3,
+   "hitTime": 142.363,
+   "type": "Tap",
+   "endTime": 142.363
+  },
+  {
+   "noteId": 505,
+   "lane": 1,
+   "hitTime": 142.6176,
+   "type": "Tap",
+   "endTime": 142.6176
+  },
+  {
+   "noteId": 506,
+   "lane": 2,
+   "hitTime": 142.8721,
+   "type": "Tap",
+   "endTime": 142.8721
+  },
+  {
+   "noteId": 507,
+   "lane": 3,
+   "hitTime": 143.1266,
+   "type": "Tap",
+   "endTime": 143.1266
+  },
+  {
+   "noteId": 508,
+   "lane": 2,
+   "hitTime": 143.2539,
+   "type": "Tap",
+   "endTime": 143.2539
+  },
+  {
+   "noteId": 509,
+   "lane": 0,
+   "hitTime": 143.6357,
+   "type": "Tap",
+   "endTime": 143.6357
+  },
+  {
+   "noteId": 510,
+   "lane": 1,
+   "hitTime": 143.8902,
+   "type": "Tap",
+   "endTime": 143.8902
+  },
+  {
+   "noteId": 511,
+   "lane": 2,
+   "hitTime": 144.1448,
+   "type": "Tap",
+   "endTime": 144.1448
+  },
+  {
+   "noteId": 512,
+   "lane": 4,
+   "hitTime": 144.3993,
+   "type": "Tap",
+   "endTime": 144.3993
+  },
+  {
+   "noteId": 513,
+   "lane": 3,
+   "hitTime": 144.6539,
+   "type": "Tap",
+   "endTime": 144.6539
+  },
+  {
+   "noteId": 514,
+   "lane": 0,
+   "hitTime": 144.9084,
+   "type": "Tap",
+   "endTime": 144.9084
+  },
+  {
+   "noteId": 515,
+   "lane": 5,
+   "hitTime": 144.9084,
+   "type": "Tap",
+   "endTime": 144.9084
+  },
+  {
+   "noteId": 516,
+   "lane": 4,
+   "hitTime": 145.163,
+   "type": "Tap",
+   "endTime": 145.163
+  },
+  {
+   "noteId": 517,
+   "lane": 3,
+   "hitTime": 145.4175,
+   "type": "Tap",
+   "endTime": 145.4175
+  },
+  {
+   "noteId": 518,
+   "lane": 4,
+   "hitTime": 145.6721,
+   "type": "Tap",
+   "endTime": 145.6721
+  },
+  {
+   "noteId": 519,
+   "lane": 0,
+   "hitTime": 145.9267,
+   "type": "Tap",
+   "endTime": 145.9267
+  },
+  {
+   "noteId": 520,
+   "lane": 5,
+   "hitTime": 145.9267,
+   "type": "Tap",
+   "endTime": 145.9267
+  },
+  {
+   "noteId": 521,
+   "lane": 4,
+   "hitTime": 146.1813,
+   "type": "Tap",
+   "endTime": 146.1813
+  },
+  {
+   "noteId": 522,
+   "lane": 2,
+   "hitTime": 146.436,
+   "type": "Tap",
+   "endTime": 146.436
+  },
+  {
+   "noteId": 523,
+   "lane": 3,
+   "hitTime": 146.6907,
+   "type": "Tap",
+   "endTime": 146.6907
+  },
+  {
+   "noteId": 524,
+   "lane": 4,
+   "hitTime": 146.9453,
+   "type": "Tap",
+   "endTime": 146.9453
+  },
+  {
+   "noteId": 525,
+   "lane": 2,
+   "hitTime": 147.3273,
+   "type": "Tap",
+   "endTime": 147.3273
+  },
+  {
+   "noteId": 526,
+   "lane": 0,
+   "hitTime": 147.4547,
+   "type": "Tap",
+   "endTime": 147.4547
+  },
+  {
+   "noteId": 527,
+   "lane": 2,
+   "hitTime": 147.7094,
+   "type": "Tap",
+   "endTime": 147.7094
+  },
+  {
+   "noteId": 528,
+   "lane": 0,
+   "hitTime": 147.964,
+   "type": "Tap",
+   "endTime": 147.964
+  },
+  {
+   "noteId": 529,
+   "lane": 2,
+   "hitTime": 148.2189,
+   "type": "Tap",
+   "endTime": 148.2189
+  },
+  {
+   "noteId": 530,
+   "lane": 4,
+   "hitTime": 148.4737,
+   "type": "Tap",
+   "endTime": 148.4737
+  },
+  {
+   "noteId": 531,
+   "lane": 2,
+   "hitTime": 148.7285,
+   "type": "Tap",
+   "endTime": 148.7285
+  },
+  {
+   "noteId": 532,
+   "lane": 4,
+   "hitTime": 148.9834,
+   "type": "Tap",
+   "endTime": 148.9834
+  },
+  {
+   "noteId": 533,
+   "lane": 2,
+   "hitTime": 149.3656,
+   "type": "Tap",
+   "endTime": 149.3656
+  },
+  {
+   "noteId": 534,
+   "lane": 0,
+   "hitTime": 149.4931,
+   "type": "Tap",
+   "endTime": 149.4931
+  },
+  {
+   "noteId": 535,
+   "lane": 2,
+   "hitTime": 149.7479,
+   "type": "Tap",
+   "endTime": 149.7479
+  },
+  {
+   "noteId": 536,
+   "lane": 0,
+   "hitTime": 150.0027,
+   "type": "Tap",
+   "endTime": 150.0027
+  },
+  {
+   "noteId": 537,
+   "lane": 2,
+   "hitTime": 150.2577,
+   "type": "Tap",
+   "endTime": 150.2577
+  },
+  {
+   "noteId": 538,
+   "lane": 4,
+   "hitTime": 150.5127,
+   "type": "Tap",
+   "endTime": 150.5127
+  },
+  {
+   "noteId": 539,
+   "lane": 2,
+   "hitTime": 150.7676,
+   "type": "Tap",
+   "endTime": 150.7676
+  },
+  {
+   "noteId": 540,
+   "lane": 4,
+   "hitTime": 151.0226,
+   "type": "Tap",
+   "endTime": 151.0226
+  },
+  {
+   "noteId": 541,
+   "lane": 2,
+   "hitTime": 151.5325,
+   "type": "Tap",
+   "endTime": 151.5325
+  },
+  {
+   "noteId": 542,
+   "lane": 4,
+   "hitTime": 151.7874,
+   "type": "Tap",
+   "endTime": 151.7874
+  },
+  {
+   "noteId": 543,
+   "lane": 2,
+   "hitTime": 152.0424,
+   "type": "Tap",
+   "endTime": 152.0424
+  },
+  {
+   "noteId": 544,
+   "lane": 4,
+   "hitTime": 152.2973,
+   "type": "Tap",
+   "endTime": 152.2973
+  },
+  {
+   "noteId": 545,
+   "lane": 2,
+   "hitTime": 152.5521,
+   "type": "Tap",
+   "endTime": 152.5521
+  },
+  {
+   "noteId": 546,
+   "lane": 0,
+   "hitTime": 152.807,
+   "type": "Tap",
+   "endTime": 152.807
+  },
+  {
+   "noteId": 547,
+   "lane": 2,
+   "hitTime": 153.0619,
+   "type": "Tap",
+   "endTime": 153.0619
+  },
+  {
+   "noteId": 548,
+   "lane": 3,
+   "hitTime": 153.0619,
+   "type": "Tap",
+   "endTime": 153.0619
+  },
+  {
+   "noteId": 549,
+   "lane": 0,
+   "hitTime": 153.4442,
+   "type": "Tap",
+   "endTime": 153.4442
+  },
+  {
+   "noteId": 550,
+   "lane": 2,
+   "hitTime": 153.5716,
+   "type": "Tap",
+   "endTime": 153.5716
+  },
+  {
+   "noteId": 551,
+   "lane": 4,
+   "hitTime": 153.8265,
+   "type": "Tap",
+   "endTime": 153.8265
+  },
+  {
+   "noteId": 552,
+   "lane": 2,
+   "hitTime": 154.0812,
+   "type": "Tap",
+   "endTime": 154.0812
+  },
+  {
+   "noteId": 553,
+   "lane": 4,
+   "hitTime": 154.3355,
+   "type": "Tap",
+   "endTime": 154.3355
+  },
+  {
+   "noteId": 554,
+   "lane": 2,
+   "hitTime": 154.5899,
+   "type": "Tap",
+   "endTime": 154.5899
+  },
+  {
+   "noteId": 555,
+   "lane": 4,
+   "hitTime": 154.8442,
+   "type": "Tap",
+   "endTime": 154.8442
+  },
+  {
+   "noteId": 556,
+   "lane": 2,
+   "hitTime": 155.0986,
+   "type": "Tap",
+   "endTime": 155.0986
+  },
+  {
+   "noteId": 557,
+   "lane": 3,
+   "hitTime": 155.6073,
+   "type": "Tap",
+   "endTime": 155.6073
+  },
+  {
+   "noteId": 558,
+   "lane": 1,
+   "hitTime": 155.8616,
+   "type": "Tap",
+   "endTime": 155.8616
+  },
+  {
+   "noteId": 559,
+   "lane": 0,
+   "hitTime": 156.1157,
+   "type": "Tap",
+   "endTime": 156.1157
+  },
+  {
+   "noteId": 560,
+   "lane": 2,
+   "hitTime": 156.6234,
+   "type": "Tap",
+   "endTime": 156.6234
+  },
+  {
+   "noteId": 561,
+   "lane": 0,
+   "hitTime": 156.8772,
+   "type": "Tap",
+   "endTime": 156.8772
+  },
+  {
+   "noteId": 562,
+   "lane": 1,
+   "hitTime": 157.1311,
+   "type": "Tap",
+   "endTime": 157.1311
+  },
+  {
+   "noteId": 563,
+   "lane": 3,
+   "hitTime": 157.258,
+   "type": "Tap",
+   "endTime": 157.258
+  },
+  {
+   "noteId": 564,
+   "lane": 1,
+   "hitTime": 157.6388,
+   "type": "Tap",
+   "endTime": 157.6388
+  },
+  {
+   "noteId": 565,
+   "lane": 3,
+   "hitTime": 157.8926,
+   "type": "Tap",
+   "endTime": 157.8926
+  },
+  {
+   "noteId": 566,
+   "lane": 1,
+   "hitTime": 158.1468,
+   "type": "Tap",
+   "endTime": 158.1468
+  },
+  {
+   "noteId": 567,
+   "lane": 3,
+   "hitTime": 158.4012,
+   "type": "Tap",
+   "endTime": 158.4012
+  },
+  {
+   "noteId": 568,
+   "lane": 1,
+   "hitTime": 158.6556,
+   "type": "Tap",
+   "endTime": 158.6556
+  },
+  {
+   "noteId": 569,
+   "lane": 3,
+   "hitTime": 158.7828,
+   "type": "Tap",
+   "endTime": 158.7828
+  },
+  {
+   "noteId": 570,
+   "lane": 5,
+   "hitTime": 159.0372,
+   "type": "Tap",
+   "endTime": 159.0372
+  },
+  {
+   "noteId": 571,
+   "lane": 3,
+   "hitTime": 159.1644,
+   "type": "Tap",
+   "endTime": 159.1644
+  },
+  {
+   "noteId": 572,
+   "lane": 1,
+   "hitTime": 159.4188,
+   "type": "Tap",
+   "endTime": 159.4188
+  },
+  {
+   "noteId": 573,
+   "lane": 3,
+   "hitTime": 159.6732,
+   "type": "Tap",
+   "endTime": 159.6732
+  },
+  {
+   "noteId": 574,
+   "lane": 2,
+   "hitTime": 159.9276,
+   "type": "Tap",
+   "endTime": 159.9276
+  },
+  {
+   "noteId": 575,
+   "lane": 0,
+   "hitTime": 160.1825,
+   "type": "Tap",
+   "endTime": 160.1825
+  },
+  {
+   "noteId": 576,
+   "lane": 2,
+   "hitTime": 160.4374,
+   "type": "Tap",
+   "endTime": 160.4374
+  },
+  {
+   "noteId": 577,
+   "lane": 1,
+   "hitTime": 160.6923,
+   "type": "Hold",
+   "endTime": 161.2022
+  },
+  {
+   "noteId": 578,
+   "lane": 3,
+   "hitTime": 161.4571,
+   "type": "Tap",
+   "endTime": 161.4571
+  },
+  {
+   "noteId": 579,
+   "lane": 2,
+   "hitTime": 161.712,
+   "type": "Tap",
+   "endTime": 161.712
+  },
+  {
+   "noteId": 580,
+   "lane": 4,
+   "hitTime": 161.967,
+   "type": "Tap",
+   "endTime": 161.967
+  },
+  {
+   "noteId": 581,
+   "lane": 2,
+   "hitTime": 162.222,
+   "type": "Tap",
+   "endTime": 162.222
+  },
+  {
+   "noteId": 582,
+   "lane": 4,
+   "hitTime": 162.4771,
+   "type": "Tap",
+   "endTime": 162.4771
+  },
+  {
+   "noteId": 583,
+   "lane": 2,
+   "hitTime": 162.7321,
+   "type": "Tap",
+   "endTime": 162.7321
+  },
+  {
+   "noteId": 584,
+   "lane": 0,
+   "hitTime": 163.2423,
+   "type": "Tap",
+   "endTime": 163.2423
+  },
+  {
+   "noteId": 585,
+   "lane": 2,
+   "hitTime": 163.3698,
+   "type": "Hold",
+   "endTime": 164.8995
+  },
+  {
+   "noteId": 586,
+   "lane": 0,
+   "hitTime": 165.2818,
+   "type": "Tap",
+   "endTime": 165.2818
+  }
+ ]
+}

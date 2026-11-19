@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf8de0ef9b0c6547be9141d2d4cd870, type: 3}
+  m_Name: HoloTransitionSettings
+  m_EditorClassIdentifier: Assembly-CSharp::HoloTransitionSettings
+  screenMaterial: {fileID: 2100000, guid: a2118825dd706874490fbc13f12f9cb8, type: 2}
+  titleFont: {fileID: 11400000, guid: dd6cac0cee01e8f4a9d4472bb4ef8cf6, type: 2}
+  monoFont: {fileID: 11400000, guid: 4b58d23948b917244911cd1d333f0d1a, type: 2}
+  offSound: {fileID: 8300000, guid: ce62a5a1bd6658e4f9421540fc7f0d02, type: 3}
+  onSound: {fileID: 0}
+  volume: 0.8
+  logoTitle: RE:WRITE
+  logoSub: "TUNING SIGNAL  \xB7  FM 77.7"
+  offGlitchTime: 0.17
+  offCollapseTime: 0.17
+  offShrinkTime: 0.11
+  shakeStrength: 55
+  flashStrength: 0.55
+  logoInTime: 0.3
+  logoHoldTime: 0.75
+  logoOutTime: 0.22
+  lineTime: 0.14
+  openTime: 0.28
+  settleTime: 0.45

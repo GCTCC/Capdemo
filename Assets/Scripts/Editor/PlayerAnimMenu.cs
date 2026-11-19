@@ -1,16 +1,16 @@
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEditor.SceneManagement;
 using UnityEditor.U2D.Sprites;
 using UnityEngine;
 
-// 에디터 상단 메뉴 Tools > CapDemo > 데모 > 플레이어 애니메이션 적용
-// Idle/Run/Jump 시트를 잘라 애니메이션과 Animator Controller를 만들고 DemoScene의 Player에 붙인다.
-// 여러 번 실행해도 결과는 같다. Animator Controller는 실행할 때마다 새로 만든다.
+// 에디터 상단 메뉴 Tools > CapDemo > 맵 > 플레이어 애니메이션 만들기
+// Idle/Run/Jump 시트를 잘라 애니메이션과 Animator Controller(Assets/Animations/Player)를 만든다.
+// 맵의 Player 프리팹은 이 Controller를 쓰므로, 시트를 바꾼 뒤 다시 누르면 모든 맵에 반영된다.
+// 여러 번 실행해도 결과는 같다. Controller 내용은 새로 만들지만 파일(연결)은 그대로 두어 프리팹 연결이 끊기지 않는다.
 public static class PlayerAnimMenu
 {
-    private const string ScenePath = "Assets/Scenes/DemoScene.unity";
     private const string SheetFolder = "Assets/image/Character/Player";
     private const string AnimFolder = "Assets/Animations/Player";
     private const string ControllerPath = AnimFolder + "/Player.controller";
@@ -64,22 +64,8 @@ public static class PlayerAnimMenu
     // 빠르게 오를 때 4번, 꼭대기 근처 5번, 막 떨어질 때 6번, 빠르게 떨어질 때 7번이 나온다.
     private const float FastSpeedY = 9f, SlowSpeedY = 3f;
 
-    // Player 콜라이더 (루트가 몸 중심, 발끝은 루트에서 0.8 아래)
-    private static readonly Vector2 ColliderSize = new Vector2(0.6f, 1.6f);
-    private const float FeetOffset = -0.8f;
-
-    [MenuItem("Tools/CapDemo/데모/플레이어 애니메이션 적용")]
-    private static void ApplyFromMenu()
-    {
-        if (EditorSceneManager.GetActiveScene().path != ScenePath)
-        {
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
-            EditorSceneManager.OpenScene(ScenePath);
-        }
-        Apply();
-    }
-
-    public static void Apply()
+    [MenuItem("Tools/CapDemo/맵/플레이어 애니메이션 만들기", priority = 3)]
+    private static void Apply()
     {
         AssetDatabase.Refresh();
         var idle = SliceSheet(IdleSheet);
@@ -104,48 +90,8 @@ public static class PlayerAnimMenu
             FallFast = SaveClip("Player_JumpFallFast", new[] { jump[6] }, 1f, true),
             Land = SaveClip("Player_Land", new[] { jump[7], jump[8] }, LandFps, false),
         };
-        var controller = CreateController(clips);
-
-        var scene = EditorSceneManager.GetActiveScene();
-        var player = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "Player");
-        if (!player)
-        {
-            Debug.LogError("[CapDemo] 씬에서 Player 오브젝트를 찾지 못했습니다.");
-            return;
-        }
-
-        // 사각형 그림을 늘려 쓰던 스케일을 풀고, 크기는 콜라이더로 정한다
-        player.transform.localScale = Vector3.one;
-        if (player.TryGetComponent(out SpriteRenderer oldRenderer)) Object.DestroyImmediate(oldRenderer);
-        if (player.TryGetComponent(out BoxCollider2D box))
-        {
-            box.size = ColliderSize;
-            box.offset = Vector2.zero;
-        }
-
-        var visual = player.transform.Find("Sprite");
-        if (!visual)
-        {
-            visual = new GameObject("Sprite", typeof(SpriteRenderer), typeof(Animator)).transform;
-            visual.SetParent(player.transform, false);
-        }
-        visual.localPosition = new Vector3(0f, FeetOffset, 0f);
-        var renderer = visual.GetComponent<SpriteRenderer>();
-        renderer.sprite = idle[0];
-        renderer.sortingOrder = 10;
-        var animator = visual.GetComponent<Animator>();
-        animator.runtimeAnimatorController = controller;
-
-        if (!player.TryGetComponent(out PlayerAnimator2D playerAnimator))
-            playerAnimator = player.AddComponent<PlayerAnimator2D>();
-        var so = new SerializedObject(playerAnimator);
-        so.FindProperty("animator").objectReferenceValue = animator;
-        so.FindProperty("spriteRenderer").objectReferenceValue = renderer;
-        so.ApplyModifiedPropertiesWithoutUndo();
-
-        EditorSceneManager.MarkSceneDirty(scene);
-        EditorSceneManager.SaveScene(scene);
-        Debug.Log("[CapDemo] Player에 Idle/Run/점프 애니메이션을 붙였습니다.");
+        CreateController(clips);
+        Debug.Log("[CapDemo] 플레이어 애니메이션을 만들었습니다. 맵의 Player 프리팹에 바로 반영됩니다.");
     }
 
     private static Vector2[] Repeat(Vector2 value, int count) => Enumerable.Repeat(value, count).ToArray();
@@ -259,12 +205,29 @@ public static class PlayerAnimMenu
     // 땅 위: Speed > 0.1 이면 Run, 아니면 Idle.
     // 땅에서 떨어지면(점프든 낭떠러지든) 어디서든 Air로 가고, Air는 위아래 속도로 4~7번 중 하나를 보여 준다.
     // 땅에 닿으면 Land(8~9번)를 짧게 보여 주고 Idle로 돌아가는데, 그 사이에 움직이면 바로 Run으로 끊는다.
-    private static RuntimeAnimatorController CreateController(PlayerClips clips)
+    // 임시 파일에 새로 만든 뒤 기존 Player.controller 파일 내용만 바꿔 끼운다.
+    // 파일을 지우고 다시 만들면 Unity 안의 ID(GUID)가 바뀌어 Player 프리팹의 연결이 끊기기 때문이다.
+    private static void CreateController(PlayerClips clips)
     {
-        if (AssetDatabase.LoadAssetAtPath<AnimatorController>(ControllerPath))
-            AssetDatabase.DeleteAsset(ControllerPath);
+        string tempPath = AnimFolder + "/Player_Temp.controller";
+        AssetDatabase.DeleteAsset(tempPath);
+        BuildController(tempPath, clips);
 
-        var controller = AnimatorController.CreateAnimatorControllerAtPath(ControllerPath);
+        if (AssetDatabase.LoadAssetAtPath<AnimatorController>(ControllerPath))
+        {
+            File.Copy(tempPath, ControllerPath, true);
+            AssetDatabase.DeleteAsset(tempPath);
+            AssetDatabase.ImportAsset(ControllerPath, ImportAssetOptions.ForceUpdate);
+        }
+        else
+        {
+            AssetDatabase.MoveAsset(tempPath, ControllerPath);
+        }
+    }
+
+    private static void BuildController(string path, PlayerClips clips)
+    {
+        var controller = AnimatorController.CreateAnimatorControllerAtPath(path);
         controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
         controller.AddParameter("VelocityY", AnimatorControllerParameterType.Float);
         controller.AddParameter(new AnimatorControllerParameter
@@ -308,7 +271,6 @@ public static class PlayerAnimMenu
         landToIdle.duration = 0f;
 
         AssetDatabase.SaveAssets();
-        return controller;
     }
 
     private static void AddTransition(AnimatorState from, AnimatorState to, AnimatorConditionMode mode, float threshold, string parameter)

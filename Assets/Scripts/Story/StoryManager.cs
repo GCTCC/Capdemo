@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 // StoryChapter를 처음부터 끝까지 재생한다.
 // 컷마다 배경 일러스트를 바꾸고, 대사를 한 줄씩 보여 준다.
 // 클릭/스페이스/엔터: 출력 중이면 대사를 바로 완성, 완성 상태면 다음 줄(컷의 마지막 줄이면 다음 컷)
+// 오른쪽 위 AUTO(StoryControls)가 켜져 있으면 대사가 다 나온 뒤 잠깐 기다렸다가 저절로 넘어간다.
+// 일시정지 창이 떠 있는 동안은 입력을 받지 않고 기다린다.
 public class StoryManager : MonoBehaviour
 {
     [SerializeField] private StoryChapter chapter;
@@ -16,6 +18,8 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private NameInputPanel nameInput;
     [Tooltip("BGM·효과음 재생기. 비워 두면 실행할 때 이 오브젝트에 자동으로 붙인다")]
     [SerializeField] private StoryAudio storyAudio;
+    [Tooltip("홀로그램(폰) 대화 화면. 비우면 이 캔버스 안에서 찾는다 (Tools > CapDemo > 스토리 > 홀로그램 폰 붙이기)")]
+    [SerializeField] private HoloPhone holo;
     [SerializeField] private bool playOnStart = true;
 
     [Tooltip("에디터 테스트용: 이 번호의 컷(Cuts의 Element 번호)부터 재생한다. 빌드한 게임에서는 항상 처음부터 재생한다.")]
@@ -41,6 +45,14 @@ public class StoryManager : MonoBehaviour
     public DialogueBox Dialogue => dialogue;
     public CanvasGroup FadeOverlay => fadeOverlay;
     public StoryAudio Audio => storyAudio;
+    public HoloPhone Holo => holo;
+
+    // 씬이 시작하자마자 Chapter를 재생할지. 맵용 StoryOverlay는 Awake에서 끈다
+    public bool PlayOnStart
+    {
+        get => playOnStart;
+        set => playOnStart = value;
+    }
 
     // 지금 흘러야 할 BGM과, Cut Count로 정한 BGM이 끝나는 컷 번호·그때 줄어드는 시간
     private AudioClip bgmClip;
@@ -49,11 +61,18 @@ public class StoryManager : MonoBehaviour
     private int bgmLastCut = int.MaxValue;
     private float bgmStopFade;
 
+    // 대사 줄 효과음 타이밍 (맵 NPC 대화와 같이 쓰는 LineSoundPlayer)
+    private LineSoundPlayer lineSounds;
+
+    // 홀로그램이 떠 있는 구간인지 (Holo Start ~ Holo End)
+    private bool holoOn;
+
     private void Awake()
     {
-        if (storyAudio) return;
-        storyAudio = GetComponent<StoryAudio>();
+        if (!storyAudio) storyAudio = GetComponent<StoryAudio>();
         if (!storyAudio) storyAudio = gameObject.AddComponent<StoryAudio>();
+        lineSounds = new LineSoundPlayer(storyAudio, this, nameof(StoryManager));
+        if (!holo) holo = GetComponentInChildren<HoloPhone>(true);
     }
 
     private void Start()
@@ -85,6 +104,8 @@ public class StoryManager : MonoBehaviour
     {
         IsPlaying = true;
         dialogue.Clear();
+        holoOn = false;
+        if (holo) holo.HideNow();
         bgmClip = null;
         bgmLastCut = int.MaxValue;
 
@@ -130,12 +151,14 @@ public class StoryManager : MonoBehaviour
             // 대사가 없는 컷은 일러스트만 보여 주고 입력을 기다린다
             if (cut.Lines.Count == 0) yield return WaitForAdvance();
 
-            foreach (var line in cut.Lines)
-                yield return PlayLine(cut, line);
+            for (int l = 0; l < cut.Lines.Count; l++)
+                yield return PlayLine(c, l);
 
             storyAudio.StopLoops(cut);
         }
 
+        if (holoOn) yield return CloseHolo(); // Holo End 없이 끝나도 홀로그램을 먼저 접는다
+        dialogue.FoldIntroCard(); // 마지막 줄의 소개 카드가 떠 있으면 접고 어두워진다
         if (fadeOutBgmOnFinish) storyAudio.StopBgm(fadeOutDuration);
         yield return Fade(fadeOverlay ? fadeOverlay.alpha : 0f, 1f, fadeOutDuration);
         storyAudio.StopAllLoops();
@@ -210,82 +233,107 @@ public class StoryManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayLine(StoryCut cut, StoryLine line)
+    private IEnumerator PlayLine(int c, int l)
     {
-        dialogue.Show(line);
+        var cut = chapter.Cuts[c];
+        var line = cut.Lines[l];
+
+        // 홀로그램 구간에 들어서면 먼저 펼친다 (중간 컷부터 재생해서 구간 한가운데로 들어와도 펼친다)
+        if (holo && !holoOn && chapter.TryGetHoloStart(c, l, out int startCut, out int startLine))
+            yield return OpenHolo(startCut, startLine);
+
+        // 말풍선 줄은 홀로그램 안에, 나머지(독백 포함)는 아래 대화창에
+        bool message = holoOn && line.HoloMessage;
+        if (message)
+        {
+            dialogue.Clear();
+            dialogue.SetBoxHidden(true);
+            holo.AddMessage(StoryText.Format(line.Speaker), StoryText.Format(line.Text), line.IsPlayerSpeaker);
+        }
+        else
+        {
+            if (holo)
+            {
+                holo.ShowIndicator = false;
+                dialogue.SetBoxHidden(false);
+            }
+            dialogue.Show(line);
+        }
 
         // 글자·단어 타이밍 효과음은 그 글자가 화면에 나올 때 낸다
-        var pending = new List<(LineSound sound, int at)>();
-        foreach (var sound in line.Sounds)
-        {
-            if (sound == null) continue;
-            switch (sound.timing)
-            {
-                case LineSoundTiming.LineStart:
-                    PlayLineSound(cut, line, sound);
-                    break;
-                case LineSoundTiming.AtCharacter:
-                    pending.Add((sound, Mathf.Max(sound.atCharacter, 1)));
-                    break;
-                case LineSoundTiming.AtText:
-                    int index = dialogue.FindText(sound.atText);
-                    if (index < 0)
-                        Debug.LogWarning($"[StoryManager] 효과음 단어 '{sound.atText}'를 대사에서 찾지 못해 대사 시작에 냅니다.", this);
-                    pending.Add((sound, index + 1));
-                    break;
-            }
-        }
-        PlayPendingSounds(cut, line, pending, dialogue.VisibleCharacters);
+        if (lineSounds == null) lineSounds = new LineSoundPlayer(storyAudio, this, nameof(StoryManager));
+        lineSounds.Begin(line, cut, message ? holo.FindText : dialogue.FindText);
+        lineSounds.Tick(message ? holo.VisibleCharacters : dialogue.VisibleCharacters);
         yield return null; // 이전 줄을 넘긴 입력이 이번 줄을 바로 완성하지 않게 한 프레임 쉰다
 
-        while (dialogue.IsTyping)
+        while (message ? holo.IsTyping : dialogue.IsTyping)
         {
-            if (AdvancePressed()) dialogue.Complete();
-            PlayPendingSounds(cut, line, pending, dialogue.VisibleCharacters);
+            if (AdvancePressed())
+            {
+                if (message) holo.Complete();
+                else dialogue.Complete();
+            }
+            lineSounds.Tick(message ? holo.VisibleCharacters : dialogue.VisibleCharacters);
             yield return null;
         }
-        PlayPendingSounds(cut, line, pending, int.MaxValue); // 출력을 건너뛰었어도 남은 효과음은 낸다
-        PlayLineSounds(cut, line, LineSoundTiming.TypingDone);
+        lineSounds.TypingDone(); // 출력을 건너뛰었어도 남은 효과음은 낸다
 
         // 이름 입력 줄은 이름을 확정한 엔터로 다음 줄이 넘어가지 않게, 입력을 기다리지 않고 바로 다음 줄로
         if (line.Pause == StoryPause.NameInput && nameInput) yield return nameInput.Ask();
-        else yield return WaitForAdvance();
+        else yield return WaitForAdvance(message ? holo.VisibleCharacters : dialogue.VisibleCharacters);
 
-        PlayLineSounds(cut, line, LineSoundTiming.OnNext);
-        storyAudio.StopLoops(line);
+        lineSounds.Next(); // OnNext 효과음, 이 줄의 반복음 멈춤
+
+        if (holoOn && line.HoloEnd) yield return CloseHolo();
     }
 
-    private void PlayPendingSounds(StoryCut cut, StoryLine line, List<(LineSound sound, int at)> pending, int visible)
+    // 홀로그램을 Holo Start 줄의 자리·크기에 두고 지직거리며 펼친다. 대화창·이름표는 숨긴다
+    private IEnumerator OpenHolo(int startCut, int startLine)
     {
-        for (int i = pending.Count - 1; i >= 0; i--)
-        {
-            if (pending[i].at > visible) continue;
-            PlayLineSound(cut, line, pending[i].sound);
-            pending.RemoveAt(i);
-        }
+        holoOn = true;
+        var start = chapter.Cuts[startCut].Lines[startLine];
+        dialogue.Clear();
+        dialogue.SetHoloMode(true);
+        dialogue.SetBoxHidden(true);
+        holo.SetPlacement(start.HoloPosition, start.HoloScale);
+        holo.Open(chapter.FindHoloContact(startCut, startLine));
+        while (holo.IsAnimating) yield return null;
     }
 
-    private void PlayLineSounds(StoryCut cut, StoryLine line, LineSoundTiming timing)
+    // 홀로그램을 거꾸로 접고 대화창을 원래대로 (등장의 역순)
+    private IEnumerator CloseHolo()
     {
-        foreach (var sound in line.Sounds)
-            if (sound != null && sound.timing == timing)
-                PlayLineSound(cut, line, sound);
+        dialogue.Clear();
+        dialogue.SetBoxHidden(true);
+        holo.Close();
+        while (holo.IsAnimating) yield return null;
+        dialogue.SetHoloMode(false);
+        dialogue.SetBoxHidden(false);
+        holoOn = false;
     }
 
-    private void PlayLineSound(StoryCut cut, StoryLine line, LineSound sound)
-    {
-        object scope = sound.loopUntil == SoundLoopUntil.LineEnd ? line : cut;
-        storyAudio.PlaySfx(sound.clip, sound.volume, sound.delay, sound.loop, scope);
-    }
-
-    private IEnumerator WaitForAdvance()
+    // 입력을 기다린다. AUTO가 켜져 있으면 대사 길이(chars)에 맞춘 시간이 지나면 저절로 넘어간다
+    private IEnumerator WaitForAdvance(int chars = 0)
     {
         yield return null;
-        while (!AdvancePressed()) yield return null;
+        float waited = 0f;
+        while (!AdvancePressed())
+        {
+            if (StoryControls.AutoOn && !StoryControls.BlocksAdvance)
+            {
+                waited += GamePause.Delta;
+                if (waited >= StoryControls.AutoDelay(chars)) yield break;
+            }
+            else waited = 0f;
+            yield return null;
+        }
     }
 
     private static bool AdvancePressed()
     {
+        // 일시정지 중이거나, AUTO·일시정지 버튼을 누른 클릭은 대사를 넘기지 않는다
+        if (StoryControls.BlocksAdvance) return false;
+
         var keyboard = Keyboard.current;
         if (keyboard != null && (keyboard.spaceKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame ||
                                  keyboard.numpadEnterKey.wasPressedThisFrame))
@@ -300,7 +348,7 @@ public class StoryManager : MonoBehaviour
         if (!fadeOverlay) yield break;
 
         fadeOverlay.blocksRaycasts = true;
-        for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+        for (float t = 0f; t < duration; t += GamePause.Delta)
         {
             fadeOverlay.alpha = Mathf.Lerp(from, to, t / duration);
             yield return null;

@@ -24,6 +24,10 @@ public class FollowCamera2D : MonoBehaviour
     [Tooltip("클로즈업으로 들어가고 나오는 데 걸리는 시간(초)")]
     [SerializeField, Min(0f)] private float closeUpSmoothTime = 0.4f;
 
+    [Header("홀로그램(폰) 대화")]
+    [Tooltip("홀로그램이 켜지면 카메라가 오른쪽으로 옮겨 가는 거리. 화면 너비 기준 비율(0.15면 화면 너비의 15%). 주인공이 화면 왼쪽으로 간다.")]
+    [SerializeField, Range(0f, 0.4f)] private float holoShift = 0.15f;
+
     [Header("화면 범위")]
     [Tooltip("이 맵 범위 밖은 보여 주지 않는다. 비우면 씬에서 찾고, 없으면 범위 제한 없이 따라간다.")]
     [SerializeField] private MapBackground bounds;
@@ -57,6 +61,10 @@ public class FollowCamera2D : MonoBehaviour
 
     public void ClearFocus() => focusA = focusB = null;
 
+    // 홀로그램이 켜져 있는 동안 카메라를 오른쪽으로 살짝 옮긴다 (클로즈업 속도로 부드럽게)
+    public void SetHoloShift(bool on) => holoOn = on;
+    private bool holoOn;
+
     private void LateUpdate()
     {
         Vector3 goal;
@@ -74,11 +82,12 @@ public class FollowCamera2D : MonoBehaviour
             goalSize = normalSize;
         }
         else return;
+        if (holoOn) goal.x += goalSize * cam.aspect * 2f * holoShift;
         goal = ClampToBounds(goal, goalSize);
 
         // 클로즈업에서 돌아오는 동안에도 클로즈업 속도로 움직인다
         bool zoomed = Mathf.Abs(cam.orthographicSize - normalSize) > 0.01f;
-        float smoothTime = Focused || zoomed ? closeUpSmoothTime : followSmoothTime;
+        float smoothTime = Focused || zoomed || holoOn ? closeUpSmoothTime : followSmoothTime;
         transform.position = Vector3.SmoothDamp(transform.position, WithZ(goal), ref moveVelocity, smoothTime);
         cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, goalSize, ref zoomVelocity, closeUpSmoothTime);
     }

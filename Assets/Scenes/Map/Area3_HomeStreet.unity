@@ -5796,6 +5796,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 97034223089873756, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 2734040602575101705, guid: 898504573549f3c4fa600b6856fd6464, type: 3}
       propertyPath: m_Name
       value: DialogueCanvas
@@ -8093,6 +8097,7 @@ MonoBehaviour:
   closeUpOffset: {x: 0, y: -0.6}
   closeUpPadding: 1
   closeUpSmoothTime: 0.4
+  holoShift: 0.15
   bounds: {fileID: 0}
 --- !u!81 &1993195836
 AudioListener:
@@ -8887,6 +8892,67 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2724539246518903084, guid: fab7b6f602f32674da1fa99b7072916e, type: 3}
   m_PrefabInstance: {fileID: 7613531217030194937}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &797751450
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4682267693825630251, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: targetScene
+      value: Area2_LiveHouse
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 27.32907
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643075505605562725, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9058662020830531108, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
+      propertyPath: m_Name
+      value: Portal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b31873fc1c6f91c4baf5fbb8a3ef8377, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -8911,3 +8977,4 @@ SceneRoots:
   - {fileID: 1817395695}
   - {fileID: 1671422107}
   - {fileID: 127732794}
+  - {fileID: 797751450}

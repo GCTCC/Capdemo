@@ -25,6 +25,15 @@ MonoBehaviour:
     text: "\uC624\uB79C\uB9CC\uC774\uB124. \uD63C\uC790 \uC628\uAC70\uC57C?"
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -36,6 +45,15 @@ MonoBehaviour:
     text: "\uC5B4. \uB098 \uC5C6\uB294 \uB3D9\uC548 \uBB34\uB300\uB294 \uC880 \uC788\uC5C8\uC5B4?"
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uBC14\uC6B4\uC11C"
     standing: {fileID: 0}
     hideStanding: 0
@@ -50,6 +68,15 @@ MonoBehaviour:
       \uC5C6\uC5B4."
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -61,6 +88,15 @@ MonoBehaviour:
     text: "..\uC5EC\uAE30\uB3C4 \uC774\uC81C \uB05D\uBB3C\uC774\uAD6C\uB9CC"
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uBC14\uC6B4\uC11C"
     standing: {fileID: 0}
     hideStanding: 0
@@ -72,6 +108,15 @@ MonoBehaviour:
     text: "\uBB50\uB77C\uB294\uAC70\uC57C. \uADF8\uB798\uC11C, \uBB34\uC2A8 \uC77C\uC778\uB370?"
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -84,6 +129,15 @@ MonoBehaviour:
       \uD574\uC11C."
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uBC14\uC6B4\uC11C"
     standing: {fileID: 0}
     hideStanding: 0
@@ -95,6 +149,15 @@ MonoBehaviour:
     text: "\uADF8\uB7F0\uAC70\uAD6C\uB9CC. \uC7A0\uAE50\uB9CC."
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uBC14\uC6B4\uC11C"
     standing: {fileID: 0}
     hideStanding: 0
@@ -109,12 +172,21 @@ MonoBehaviour:
     - timing: 0
       atCharacter: 0
       atText: 
-      clip: {fileID: 8300000, guid: 55b35b3f5ef93b543b4efbde149b9a1a, type: 3}
-      volume: 1
+      clip: {fileID: 8300000, guid: daf20332becbeb446a59cc23461d34ed, type: 3}
+      volume: 0.583
       delay: 0
       loop: 0
       loopUntil: 0
       volumeInitialized: 1
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uBC14\uC6B4\uC11C"
     standing: {fileID: 0}
     hideStanding: 0
@@ -128,6 +200,15 @@ MonoBehaviour:
       \uD14C\uB2C8\uAE4C."
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -139,3 +220,12 @@ MonoBehaviour:
     text: "\uADF8\uB798. \uC218\uACE0\uD558\uB77C\uACE0."
     pause: 0
     sounds: []
+    introCard:
+      show: 0
+      displayName: 
+      profile: 
+      position: {x: 960, y: 620}
+      mapOffset: {x: 0, y: 0}
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0

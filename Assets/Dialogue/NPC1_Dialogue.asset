@@ -26,6 +26,9 @@ MonoBehaviour:
       \uC5C6\uC5B4\uC11C \uC5BC\uAD74 \uBCFC \uC77C\uC774 \uC5C6\uB124."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 1
@@ -38,6 +41,9 @@ MonoBehaviour:
       \uBE44\uC2B7\uD558\uC9C0. \uC774 \uADFC\uCC98\uB294 \uC694\uC0C8\uB3C4 \uBE44\uC2B7\uD55C\uAC00\uBCF4\uB124?"
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uC8FC\uBBFC"
     standing: {fileID: 0}
     hideStanding: 0
@@ -51,6 +57,9 @@ MonoBehaviour:
       \uC811\uC740\uAC70\uC57C?"
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -65,6 +74,9 @@ MonoBehaviour:
       \uBA87\uBA85 \uC788\uB2E4\uB358\uB370."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uC8FC\uBBFC"
     standing: {fileID: 0}
     hideStanding: 0
@@ -79,6 +91,9 @@ MonoBehaviour:
       \uB9CC\uB4E4\uC5B4\uC57C\uD560 \uD310\uC774\uB77C\uACE0."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -91,6 +106,9 @@ MonoBehaviour:
       \uACF5\uC5F0\uD558\uB824\uACE0?"
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uC8FC\uBBFC"
     standing: {fileID: 0}
     hideStanding: 0
@@ -102,6 +120,9 @@ MonoBehaviour:
     text: "\uC57C\uC57C.. \uB09C \uADF8\uC815\uB3C4 \uAE61\uC740 \uC5C6\uB2E4\uACE0.."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uC8FC\uBBFC"
     standing: {fileID: 0}
     hideStanding: 0
@@ -115,6 +136,9 @@ MonoBehaviour:
       \uC0AC\uB78C\uB4E4, \uC544\uC9C1 \uC548\uB3CC\uC544\uC628 \uBAA8\uC591\uC774\uC57C."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -126,6 +150,9 @@ MonoBehaviour:
     text: "\uB204\uAC00 \uADF8\uB798?"
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uC8FC\uBBFC"
     standing: {fileID: 0}
     hideStanding: 0
@@ -139,6 +166,9 @@ MonoBehaviour:
       \uCC98\uB9AC\uD588\uB2E4\uB294 \uC18C\uBB38\uAE4C\uC9C0 \uB3C8\uB2E4\uB358\uB370."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -151,6 +181,9 @@ MonoBehaviour:
       \uADF8\uB7F0\uB2E4\uACE0?"
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uC8FC\uBBFC"
     standing: {fileID: 0}
     hideStanding: 0
@@ -165,6 +198,9 @@ MonoBehaviour:
       \uBCF4\uACE0 \uD558\uB77C\uACE0."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: '{player}'
     standing: {fileID: 0}
     hideStanding: 0
@@ -177,6 +213,9 @@ MonoBehaviour:
       \uD558\uAC8C\uB418\uBA74 \uC54C\uB824\uC904\uAC8C."
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0
   - speaker: "\uC8FC\uBBFC"
     standing: {fileID: 0}
     hideStanding: 0
@@ -188,3 +227,6 @@ MonoBehaviour:
     text: "\uADF8\uB798. \uC2DC\uAC04\uB3C4 \uB2A6\uC5C8\uB294\uB370 \uC870\uC2EC\uD558\uB77C\uACE0"
     pause: 0
     sounds: []
+    holoStart: 0
+    holoMessage: 0
+    holoEnd: 0

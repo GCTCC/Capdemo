@@ -20,6 +20,14 @@ public static class RhythmLaunchContext
 {
     private static RhythmLaunchRequest pendingRequest;
 
+    // 이 프로젝트는 Play할 때 도메인 리로드를 꺼 두어서 static 값이 지난 Play에서 그대로 남는다.
+    // 지난 Play에서 쓰다 남은 요청(예: 옛 허브로 돌아가라는 요청)이 다음 Play에 섞이지 않게 비운다.
+    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetOnPlay()
+    {
+        pendingRequest = null;
+    }
+
     public static void RequestSingle(string songName, string returnSceneName)
     {
         Request(RhythmEntryMode.Single, songName, returnSceneName);

@@ -6,7 +6,7 @@ using UnityEngine;
 // BGM은 AudioSource 두 개를 번갈아 쓰며 크로스페이드하고, 효과음은 한 번 재생과 반복 재생(환경음)을 나눠 관리한다.
 public class StoryAudio : MonoBehaviour
 {
-    [Tooltip("BGM 전체 음량. 각 컷의 BGM 음량과 곱해진다 (나중에 설정 메뉴와 연결)")]
+    [Tooltip("BGM 전체 음량. 각 컷의 BGM 음량, 설정 창의 배경음 음량과 곱해진다")]
     [SerializeField, Range(0f, 1f)] private float bgmVolume = 1f;
     [Tooltip("효과음 전체 음량. 각 효과음의 음량과 곱해진다")]
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
@@ -36,6 +36,10 @@ public class StoryAudio : MonoBehaviour
 
     public AudioClip CurrentBgm => currentClip;
 
+    // 실제로 곱하는 음량 = 이 컴포넌트의 값 × 설정 창의 배경음/효과음 (GameSettings)
+    private float BgmGain => bgmVolume * GameSettings.BgmVolume;
+    private float SfxGain => sfxVolume * GameSettings.SfxVolume;
+
     private void Awake()
     {
         bgmCurrent = CreateSource(true);
@@ -46,7 +50,7 @@ public class StoryAudio : MonoBehaviour
     private void Update()
     {
         // 전체 음량을 바꾸면 페이드 중이 아닐 때 바로 반영한다
-        if (bgmFade == null && currentClip) bgmCurrent.volume = currentVolume * bgmVolume;
+        if (bgmFade == null && currentClip) bgmCurrent.volume = currentVolume * BgmGain;
     }
 
     // clip으로 바꾼다. 이미 같은 곡이 흐르고 있으면 음량만 맞춘다
@@ -56,7 +60,7 @@ public class StoryAudio : MonoBehaviour
         currentVolume = volume;
         if (clip == currentClip && bgmCurrent.isPlaying)
         {
-            StartBgmFade(bgmCurrent, volume * bgmVolume, bgmPrevious, fade);
+            StartBgmFade(bgmCurrent, volume * BgmGain, bgmPrevious, fade);
             return;
         }
 
@@ -65,7 +69,7 @@ public class StoryAudio : MonoBehaviour
         bgmCurrent.clip = clip;
         bgmCurrent.volume = 0f;
         bgmCurrent.Play();
-        StartBgmFade(bgmCurrent, volume * bgmVolume, bgmPrevious, fade);
+        StartBgmFade(bgmCurrent, volume * BgmGain, bgmPrevious, fade);
     }
 
     public void StopBgm(float fade)
@@ -112,13 +116,13 @@ public class StoryAudio : MonoBehaviour
     {
         if (!loop)
         {
-            oneShot.PlayOneShot(clip, volume * sfxVolume);
+            oneShot.PlayOneShot(clip, volume * SfxGain);
             return;
         }
         endedScopes.Remove(scope);
         var source = CreateSource(true);
         source.clip = clip;
-        source.volume = volume * sfxVolume;
+        source.volume = volume * SfxGain;
         source.Play();
         loops.Add((source, scope));
     }

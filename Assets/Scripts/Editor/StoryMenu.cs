@@ -11,29 +11,71 @@ using UnityEngine.UI;
 // 에디터 상단 메뉴 Tools > CapDemo > 스토리
 public static class StoryMenu
 {
-    internal const string FontPath = "Assets/Art/Fonts/DaeguJunggu/대구중구읍성 Regular SDF.asset";
-    private const string SampleChapterPath = "Assets/Story/Story_Sample.asset";
-    private const string IllustFolder = "Assets/image/Illust/";
+    // 스토리 UI의 모든 글자(대사·이름·이름 입력 창)는 경기천년제목을 쓴다
+    internal const string FontPath = "Assets/Art/Fonts/경기천년제목_Bold SDF.asset";
+    private const string NameInputFontPath = "Assets/Art/Fonts/경기천년제목_Bold SDF.asset";
 
     // 지금 열린 씬에 스토리 UI 한 벌을 만든다. 씬 저장은 직접 한다(Ctrl+S).
     // 프로젝트 창에서 StoryChapter 에셋을 선택한 채로 실행하면 그 에셋을 연결해 둔다.
     [MenuItem("Tools/CapDemo/스토리/스토리 UI 만들기")]
-    private static void CreateStoryUI()
+    private static void CreateStoryUI() => BuildStoryCanvas(forMap: false);
+
+    private const string MapStoryPrefabPath = "Assets/Prefabs/MapStoryCanvas.prefab";
+
+    // 맵 씬 위에 덮어 띄우는 스토리 UI. NPC의 First Meet Story를 재생할 때 쓴다.
+    // 처음 실행하면 지금 씬에 만들고 Assets/Prefabs/MapStoryCanvas.prefab으로 저장한다.
+    // 프리팹이 이미 있으면 그 프리팹을 지금 씬에 넣기만 한다. 씬 저장은 직접 한다(Ctrl+S).
+    [MenuItem("Tools/CapDemo/스토리/맵용 스토리 UI 만들기")]
+    private static void CreateMapStoryUI()
+    {
+        if (Object.FindAnyObjectByType<StoryOverlay>(FindObjectsInactive.Include))
+        {
+            EditorUtility.DisplayDialog("맵용 스토리 UI", "이 씬에는 이미 맵용 StoryCanvas(StoryOverlay)가 있어요.", "확인");
+            return;
+        }
+
+        var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(MapStoryPrefabPath);
+        if (prefab)
+        {
+            EnsureEventSystem();
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            Undo.RegisterCreatedObjectUndo(instance, "Create Map Story UI");
+            EditorSceneManager.MarkSceneDirty(instance.scene);
+            Selection.activeGameObject = instance;
+            Debug.Log($"[CapDemo] {MapStoryPrefabPath} 프리팹을 씬에 넣었습니다. 씬을 저장하세요.");
+            return;
+        }
+
+        var canvasGo = BuildStoryCanvas(forMap: true);
+        Directory.CreateDirectory(Path.GetDirectoryName(MapStoryPrefabPath));
+        PrefabUtility.SaveAsPrefabAssetAndConnect(canvasGo, MapStoryPrefabPath, InteractionMode.UserAction);
+        Debug.Log($"[CapDemo] 맵용 StoryCanvas를 만들고 {MapStoryPrefabPath} 프리팹으로 저장했습니다. " +
+                  "다른 맵 씬에는 이 프리팹을 끌어다 놓으세요. 씬을 저장하세요.");
+    }
+
+    private static void EnsureEventSystem()
+    {
+        if (Object.FindAnyObjectByType<EventSystem>()) return;
+        var es = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
+        Undo.RegisterCreatedObjectUndo(es, "Create Story UI");
+    }
+
+    // 스토리 UI 한 벌. forMap이면 맵 위에 덮어 띄우는 용도(StoryOverlay, 자동 재생 안 함, 끝나도 씬 이동 없음),
+    // 아니면 TutoScene처럼 씬이 시작하자마자 재생하고 끝나면 HoloHubScene으로 넘어가는 용도
+    private static GameObject BuildStoryCanvas(bool forMap)
     {
         var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontPath);
         if (!font) Debug.LogWarning($"[CapDemo] {FontPath} 폰트를 찾지 못해 기본 폰트를 사용합니다.");
 
-        if (!Object.FindAnyObjectByType<EventSystem>())
-        {
-            var es = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-            Undo.RegisterCreatedObjectUndo(es, "Create Story UI");
-        }
+        EnsureEventSystem();
 
         // StoryCanvas: 1920x1080 기준으로 해상도에 맞춰 늘어난다
-        var canvasGo = new GameObject("StoryCanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster),
-            typeof(StoryManager), typeof(TutoStoryEnd));
+        var canvasGo = new GameObject(forMap ? "MapStoryCanvas" : "StoryCanvas", typeof(Canvas), typeof(CanvasScaler),
+            typeof(GraphicRaycaster), typeof(StoryManager), forMap ? typeof(StoryOverlay) : typeof(TutoStoryEnd));
         Undo.RegisterCreatedObjectUndo(canvasGo, "Create Story UI");
-        canvasGo.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+        var canvas = canvasGo.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        if (forMap) canvas.sortingOrder = 100; // 맵의 다른 UI(대화창 등)보다 위에 그린다
         var scaler = canvasGo.GetComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920, 1080);
@@ -62,7 +104,10 @@ public static class StoryMenu
 
         var dialogueBox = CreateDialogueBox(root, font, standing);
 
-        var nameInput = CreateNameInputPanel(root, font);
+        // 이름 입력 창 폰트 (없으면 대사창 폰트)
+        var nameFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(NameInputFontPath);
+        if (!nameFont) Debug.LogWarning($"[CapDemo] {NameInputFontPath} 폰트를 찾지 못해 대사창 폰트를 사용합니다.");
+        var nameInput = CreateNameInputPanel(root, nameFont ? nameFont : font);
 
         // FadeOverlay: 화면 전체를 덮는 검은 Image. 맨 마지막 자식이라 가장 위에 그려진다
         var overlay = CreateImage("FadeOverlay", root, Color.black);
@@ -82,16 +127,31 @@ public static class StoryMenu
         managerSo.FindProperty("dialogue").objectReferenceValue = dialogueBox;
         managerSo.FindProperty("nameInput").objectReferenceValue = nameInput;
         managerSo.FindProperty("fadeOverlay").objectReferenceValue = overlayGroup;
-        if (Selection.activeObject is StoryChapter selected)
+        if (forMap)
+        {
+            // 맵에서는 NPC가 부를 때만 재생하므로 Chapter를 비워 두고 자동 재생을 끈다
+            managerSo.FindProperty("playOnStart").boolValue = false;
+            // 평소에는 투명하게 두어 맵이 보이게 한다
+            overlayGroup.alpha = 0f;
+            overlayGroup.blocksRaycasts = false;
+        }
+        else if (Selection.activeObject is StoryChapter selected)
             managerSo.FindProperty("chapter").objectReferenceValue = selected;
         managerSo.ApplyModifiedPropertiesWithoutUndo();
 
-        // 스토리가 끝나면 튜토리얼 완료 저장 → HubScene
-        UnityEventTools.AddPersistentListener(manager.OnFinished, canvasGo.GetComponent<TutoStoryEnd>().OnStoryFinished);
+        // 대화창을 새 스타일(하단 그라데이션 + 가는 선 + 선 가운데 화자 이름)로 바꾼다.
+        // Tools > CapDemo > 스토리 > 챕터 대화창 새 스타일 적용과 같은 결과
+        DialogueStyleMenu.UpgradeChapterBox(dialogueBox);
+
+        // 스토리가 끝나면 튜토리얼 완료 저장 → HoloHubScene
+        if (!forMap)
+            UnityEventTools.AddPersistentListener(manager.OnFinished, canvasGo.GetComponent<TutoStoryEnd>().OnStoryFinished);
 
         EditorSceneManager.MarkSceneDirty(canvasGo.scene);
         Selection.activeGameObject = canvasGo;
-        Debug.Log("[CapDemo] StoryCanvas를 만들었습니다. StoryManager의 Chapter에 스토리 에셋을 넣고 씬을 저장하세요.");
+        if (!forMap)
+            Debug.Log("[CapDemo] StoryCanvas를 만들었습니다. StoryManager의 Chapter에 스토리 에셋을 넣고 씬을 저장하세요.");
+        return canvasGo;
     }
 
     // 화면 아래 반투명 대사창 한 벌 (이름표·본문·▼). standing은 없어도 된다
@@ -180,8 +240,11 @@ public static class StoryMenu
         buttonLabel.fontSize = 34;
 
         if (font)
+        {
+            input.fontAsset = font;
             foreach (var text in panel.GetComponentsInChildren<TMP_Text>(true))
                 text.font = font;
+        }
         if (input.placeholder is TMP_Text placeholder) placeholder.text = "이름";
 
         var component = panel.gameObject.AddComponent<NameInputPanel>();
@@ -192,64 +255,6 @@ public static class StoryMenu
 
         panel.gameObject.SetActive(false);
         return component;
-    }
-
-    // 동작 확인용 샘플 스토리: image/Illust의 일러스트로 컷 2개, 이름 입력 줄 포함
-    [MenuItem("Tools/CapDemo/스토리/샘플 스토리 에셋 만들기")]
-    private static void CreateSampleChapter()
-    {
-        if (File.Exists(SampleChapterPath) && !EditorUtility.DisplayDialog("샘플 덮어쓰기",
-                SampleChapterPath + " 을(를) 새로 만듭니다.", "덮어쓰기", "취소"))
-            return;
-
-        Directory.CreateDirectory(Path.GetDirectoryName(SampleChapterPath));
-        var chapter = ScriptableObject.CreateInstance<StoryChapter>();
-        AssetDatabase.CreateAsset(chapter, SampleChapterPath);
-
-        var so = new SerializedObject(chapter);
-        var cuts = so.FindProperty("cuts");
-        cuts.arraySize = 2;
-
-        var cut1 = cuts.GetArrayElementAtIndex(0);
-        cut1.FindPropertyRelative("memo").stringValue = "컷 1 - 도입";
-        cut1.FindPropertyRelative("illustration").objectReferenceValue = LoadSprite("Anima_00621_.png");
-        var lines1 = cut1.FindPropertyRelative("lines");
-        lines1.arraySize = 3;
-        SetLine(lines1.GetArrayElementAtIndex(0), "", null, "……여기는 어디지?");
-        SetLine(lines1.GetArrayElementAtIndex(1), "???", LoadSprite("Anima_00329_.png"), "드디어 눈을 떴구나.\n이름이 뭐지?");
-        SetLine(lines1.GetArrayElementAtIndex(2), "???", null, "그래, 기억해 두지.", StoryPause.NameInput);
-
-        var cut2 = cuts.GetArrayElementAtIndex(1);
-        cut2.FindPropertyRelative("memo").stringValue = "컷 2 - 이름 확인";
-        cut2.FindPropertyRelative("illustration").objectReferenceValue = LoadSprite("upscalemedia-transformed.png");
-        cut2.FindPropertyRelative("transition").enumValueIndex = (int)CutTransition.FadeToBlack;
-        var lines2 = cut2.FindPropertyRelative("lines");
-        lines2.arraySize = 2;
-        SetLine(lines2.GetArrayElementAtIndex(0), "???", null, "반가워, {player}.");
-        SetLine(lines2.GetArrayElementAtIndex(1), "{player}", null, "……잘 부탁해.", hideStanding: true);
-
-        so.ApplyModifiedPropertiesWithoutUndo();
-        AssetDatabase.SaveAssets();
-        Selection.activeObject = chapter;
-        EditorGUIUtility.PingObject(chapter);
-        Debug.Log($"[CapDemo] {SampleChapterPath} 를 만들었습니다.");
-    }
-
-    internal static void SetLine(SerializedProperty line, string speaker, Sprite standing, string text,
-        StoryPause pause = StoryPause.None, bool hideStanding = false)
-    {
-        line.FindPropertyRelative("speaker").stringValue = speaker;
-        line.FindPropertyRelative("standing").objectReferenceValue = standing;
-        line.FindPropertyRelative("hideStanding").boolValue = hideStanding;
-        line.FindPropertyRelative("text").stringValue = text;
-        line.FindPropertyRelative("pause").enumValueIndex = (int)pause;
-    }
-
-    private static Sprite LoadSprite(string fileName)
-    {
-        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(IllustFolder + fileName);
-        if (!sprite) Debug.LogWarning($"[CapDemo] {IllustFolder}{fileName} 스프라이트를 찾지 못했습니다.");
-        return sprite;
     }
 
     internal static GameObject CreateUI(string name, Transform parent, params System.Type[] components)

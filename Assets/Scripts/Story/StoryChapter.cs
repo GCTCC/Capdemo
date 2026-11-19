@@ -11,6 +11,64 @@ public class StoryChapter : ScriptableObject
 
     public IReadOnlyList<StoryCut> Cuts => cuts;
 
+    // (cut, line) 줄을 볼 때 홀로그램이 떠 있는지, 떠 있으면 그 구간이 시작된 줄을 알려 준다.
+    // StoryManager와 같은 규칙: Holo Start(또는 Start 없이 Holo Message)에서 켜지고, Holo End 줄을 넘기면 꺼진다
+    public bool TryGetHoloStart(int cut, int line, out int startCut, out int startLine)
+    {
+        startCut = startLine = -1;
+        bool on = false;
+        for (int c = 0; c < cuts.Count && c <= cut; c++)
+        {
+            var lines = cuts[c].Lines;
+            for (int l = 0; l < lines.Count; l++)
+            {
+                var current = lines[l];
+                if (!on && (current.HoloStart || current.HoloMessage))
+                {
+                    on = true;
+                    startCut = c;
+                    startLine = l;
+                }
+                if (c == cut && l == line) return on;
+                if (on && current.HoloEnd) on = false;
+            }
+        }
+        return false;
+    }
+
+    // 홀로그램 맨 위에 띄울 상대 이름: 시작 줄부터 이 구간에서 주인공이 아닌 첫 말풍선 화자
+    public string FindHoloContact(int startCut, int startLine)
+    {
+        for (int c = startCut; c < cuts.Count; c++)
+        {
+            var lines = cuts[c].Lines;
+            for (int l = c == startCut ? startLine : 0; l < lines.Count; l++)
+            {
+                var current = lines[l];
+                bool first = c == startCut && l == startLine;
+                if (!first && current.HoloStart) return "";
+                if (current.HoloMessage && !current.IsPlayerSpeaker && !string.IsNullOrEmpty(current.Speaker))
+                    return StoryText.Format(current.Speaker);
+                if (current.HoloEnd) return "";
+            }
+        }
+        return "";
+    }
+
+    // 구간 시작 줄부터 (cut, line)까지의 말풍선 줄 (미리보기에서 그 줄까지 쌓인 말풍선을 그릴 때)
+    public List<StoryLine> HoloMessagesUpTo(int startCut, int startLine, int cut, int line)
+    {
+        var result = new List<StoryLine>();
+        for (int c = startCut; c < cuts.Count && c <= cut; c++)
+        {
+            var lines = cuts[c].Lines;
+            int end = c == cut ? Mathf.Min(line, lines.Count - 1) : lines.Count - 1;
+            for (int l = c == startCut ? startLine : 0; l <= end; l++)
+                if (lines[l].HoloMessage) result.Add(lines[l]);
+        }
+        return result;
+    }
+
     // index번 컷에서 실제로 보이는 일러스트와 연출 값.
     // Illustration을 비운 컷은 앞 컷의 그림과 연출을 그대로 이어받고, Black Screen이면 그림 없음(null)
     public (Sprite sprite, IllustFraming framing) ResolveIllustration(int index)
@@ -105,6 +163,27 @@ public class StoryLine
     [Tooltip("이 대사에 맞춰 나오는 효과음 (대사 시작 / N번째 글자 / 특정 단어 / 출력 끝 / 다음으로 넘길 때)")]
     [SerializeField] private List<LineSound> sounds = new List<LineSound>();
 
+    [Tooltip("캐릭터 소개 카드. Show를 체크하면 이 줄이 시작될 때 카드가 펼쳐지고, 다음 줄로 넘어가면 접힌다. 캐릭터가 처음 나올 때 한 번 쓰는 용도")]
+    [SerializeField] private IntroCardInfo introCard = new IntroCardInfo();
+
+    [Header("홀로그램(폰) 대화 — 맵 NPC 대화·챕터 둘 다")]
+    [Tooltip("체크하면 이 줄에서 홀로그램이 펼쳐진다. Holo End가 체크된 줄까지 홀로그램이 계속 떠 있다.")]
+    [SerializeField] private bool holoStart;
+
+    [Tooltip("챕터용(Holo Start 줄에만 쓴다): 홀로그램 가운데가 놓일 자리 (1920x1080 기준, 왼쪽 아래가 0,0).\n" +
+             "챕터 인스펙터의 '씬 미리보기'에서 이 구간의 줄을 띄우고 씬 뷰의 청록 네모를 끌어서 정하면 편하다. 맵 대화에서는 무시한다")]
+    [SerializeField] private Vector2 holoPosition = new Vector2(1420f, 615f);
+
+    [Tooltip("챕터용(Holo Start 줄에만 쓴다): 홀로그램 크기 배율. 1이면 원래 크기. 맵 대화에서는 무시한다")]
+    [SerializeField, Min(0.1f)] private float holoScale = 1f;
+
+    [Tooltip("체크하면 이 대사가 홀로그램 안 말풍선(문자)으로 나온다. 주인공({player})은 오른쪽, 상대는 왼쪽.\n" +
+             "홀로그램이 떠 있는 동안 체크 안 한 줄은 독백으로 보고 아래 대화창에 이름표 없이 나온다.")]
+    [SerializeField] private bool holoMessage;
+
+    [Tooltip("체크하면 이 줄을 보고 넘길 때 홀로그램이 접히고 카메라가 원래 자리로 돌아간다.")]
+    [SerializeField] private bool holoEnd;
+
     public string Speaker => speaker;
     public Sprite Standing => standing;
     public bool HideStanding => hideStanding;
@@ -112,6 +191,39 @@ public class StoryLine
     public string Text => text;
     public StoryPause Pause => pause;
     public IReadOnlyList<LineSound> Sounds => sounds;
+    public bool HoloStart => holoStart;
+    public bool HoloMessage => holoMessage;
+    public bool HoloEnd => holoEnd;
+    public Vector2 HoloPosition => holoPosition;
+    public float HoloScale => holoScale;
+    public IntroCardInfo IntroCard => introCard;
+    public bool HasIntroCard => introCard != null && introCard.show;
+
+    // 화자가 주인공({player})인지
+    public bool IsPlayerSpeaker =>
+        !string.IsNullOrEmpty(speaker) &&
+        (speaker.Contains(StoryText.PlayerToken) || StoryText.Format(speaker) == StoryText.Format(StoryText.PlayerToken));
+}
+
+// 대사 줄의 소개 카드 내용. 별도 에셋 없이 줄에 바로 적는다
+[Serializable]
+public class IntroCardInfo
+{
+    [Tooltip("체크하면 이 줄이 시작될 때 소개 카드가 펼쳐지고, 다음 줄로 넘어가면 접힌다")]
+    public bool show;
+
+    [Tooltip("카드 맨 위 이름. 비우면 이 줄의 화자 이름을 쓴다. {player}는 플레이어 이름으로 바뀐다")]
+    public string displayName;
+
+    [Tooltip("이름 아래 프로필. 줄바꿈한 대로 여러 줄로 나온다 (자동 줄바꿈은 하지 않으니 길면 직접 줄을 나눈다)")]
+    [TextArea(2, 6)] public string profile;
+
+    [Tooltip("챕터용: 꼬리 끝 마름모가 찍히는 자리 (1920x1080 기준, 왼쪽 아래가 0,0).\n" +
+             "챕터 인스펙터의 '씬 미리보기'에서 이 줄을 띄우고 씬 뷰의 노란 네모를 끌어서 정하면 편하다")]
+    public Vector2 position = new Vector2(960f, 620f);
+
+    [Tooltip("맵 대화용: 화자 머리 옆 자동 자리에서 더 옮길 양 (1920x1080 기준 픽셀). 보통은 0,0 그대로")]
+    public Vector2 mapOffset;
 }
 
 public enum CutTransition

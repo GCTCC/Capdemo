@@ -1,0 +1,1690 @@
+fileFormatVersion: 2
+guid: 2e8a8471f55558b489ffc62641c50f81
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 513053714225520805
+    second: DashRing_0
+  - first:
+      213: -494158855709129295
+    second: DashRing_1
+  - first:
+      213: 4562618420108791353
+    second: DashRing_2
+  - first:
+      213: 7032022646926962709
+    second: DashRing_3
+  - first:
+      213: -4943621039855164668
+    second: DashRing_4
+  - first:
+      213: 6953224041346047810
+    second: DashRing_5
+  - first:
+      213: 7372282854904465431
+    second: DashRing_6
+  - first:
+      213: -580817037635997561
+    second: DashRing_7
+  - first:
+      213: -8092683514996068953
+    second: DashRing_8
+  - first:
+      213: 2873474224906269524
+    second: DashRing_9
+  - first:
+      213: 4291236264062962618
+    second: DashRing_10
+  - first:
+      213: 4796605713667395619
+    second: DashRing_11
+  - first:
+      213: -5129735273323992239
+    second: DashRing_12
+  - first:
+      213: 4814032005286260292
+    second: DashRing_13
+  - first:
+      213: 5041651135346972276
+    second: DashRing_14
+  - first:
+      213: 2189978452778701178
+    second: DashRing_15
+  - first:
+      213: 58884548136124658
+    second: DashRing_16
+  - first:
+      213: -3220661952965240892
+    second: DashRing_17
+  - first:
+      213: -2649694340111554967
+    second: DashRing_18
+  - first:
+      213: 603434634891468496
+    second: DashRing_19
+  - first:
+      213: -7779412838946337790
+    second: DashRing_20
+  - first:
+      213: -6226011675597942493
+    second: DashRing_21
+  - first:
+      213: 1311675269754847609
+    second: DashRing_22
+  - first:
+      213: -513203188037130560
+    second: DashRing_23
+  - first:
+      213: 2247246643327417963
+    second: DashRing_24
+  - first:
+      213: 3017626856295592159
+    second: DashRing_25
+  - first:
+      213: 608894229301248935
+    second: DashRing_26
+  - first:
+      213: 3318185652329222089
+    second: DashRing_27
+  - first:
+      213: 6415155895575042402
+    second: DashRing_28
+  - first:
+      213: -698571446246492530
+    second: DashRing_29
+  - first:
+      213: -2178922514786066314
+    second: DashRing_30
+  - first:
+      213: -8698666230941029230
+    second: DashRing_31
+  - first:
+      213: 7176503901748855647
+    second: DashRing_32
+  - first:
+      213: -4096221973424087295
+    second: DashRing_33
+  - first:
+      213: -2384728668052943879
+    second: DashRing_34
+  - first:
+      213: -4900036594476052384
+    second: DashRing_35
+  - first:
+      213: -8908657841991541278
+    second: DashRing_36
+  - first:
+      213: -1900756349469399094
+    second: DashRing_37
+  - first:
+      213: 2919615313779748617
+    second: DashRing_38
+  - first:
+      213: 8667921523939488098
+    second: DashRing_39
+  - first:
+      213: 8406740336246533601
+    second: DashRing_40
+  - first:
+      213: -6860243808971150433
+    second: DashRing_41
+  - first:
+      213: -886742482164556911
+    second: DashRing_42
+  - first:
+      213: -3113477097061337600
+    second: DashRing_43
+  - first:
+      213: -5096242181835231638
+    second: DashRing_44
+  - first:
+      213: -9194084418008585373
+    second: DashRing_45
+  - first:
+      213: 7309425848599520725
+    second: DashRing_46
+  - first:
+      213: -3935866104636896314
+    second: DashRing_47
+  - first:
+      213: 4836106575468778892
+    second: DashRing_48
+  - first:
+      213: 1707136641859931463
+    second: DashRing_49
+  - first:
+      213: -9066840974549191481
+    second: DashRing_50
+  - first:
+      213: -661941257475073880
+    second: DashRing_51
+  - first:
+      213: 3477126460685320279
+    second: DashRing_52
+  - first:
+      213: -8032127291895777378
+    second: DashRing_53
+  - first:
+      213: -2033441208172815400
+    second: DashRing_54
+  - first:
+      213: 8816826744974791234
+    second: DashRing_55
+  - first:
+      213: -4351121305747683185
+    second: DashRing_56
+  - first:
+      213: 4799756405626233189
+    second: DashRing_57
+  - first:
+      213: 4512048770878871712
+    second: DashRing_58
+  - first:
+      213: -3559599481646121861
+    second: DashRing_59
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DashRing_0
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 495
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a06b1382abbe1700800000000000000
+      internalID: 513053714225520805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_1
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 500
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b508de83256429f0800000000000000
+      internalID: -494158855709129295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_2
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 503
+        width: 15
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93e0d30874da15f30800000000000000
+      internalID: 4562618420108791353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_3
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 502
+        width: 15
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51075921753c69160800000000000000
+      internalID: 7032022646926962709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_4
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 498
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 403294f4bdab46bb0800000000000000
+      internalID: -4943621039855164668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 487
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24f13240d60de7060800000000000000
+      internalID: 6953224041346047810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_6
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 491
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 718884e423c9f4660800000000000000
+      internalID: 7372282854904465431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_7
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 482
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78036384bf580f7f0800000000000000
+      internalID: -580817037635997561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_8
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 476
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7adeff0583301bf80800000000000000
+      internalID: -8092683514996068953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_9
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 470
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45377ce4591a0e720800000000000000
+      internalID: 2873474224906269524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_10
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 463
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abb4fbe65a88d8b30800000000000000
+      internalID: 4291236264062962618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_11
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 456
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32011caab77f09240800000000000000
+      internalID: 4796605713667395619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_12
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 448
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15b6bb982f48fc8b0800000000000000
+      internalID: -5129735273323992239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_13
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 440
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44ee27c5a90eec240800000000000000
+      internalID: 4814032005286260292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_14
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 431
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4761dcbeefa87f540800000000000000
+      internalID: 5041651135346972276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_15
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 421
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7152afbccd546e10800000000000000
+      internalID: 2189978452778701178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_16
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 411
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f0c96e3f2331d000800000000000000
+      internalID: 58884548136124658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_17
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 401
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c714ef7409ed43d0800000000000000
+      internalID: -3220661952965240892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_18
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 390
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 966a94e49056a3bd0800000000000000
+      internalID: -2649694340111554967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_19
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 379
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0de9fd17a94df5800800000000000000
+      internalID: 603434634891468496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_20
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 368
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20c8d757d39f90490800000000000000
+      internalID: -7779412838946337790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_21
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 356
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 321dc8c2e53c899a0800000000000000
+      internalID: -6226011675597942493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_22
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 344
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 971076255b1043210800000000000000
+      internalID: 1311675269754847609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_23
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 332
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c6e2776b6cb0e8f0800000000000000
+      internalID: -513203188037130560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_24
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 319
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6e383a6ae2df2f10800000000000000
+      internalID: 2247246643327417963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_25
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 307
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd07d2243a3c0e920800000000000000
+      internalID: 3017626856295592159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_26
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 294
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a34943531a337800800000000000000
+      internalID: 608894229301248935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_27
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 281
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cf81e135409c0e20800000000000000
+      internalID: 3318185652329222089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_28
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 268
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 269d08e4c46370950800000000000000
+      internalID: 6415155895575042402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_29
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 255
+        width: 6
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e863f3888fc2e46f0800000000000000
+      internalID: -698571446246492530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_30
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 242
+        width: 6
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67063196489e2c1e0800000000000000
+      internalID: -2178922514786066314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_31
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 229
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29ce2158621284780800000000000000
+      internalID: -8698666230941029230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_32
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 216
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5302f0a640189360800000000000000
+      internalID: 7176503901748855647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_33
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 203
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10f58e061db4727c0800000000000000
+      internalID: -4096221973424087295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_34
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 190
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fb830749edb7eed0800000000000000
+      internalID: -2384728668052943879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_35
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 177
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06017d7cda29ffbb0800000000000000
+      internalID: -4900036594476052384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_36
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 165
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ed989e84e61e5480800000000000000
+      internalID: -8908657841991541278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_37
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 153
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac7ee49bb282f95e0800000000000000
+      internalID: -1900756349469399094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_38
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 141
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90fe1aab8ae848820800000000000000
+      internalID: 2919615313779748617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_39
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 129
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 261306f83b4aa4870800000000000000
+      internalID: 8667921523939488098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_40
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 118
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ed2ce48bcdbaa470800000000000000
+      internalID: 8406740336246533601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_41
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 107
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9ba3b55a948bc0a0800000000000000
+      internalID: -6860243808971150433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_42
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 97
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19b555f1968a1b3f0800000000000000
+      internalID: -886742482164556911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_43
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 87
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 006385d7315bac4d0800000000000000
+      internalID: -3113477097061337600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_44
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 77
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6e69569cb28649b0800000000000000
+      internalID: -5096242181835231638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_45
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 68
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36be4a52fec086080800000000000000
+      internalID: -9194084418008585373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_46
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 59
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d525d1151c407560800000000000000
+      internalID: 7309425848599520725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_47
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 51
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cb0e9581aef069c0800000000000000
+      internalID: -3935866104636896314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_48
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 44
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c855fbebe4d4d1340800000000000000
+      internalID: 4836106575468778892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_49
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 37
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74d4d112bb7f0b710800000000000000
+      internalID: 1707136641859931463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_50
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 31
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c4f90dfb2c1c2280800000000000000
+      internalID: -9066840974549191481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_51
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 25
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a8d506feef40d6f0800000000000000
+      internalID: -661941257475073880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_52
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 20
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7508248e71c314030800000000000000
+      internalID: 3477126460685320279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_53
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 12
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e97f4d7b8c6288090800000000000000
+      internalID: -8032127291895777378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_54
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 16
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dbd73baef3c7c3e0800000000000000
+      internalID: -2033441208172815400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_55
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 6
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 242d2640639ab5a70800000000000000
+      internalID: 8816826744974791234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_56
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 3
+        width: 15
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f888644c936bd93c0800000000000000
+      internalID: -4351121305747683185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_57
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 3
+        width: 15
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 561e1cd45092c9240800000000000000
+      internalID: 4799756405626233189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_58
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 4
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a8197583740e9e30800000000000000
+      internalID: 4512048770878871712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashRing_59
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 9
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7c71d98123c99ec0800000000000000
+      internalID: -3559599481646121861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      DashRing_0: 513053714225520805
+      DashRing_1: -494158855709129295
+      DashRing_10: 4291236264062962618
+      DashRing_11: 4796605713667395619
+      DashRing_12: -5129735273323992239
+      DashRing_13: 4814032005286260292
+      DashRing_14: 5041651135346972276
+      DashRing_15: 2189978452778701178
+      DashRing_16: 58884548136124658
+      DashRing_17: -3220661952965240892
+      DashRing_18: -2649694340111554967
+      DashRing_19: 603434634891468496
+      DashRing_2: 4562618420108791353
+      DashRing_20: -7779412838946337790
+      DashRing_21: -6226011675597942493
+      DashRing_22: 1311675269754847609
+      DashRing_23: -513203188037130560
+      DashRing_24: 2247246643327417963
+      DashRing_25: 3017626856295592159
+      DashRing_26: 608894229301248935
+      DashRing_27: 3318185652329222089
+      DashRing_28: 6415155895575042402
+      DashRing_29: -698571446246492530
+      DashRing_3: 7032022646926962709
+      DashRing_30: -2178922514786066314
+      DashRing_31: -8698666230941029230
+      DashRing_32: 7176503901748855647
+      DashRing_33: -4096221973424087295
+      DashRing_34: -2384728668052943879
+      DashRing_35: -4900036594476052384
+      DashRing_36: -8908657841991541278
+      DashRing_37: -1900756349469399094
+      DashRing_38: 2919615313779748617
+      DashRing_39: 8667921523939488098
+      DashRing_4: -4943621039855164668
+      DashRing_40: 8406740336246533601
+      DashRing_41: -6860243808971150433
+      DashRing_42: -886742482164556911
+      DashRing_43: -3113477097061337600
+      DashRing_44: -5096242181835231638
+      DashRing_45: -9194084418008585373
+      DashRing_46: 7309425848599520725
+      DashRing_47: -3935866104636896314
+      DashRing_48: 4836106575468778892
+      DashRing_49: 1707136641859931463
+      DashRing_5: 6953224041346047810
+      DashRing_50: -9066840974549191481
+      DashRing_51: -661941257475073880
+      DashRing_52: 3477126460685320279
+      DashRing_53: -8032127291895777378
+      DashRing_54: -2033441208172815400
+      DashRing_55: 8816826744974791234
+      DashRing_56: -4351121305747683185
+      DashRing_57: 4799756405626233189
+      DashRing_58: 4512048770878871712
+      DashRing_59: -3559599481646121861
+      DashRing_6: 7372282854904465431
+      DashRing_7: -580817037635997561
+      DashRing_8: -8092683514996068953
+      DashRing_9: 2873474224906269524
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

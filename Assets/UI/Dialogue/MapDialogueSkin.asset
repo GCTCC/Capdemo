@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3f017a9dc73b904a8f0e10ac4654c1b, type: 3}
+  m_Name: MapDialogueSkin
+  m_EditorClassIdentifier: Assembly-CSharp::StorySkin
+  boxSprite: {fileID: 21300000, guid: c5613d5fb04738a40a358aac4c19d21c, type: 3}
+  boxColor: {r: 1, g: 1, b: 1, a: 1}
+  plateSprite: {fileID: 21300000, guid: a3acae57e8e065942a5cc9449541c2fa, type: 3}
+  plateColor: {r: 1, g: 1, b: 1, a: 1}
+  bodyFont: {fileID: 0}
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
+  nameFont: {fileID: 0}
+  nameColor: {r: 1, g: 0.93, b: 0.82, a: 1}
+  indicatorColor: {r: 1, g: 1, b: 1, a: 1}

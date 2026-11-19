@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class RhythmResultSceneController : MonoBehaviour
 {
     [SerializeField] private string songSelectSceneName = "SongSelectScene";
-    [SerializeField] private string hubSceneName = "NewHubDemoScene";
+    [SerializeField] private string hubSceneName = "HoloHubScene";
     private RhythmSceneTransition transition;
     private PlayResult result;
     private string songTitle;

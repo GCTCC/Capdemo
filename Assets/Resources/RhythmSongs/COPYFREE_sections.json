@@ -1,0 +1,9 @@
+{
+  "sections": [
+    { "time": 0, "name": "INTRO" },
+    { "time": 20, "name": "VERSE" },
+    { "time": 55, "name": "CHORUS" },
+    { "time": 95, "name": "BRIDGE" },
+    { "time": 135, "name": "OUTRO" }
+  ]
+}

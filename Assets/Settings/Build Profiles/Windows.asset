@@ -28,8 +28,8 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/TutoScene.unity
     m_guid: fe97b77477731f946a753af84b83cdaf
-  - m_enabled: 1
-    m_path: Assets/Scenes/HubScene.unity
+  - m_enabled: 0
+    m_path: Assets/Scenes/OldDemo/HubScene.unity
     m_guid: 848b2756e84564246ac7d88a80d38211
   - m_enabled: 1
     m_path: Assets/Scenes/Map/Area1_.unity
@@ -37,6 +37,24 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/Map/Area2_LiveHouse.unity
     m_guid: a1c9203c045fef449934cefaf1417e13
+  - m_enabled: 0
+    m_path: Assets/Scenes/OldDemo/NewHubDemoScene.unity
+    m_guid: fa3f58cbf69d76342831b61d2526fb65
+  - m_enabled: 1
+    m_path: Assets/Scenes/RhythmIngame/RhythmScene.unity
+    m_guid: 624ac7fad7817234a9aa5b32582aeaff
+  - m_enabled: 1
+    m_path: Assets/Scenes/RhythmIngame_v2/SongSelectScene_v2.unity
+    m_guid: 6376b6aa8b2f45d88f14194a61ee1b57
+  - m_enabled: 1
+    m_path: Assets/Scenes/RhythmIngame_v2/RhythmScene_v2.unity
+    m_guid: 096676cab1e74e9da2ae2b9d330baaa6
+  - m_enabled: 1
+    m_path: Assets/Scenes/RhythmIngame_v2/RhythmResultScene_v2.unity
+    m_guid: 793b0fb4f0374112b65729b4da4cffb0
+  - m_enabled: 1
+    m_path: Assets/Scenes/HoloHubScene.unity
+    m_guid: 5999eff2693cef84c9d6f2dbb3a5bf61
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:

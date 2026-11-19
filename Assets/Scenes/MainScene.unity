@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleScreen
   tutorialSceneName: TutoScene
-  hubSceneName: HubScene
+  hubSceneName: HoloHubScene
   inputDelay: 0.5
   fadeOverlay: {fileID: 147652408}
   fadeInDuration: 3

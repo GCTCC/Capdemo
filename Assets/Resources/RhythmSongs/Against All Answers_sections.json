@@ -1,0 +1,36 @@
+{
+  "sections": [
+    {
+      "time": 0,
+      "name": "INTRO"
+    },
+    {
+      "time": 8,
+      "name": "VERSE"
+    },
+    {
+      "time": 43,
+      "name": "CHORUS"
+    },
+    {
+      "time": 96,
+      "name": "BREAK"
+    },
+    {
+      "time": 104,
+      "name": "VERSE"
+    },
+    {
+      "time": 140,
+      "name": "BREAK"
+    },
+    {
+      "time": 155,
+      "name": "CHORUS"
+    },
+    {
+      "time": 208,
+      "name": "OUTRO"
+    }
+  ]
+}

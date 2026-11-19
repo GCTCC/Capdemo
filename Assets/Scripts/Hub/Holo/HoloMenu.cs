@@ -85,7 +85,8 @@ public class HoloMenu : MonoBehaviour
         if (item.OpensSongSelect)
             RhythmLaunchContext.RequestSingle(string.Empty, SceneManager.GetActiveScene().name);
 
-        HoloTransition.LoadScene(scene);
+        if (item.OpensStory) HoloTransition.LoadStory(scene);
+        else HoloTransition.LoadScene(scene);
     }
 
     private void Deny(HoloMenuItem item)

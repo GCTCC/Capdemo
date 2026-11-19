@@ -42,4 +42,13 @@ public class HoloTransitionSettings : ScriptableObject
     [Min(0f)] public float lineTime = 0.14f;     // 가운데 가로줄이 양옆으로 뻗는 시간
     [Min(0f)] public float openTime = 0.28f;     // 위아래로 벌어지는 시간
     [Min(0f)] public float settleTime = 0.45f;   // 남은 지직거림이 잦아드는 시간
+
+    [Header("스토리 모드로 들어갈 때 (HoloTransition.LoadStory)")]
+    public string storyLabel = "STORY MODE  ·  MEMORY PLAYBACK";
+    public string storyTitle = "프롤로그";
+    public string storySubtitle = "나의 음악이, 우리의 음악이 되기까지";
+    [Min(0f)] public float storyCloseTime = 0.9f;   // 위아래 검은 막이 닫히는 시간
+    [Min(0f)] public float storyTypeSpeed = 0.06f;  // 부제 한 글자씩 찍히는 간격
+    [Min(0f)] public float storyHoldTime = 0.9f;    // 다 찍힌 뒤 머무는 시간
+    [Min(0f)] public float storyOpenTime = 1.1f;    // 새 씬에서 막이 열리는 시간
 }

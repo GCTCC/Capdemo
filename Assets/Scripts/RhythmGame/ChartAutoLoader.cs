@@ -95,7 +95,8 @@ public class ChartAutoLoader : MonoBehaviour
         TextAsset[] chartFiles = Resources.LoadAll<TextAsset>(resourcesFolder);
         Texture2D[] coverTextures = Resources.LoadAll<Texture2D>(resourcesFolder);
         Sprite[] coverSprites = Resources.LoadAll<Sprite>(resourcesFolder);
-        Array.Sort(audioClips, CompareAudioClipNames);
+        LoadSongOrder();
+        Array.Sort(audioClips, (left, right) => CompareSongOrder(left.name, right.name));
 
         List<SongEntry> songs = new List<SongEntry>();
         for (int i = 0; i < audioClips.Length; i++)
@@ -470,9 +471,42 @@ public class ChartAutoLoader : MonoBehaviour
             && text.TrimStart().StartsWith("{", StringComparison.Ordinal);
     }
 
-    private static int CompareAudioClipNames(AudioClip left, AudioClip right)
+    // 곡 목록 순서: Resources/RhythmSongs/SongOrder.txt에 한 줄에 곡 이름 하나씩 적은 순서대로.
+    // 파일에 없는 곡은 그 뒤에 이름순으로 붙는다.
+    private List<string> songOrder = new List<string>();
+
+    private void LoadSongOrder()
     {
-        return string.Compare(left.name, right.name, StringComparison.OrdinalIgnoreCase);
+        songOrder.Clear();
+        TextAsset orderFile = Resources.Load<TextAsset>(resourcesFolder + "/SongOrder");
+        if (orderFile == null)
+        {
+            return;
+        }
+
+        string[] lines = orderFile.text.Split('\n');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string line = lines[i].Trim();
+            if (line.Length > 0)
+            {
+                songOrder.Add(line);
+            }
+        }
+    }
+
+    public int CompareSongOrder(string left, string right)
+    {
+        int leftIndex = songOrder.FindIndex(n => string.Equals(n, left, StringComparison.OrdinalIgnoreCase));
+        int rightIndex = songOrder.FindIndex(n => string.Equals(n, right, StringComparison.OrdinalIgnoreCase));
+        if (leftIndex < 0) leftIndex = int.MaxValue;
+        if (rightIndex < 0) rightIndex = int.MaxValue;
+        if (leftIndex != rightIndex)
+        {
+            return leftIndex.CompareTo(rightIndex);
+        }
+
+        return string.Compare(left, right, StringComparison.OrdinalIgnoreCase);
     }
 
     private static TextAsset FindTextAsset(TextAsset[] chartFiles, string songName)

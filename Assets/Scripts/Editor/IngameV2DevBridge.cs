@@ -129,6 +129,20 @@ public static class IngameV2DevBridge
                 var win = EditorWindow.GetWindow(gv);
                 Write("gameview size " + win.position);
                 break;
+            case "bgm":
+                {
+                    var b = Object.FindAnyObjectByType<SceneBgm>();
+                    var src = b ? b.GetComponent<AudioSource>() : null;
+                    Write(src ? ("bgm playing=" + src.isPlaying + " vol=" + src.volume.ToString("0.000") + " t=" + src.time.ToString("0.0")) : "no bgm");
+                }
+                break;
+            case "goto":
+                Write("goto " + HoloTransition.LoadScene(arg));
+                break;
+            case "hubbgm":
+                HubBgmMenu.Apply();
+                Write("hub bgm done");
+                break;
             case "tsettings":
                 TransitionV2Menu.Create();
                 Write("transition settings ready");

@@ -31,9 +31,11 @@ public static class HoloHubMenu
     private const string ShaderPath = "Assets/Art/Shaders/HoloTransition.shader";
     private const string TransitionMatPath = ArtRoot + "HoloTransition.mat";
     private const string SettingsPath = "Assets/Resources/HoloTransitionSettings.asset";
-    private const string OffSfxPath = "Assets/Audio/SFX/SFX_Hologram_Off.wav";
-    private const string OnSfxPath = "Assets/Audio/SFX/SFX_Hologram_On.wav";
+    // 2026-11-18 재이 결정: 전환 소리는 꺼짐(Hologram_Off) 하나만. 켜짐 소리는 없음
+    private const string OffSfxPath = "Assets/Audio/SFX/Hologram_Off.mp3";
+    private const string OnSfxPath = "";
     private const string SongSelectScene = "SongSelectScene_v2";
+    private const string StoryScene = "TutoScene"; // 지금은 스토리 모드 = 튜토리얼 챕터(0장)
     private const string GameTitle = "RE:WRITE";
 
     private const float K = 0.96f;            // 목업 픽셀 → 캔버스 픽셀
@@ -141,7 +143,7 @@ public static class HoloHubMenu
         settings.monoFont = monoFont;
         settings.logoTitle = GameTitle;
         settings.offSound = AssetDatabase.LoadAssetAtPath<AudioClip>(OffSfxPath);
-        settings.onSound = AssetDatabase.LoadAssetAtPath<AudioClip>(OnSfxPath);
+        settings.onSound = string.IsNullOrEmpty(OnSfxPath) ? null : AssetDatabase.LoadAssetAtPath<AudioClip>(OnSfxPath);
         EditorUtility.SetDirty(settings);
         AssetDatabase.SaveAssets();
         return true;
@@ -411,7 +413,7 @@ public static class HoloHubMenu
         var defs = new[]
         {
             ("01", "싱글 플레이", "SINGLE PLAY", "icon_play", "8곡 수록", SongSelectScene, true, "NOW PLAYING  ·  Moonside Howl"),
-            ("02", "스토리 모드", "STORY MODE", "icon_book", null, "", false, "CH.03  ·  녹슨 무대 위의 노이즈  ·  3/6"),
+            ("02", "스토리 모드", "STORY MODE", "icon_book", null, StoryScene, false, "CH.03  ·  녹슨 무대 위의 노이즈  ·  3/6"),
             ("03", "아카이브", "ARCHIVE", "icon_disc", null, "", false, "ARCHIVE  ·  6 / 8 TRACKS CLEARED"),
             ("04", "설정", "SETTINGS", "icon_sliders", null, "", false, "SYSTEM  ·  AUDIO / DISPLAY / KEY CONFIG"),
         };
@@ -496,6 +498,7 @@ public static class HoloHubMenu
         var mi = item.rt.gameObject.AddComponent<HoloMenuItem>();
         Set(mi, "targetScene", scene);
         Set(mi, "opensSongSelect", songSelect);
+        Set(mi, "opensStory", scene == StoryScene);
         Set(mi, "caption", caption);
         // 설정 메뉴는 씬 대신 설정 창을 띄운다 (Tools > CapDemo > 설정·일시정지 > 프리팹 만들기로 먼저 만들어 둔다)
         if (sub == "SETTINGS")

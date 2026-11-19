@@ -27,6 +27,12 @@ public class SongTransitionSettings : ScriptableObject
     [Tooltip("로그에 보일 인게임 배경 이름")]
     public string stageBackgroundName = "bg_live_teal";
 
+    [Header("로딩 소리 (재킷이 나올 때부터, 인게임이 열리면 점점 작아지며 꺼짐)")]
+    public AudioClip loadingSound;
+    [Range(0f, 1f)] public float loadingVolume = 0.8f;
+    [Tooltip("인게임 화면이 열린 뒤 소리가 완전히 꺼질 때까지 걸리는 시간(초)")]
+    public float loadingFadeOut = 0.8f;
+
     [Header("드럼 카운트인")]
     [Tooltip("숫자가 바뀔 때마다 나는 소리. 비우면 소리 없음 (기본: 없음)")]
     public AudioClip countInClick;

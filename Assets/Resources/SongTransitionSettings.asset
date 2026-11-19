@@ -19,6 +19,9 @@ MonoBehaviour:
       \uAC19\uC774 \uB4E4\uC5B4\uAC00\uC790."
   artistText: "RE:WRITE  \xB7  ORIGINAL"
   stageBackgroundName: bg_live_teal
+  loadingSound: {fileID: 0}
+  loadingVolume: 0.8
+  loadingFadeOut: 0.8
   countInClick: {fileID: 0}
   countInVolume: 0.8
   countInterval: 0.6

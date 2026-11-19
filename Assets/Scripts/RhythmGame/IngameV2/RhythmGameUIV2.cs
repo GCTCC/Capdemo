@@ -23,6 +23,10 @@ public class RhythmGameUIV2 : MonoBehaviour
     [SerializeField] private Sprite background;        // 청록 라이브하우스 무대
     [SerializeField, Range(0f, 1f)] private float backgroundBrightness = 0.85f;
     [SerializeField] private Texture2D noCover;
+    [Tooltip("곡의 앨범 재킷을 화면 가득 채워 배경으로 쓴다 (재킷이 없는 곡은 라이브하우스 배경)")]
+    [SerializeField] private bool coverAsBackground = true;
+    [Tooltip("재킷 배경의 밝기. 노트가 잘 보이게 어둡게 깐다")]
+    [SerializeField, Range(0f, 1f)] private float coverBackgroundBrightness = 0.45f;
 
     [Header("곡 정보 아래 작은 글씨")]
     [SerializeField] private string venueText = "RE:WRITE · LIVE AT RUST HALL";
@@ -59,6 +63,8 @@ public class RhythmGameUIV2 : MonoBehaviour
 
     // 곡 정보
     private RawImage cover;
+    private RawImage coverBackground;
+    private AspectRatioFitter coverBackgroundFitter;
     private Image diffTag;
     private TextMeshProUGUI diffText, bpmText, titleMain, titleRed, titleCyan, venue;
     // 진행도
@@ -158,6 +164,18 @@ public class RhythmGameUIV2 : MonoBehaviour
         {
             bg.color = new Color(0.02f, 0.08f, 0.08f, 1f);
         }
+
+        // 앨범 재킷 배경: 화면을 꽉 채우도록(넘치는 부분은 잘림) 라이브하우스 배경 위에 깐다
+        var coverBgGo = new GameObject("Album Cover Background", typeof(RectTransform), typeof(RawImage), typeof(AspectRatioFitter));
+        coverBgGo.transform.SetParent(rootRect, false);
+        coverBackground = coverBgGo.GetComponent<RawImage>();
+        coverBackground.raycastTarget = false;
+        coverBackground.color = new Color(coverBackgroundBrightness, coverBackgroundBrightness, coverBackgroundBrightness, 1f);
+        IngameV2Art.Stretch(coverBackground.rectTransform);
+        coverBackgroundFitter = coverBgGo.GetComponent<AspectRatioFitter>();
+        coverBackgroundFitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+        coverBackgroundFitter.aspectRatio = 1f;
+        coverBgGo.SetActive(false);
 
         BackgroundLayer = IngameV2Art.NewRect("Spotlight Layer", rootRect);
         IngameV2Art.Stretch(BackgroundLayer);
@@ -455,6 +473,14 @@ public class RhythmGameUIV2 : MonoBehaviour
         Texture tex = song != null && song.albumCover != null ? (Texture)song.albumCover : noCover;
         cover.texture = tex;
         cover.color = tex ? Color.white : new Color(0.05f, 0.15f, 0.15f, 1f);
+
+        if (coverBackground)
+        {
+            Texture bgTex = coverAsBackground && song != null ? song.albumCover : null;
+            coverBackground.texture = bgTex;
+            coverBackground.gameObject.SetActive(bgTex);
+            if (bgTex) coverBackgroundFitter.aspectRatio = (float)bgTex.width / Mathf.Max(1, bgTex.height);
+        }
 
         string diff = Controller.DifficultyName;
         int level = Controller.DifficultyLevel;

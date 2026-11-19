@@ -12,6 +12,9 @@ public class HoloMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
     [Tooltip("싱글 플레이처럼 곡 선택 화면으로 갈 때 켠다 (돌아올 씬으로 이 허브를 알려 준다)")]
     [SerializeField] private bool opensSongSelect = false;
 
+    [Tooltip("스토리 모드처럼 이야기로 들어갈 때 켠다 (지직 전환 대신 영화처럼 닫히는 스토리 전환을 쓴다)")]
+    [SerializeField] private bool opensStory = false;
+
     [Tooltip("선택됐을 때 오른쪽 연결선 끝에 뜨는 글")]
     [SerializeField] private string caption = "";
 
@@ -22,6 +25,7 @@ public class HoloMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     public string TargetScene => targetScene;
     public bool OpensSongSelect => opensSongSelect;
+    public bool OpensStory => opensStory;
     public string Caption => caption;
     public HoloPopup PanelPrefab => panelPrefab;
 

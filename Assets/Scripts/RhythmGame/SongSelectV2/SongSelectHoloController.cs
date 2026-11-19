@@ -446,7 +446,7 @@ public class SongSelectHoloController : MonoBehaviour
     {
         if (sortMode == 2) songs.Sort((a, b) => ReadBpm(a.chartFile).CompareTo(ReadBpm(b.chartFile)));
         else if (sortMode == 1) songs.Sort((a, b) => NoteCount(a).CompareTo(NoteCount(b))); // 레벨이 목업이라 노트 수로 대신
-        else songs.Sort((a, b) => string.Compare(a.DisplayName, b.DisplayName, System.StringComparison.Ordinal));
+        else songs.Sort((a, b) => chartAutoLoader.CompareSongOrder(a.DisplayName, b.DisplayName)); // SongOrder.txt 순서
     }
 
     private void RefreshSortLabel()

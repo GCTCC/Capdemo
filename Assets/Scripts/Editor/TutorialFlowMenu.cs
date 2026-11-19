@@ -86,7 +86,7 @@ public static class TutorialFlowMenu
 
     private const string Area2Path = "Assets/Scenes/Map/Area2_LiveHouse.unity";
     private const string LastStoryBeforeShowPath = "Assets/Story/Story1_1.asset"; // 공연 직전 마지막 스토리 (바뀌면 StoryBeat의 Must Have Seen만 바꾸면 된다)
-    private const string FirstSongName = "Moonside-Howl-_フリーBGM-FREE-DOWNLOAD_";
+    private const string FirstSongName = "COPYFREE";
 
     [MenuItem("Tools/CapDemo/튜토리얼 흐름/Area2에 첫 공연·허브 해금 스위치 놓기")]
     private static void PlaceArea2Beats()

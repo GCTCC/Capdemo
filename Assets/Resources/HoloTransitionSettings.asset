@@ -15,8 +15,8 @@ MonoBehaviour:
   screenMaterial: {fileID: 2100000, guid: a2118825dd706874490fbc13f12f9cb8, type: 2}
   titleFont: {fileID: 11400000, guid: dd6cac0cee01e8f4a9d4472bb4ef8cf6, type: 2}
   monoFont: {fileID: 11400000, guid: 4b58d23948b917244911cd1d333f0d1a, type: 2}
-  offSound: {fileID: 8300000, guid: 76909c92ba491fc42b44215c3cde2aee, type: 3}
-  onSound: {fileID: 8300000, guid: ba10e5ca5ee041444b026d7ea91acc5a, type: 3}
+  offSound: {fileID: 8300000, guid: ce62a5a1bd6658e4f9421540fc7f0d02, type: 3}
+  onSound: {fileID: 0}
   volume: 0.8
   logoTitle: RE:WRITE
   logoSub: "TUNING SIGNAL  \xB7  FM 77.7"

@@ -629,8 +629,33 @@ public class SongTransitionOverlay : MonoBehaviour
         }
 
         Render();
+        UpdateLoadingSound();
 
         if (t >= go + 0.6f) Destroy(gameObject);
+    }
+
+    // 로딩 소리: 재킷이 나올 때(0.6초) 켜고, 인게임 화면이 열리기 시작하면(H1+0.95) 점점 작아지며 꺼진다
+    private AudioSource loadingSource;
+
+    private void UpdateLoadingSound()
+    {
+        if (settings.loadingSound == null) return;
+        if (loadingSource == null)
+        {
+            if (t < 0.6f) return;
+            loadingSource = gameObject.AddComponent<AudioSource>();
+            loadingSource.clip = settings.loadingSound;
+            loadingSource.loop = true; // 로딩이 소리보다 길어져도 끊기지 않게
+            loadingSource.playOnAwake = false;
+            loadingSource.spatialBlend = 0f;
+            loadingSource.ignoreListenerPause = true;
+            loadingSource.volume = settings.loadingVolume * GameSettings.SfxVolume;
+            loadingSource.Play();
+        }
+        float fadeStart = h1 + 0.95f;
+        float k = 1f - Seg(t, fadeStart, fadeStart + Mathf.Max(0.05f, settings.loadingFadeOut));
+        loadingSource.volume = settings.loadingVolume * GameSettings.SfxVolume * k;
+        if (k <= 0f && loadingSource.isPlaying) loadingSource.Stop();
     }
 
     private bool GameReady()

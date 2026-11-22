@@ -820,10 +820,12 @@ public class SongSelectHoloController : MonoBehaviour
 
     private IEnumerator LoadGameplay(string songName)
     {
+        // 실행 씬 목록이 잘못되었으면 미리듣기/화면을 바꾸기 전에 중단한다.
+        if (!CanLoad(gameplaySceneName)) yield break;
         isLoading = true;
 
         // 인게임 v2로 갈 때는 전환 연출 A(레코드 회전)가 로딩과 씬 이동을 맡는다
-        if (gameplaySceneName == "RhythmScene_v2" && CanLoad(gameplaySceneName))
+        if (gameplaySceneName == "RhythmScene_v2")
         {
             RhythmLaunchContext.Request(entryMode, songName, returnSceneName);
             RhythmLaunchExtrasV2.Set(CurrentDifficultyName,
@@ -844,12 +846,6 @@ public class SongSelectHoloController : MonoBehaviour
 
         StopPreviewNow();
         yield return sceneTransition.FadeToBlack();
-        if (!CanLoad(gameplaySceneName))
-        {
-            isLoading = false;
-            yield return sceneTransition.RevealScene();
-            yield break;
-        }
         RhythmLaunchContext.Request(entryMode, songName, returnSceneName);
         // 인게임 v2 곡 정보 패널에 보일 난이도 (HARD 12 등)
         RhythmLaunchExtrasV2.Set(CurrentDifficultyName,
@@ -904,7 +900,10 @@ public class SongSelectHoloController : MonoBehaviour
     private static bool CanLoad(string sceneName)
     {
         if (!string.IsNullOrWhiteSpace(sceneName) && Application.CanStreamedLevelBeLoaded(sceneName)) return true;
-        Debug.LogError("SongSelectHoloController: '" + sceneName + "' 씬이 Build Settings에 없습니다.");
+        Debug.LogError("SongSelectHoloController: '" + sceneName + "' 씬을 불러올 수 없습니다. "
+            + "현재 활성 Build Profile의 Scene List에 씬을 추가하고 활성화하세요. "
+            + "Play를 종료한 뒤 Tools > CapDemo > 리듬게임 > v2 씬 이동 설정 복구를 실행하세요. "
+            + "게임 씬의 정확한 이름은 RhythmScene_v2입니다.");
         return false;
     }
 
@@ -927,6 +926,9 @@ public class SongSelectHoloController : MonoBehaviour
     private static float ReadBpm(TextAsset chart)
     {
         if (!chart) return 0f;
+        float osuBpm;
+        int osuNoteCount;
+        if (ChartAutoLoader.TryGetOsuSummary(chart, out osuBpm, out osuNoteCount)) return osuBpm;
         try
         {
             var probe = JsonUtility.FromJson<BpmProbe>(chart.text);
@@ -945,6 +947,13 @@ public class SongSelectHoloController : MonoBehaviour
     {
         if (song == null || !song.chartFile) return 0;
         if (noteCountCache.TryGetValue(song.DisplayName, out int cached)) return cached;
+        float osuBpm;
+        int osuNoteCount;
+        if (ChartAutoLoader.TryGetOsuSummary(song.chartFile, out osuBpm, out osuNoteCount))
+        {
+            noteCountCache[song.DisplayName] = osuNoteCount;
+            return osuNoteCount;
+        }
         int count = 0;
         try
         {

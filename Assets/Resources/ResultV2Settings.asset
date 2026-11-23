@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522042d7ad6c4a499e757ab625c124f4, type: 3}
+  m_Name: ResultV2Settings
+  m_EditorClassIdentifier: 
+  backgrounds:
+  - {fileID: 21300000, guid: 1ef270244763fc94e981536360b2782e, type: 3}
+  polaroids:
+  - photo: {fileID: 21300000, guid: 75b2633c8a786d14fa13e4a800e310cf, type: 3}
+    caption: "음, 나쁘지 않네.\n한 번 더 가 볼까?"
+    focusX: 0.72
+    focusY: 1
+  avoidRepeat: 1
+  displayFont: {fileID: 12800000, guid: ebdcee78f41b4fc8890fafdd25c50960, type: 3}
+  oxaniumSemiBold: {fileID: 12800000, guid: 13d1fc48ce720544a80e5ea8cd949f9c, type: 3}
+  oxaniumBold: {fileID: 12800000, guid: 3dc374e228f281843b271dfa6bb1dd04, type: 3}
+  numberFont: {fileID: 12800000, guid: 0a5d3d91b922b06448d86735ae771d1b, type: 3}
+  koreanFallback: {fileID: 12800000, guid: ba4bd715237358541b2d27631ae41b3e, type: 3}
+  koreanTitle: {fileID: 11400000, guid: dd6cac0cee01e8f4a9d4472bb4ef8cf6, type: 2}
+  popSound: {fileID: 8300000, guid: ba10e5ca5ee041444b026d7ea91acc5a, type: 3}
+  popVolume: 0.6

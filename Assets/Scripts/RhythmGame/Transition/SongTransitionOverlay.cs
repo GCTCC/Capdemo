@@ -24,7 +24,12 @@ public class SongTransitionOverlay : MonoBehaviour
     // ── 바꿀 수 있는 상수 ──
     public const float H0 = 1.0f;
     public const float MinHold = 1.8f;
-    public const float ExitLength = 1.25f;
+    // 레코드 퇴장 길이 (H1 → 카운트인 X). 2026-11-23 C2 "지직 꺼짐 + 스캔 전진"으로 1.25 → 2.05
+    public const float ExitLength = 2.05f;
+    // C2 타이밍 (H1 기준 초)
+    private const float LayStart = 0.78f, LayEnd = 1.12f;   // 레코드가 판정선에 눕기
+    private const float HoloStart = 0.93f, HoloEnd = 1.63f; // 홀로그램으로 지직 꺼짐 (k 0 → 1)
+    private const float ScanStart = 1.28f, ScanEnd = 2.03f; // 빛의 벽이 판정선 → 게이트로 나아가며 레인을 그림
     // 카운트 간격(초). 곡 BPM에 맞추려면 60f / BPM x 박수 로 바꾼다 (설정 SO의 countInterval이 우선)
     public static float CountInterval = 0.6f;
     // RhythmClock이 음악을 0.2초 뒤에 예약 재생하므로 그만큼 먼저 시작 신호를 보낸다
@@ -127,6 +132,7 @@ public class SongTransitionOverlay : MonoBehaviour
     private bool built;
     private bool clicked0, clicked1, clicked2;
     private float lastGlitchFrame = -1;
+    private float holoK; // C2 홀로그램 꺼짐 진행 (0~1)
 
     // 시안 좌표 값
     private Vector2 discCenter = new Vector2(390, 426);
@@ -166,7 +172,7 @@ public class SongTransitionOverlay : MonoBehaviour
     private RawImage jkShadow, jkGlow;
     private PerspectiveQuadGraphic jk, rgbR, rgbB, sweep, grooves, label, sheen;
     private Material jkMat, rgbRMat, rgbBMat, groovesMat, labelMat, sheenMat;
-    private ScreenShapeGraphic shapes, shapesGlow;
+    private ScreenShapeGraphic shapes, shapesGlow, cover;
     private RawImage ringDot;
 
     private string title, artistText, bandLine, bandSpeaker, slug;
@@ -354,6 +360,10 @@ public class SongTransitionOverlay : MonoBehaviour
         yield return null;
 
         // 재킷 / 레코드
+        // 아직 빛의 벽이 지나가지 않은 하이웨이를 가리는 덮개 (레코드보다 아래)
+        cover = NewRect("Highway Cover", stage).gameObject.AddComponent<ScreenShapeGraphic>();
+        Full0(cover.rectTransform);
+        cover.raycastTarget = false;
         jkShadow = Raw("Jacket Shadow", stage, TransitionArt.SoftSquare(), new Color(0, 0, 0, 0));
         jkGlow = Raw("Jacket Glow", stage, TransitionArt.SoftSquare(), new Color(0.64f, 0.92f, 0.84f, 0f));
         jkMat = DiscMaterial(false);
@@ -703,6 +713,23 @@ public class SongTransitionOverlay : MonoBehaviour
         floorQuad = new[] { l, r, gr, gl };
     }
 
+    // 하이웨이 위 점 (x, y, z)을 시안 좌표로. 인게임 씬이 켜졌으면 실제 카메라, 아니면 같은 값의 PJ
+    private Vector2 Proj(float x, float y, float z)
+    {
+        Camera cam = Camera.main;
+        if (gamePlayField != null && cam != null)
+            return ScreenToDesign(cam.WorldToScreenPoint(gamePlayField.transform.TransformPoint(new Vector3(x, y, z))));
+        return PJ(x, y, z);
+    }
+
+    private float HalfWidth(float z)
+    {
+        return gamePlayField != null ? gamePlayField.HalfWidthAtZ(z) : Mathf.Lerp(5.8f, 2.35f, z / 20f);
+    }
+
+    private float JudgeZ { get { return gamePlayField != null ? gamePlayField.JudgeZ : 1.15f; } }
+    private float GateZ { get { return gamePlayField != null ? gamePlayField.FarGateZ : 19.85f; } }
+
     // transition.html의 PJ와 같은 계산 (카메라 (0,8,-9.2) → (0,0,8.2), 세로 FOV 55°, 1600x900)
     public static Vector2 PJ(float x, float y, float z)
     {
@@ -743,7 +770,7 @@ public class SongTransitionOverlay : MonoBehaviour
 
         // 1. 곡 선택 화면: 블러·어둡게·살짝 확대 → 인게임 등장 때 사라짐
         float s1 = Seg(t, 0.55f, 1.0f);
-        float gIn = Seg(t, H1 + 0.95f, H1 + 1.4f);
+        float gIn = Seg(t, H1 + 1.1f, H1 + 1.45f);
         float selA = (t < X + 0.4f ? 1f : 1f - Seg(t, X + 0.4f, X + 0.9f)) * (1f - gIn);
         float bright = 1f - s1 * 0.55f;
         selectGroup.localScale = Vector3.one * (1f + s1 * 0.04f);
@@ -752,8 +779,9 @@ public class SongTransitionOverlay : MonoBehaviour
         // 오버레이 아래 실제 씬이 비치지 않게: 사진이 사라지기 전까지는 클릭도 막는다
         snapSharp.raycastTarget = gIn < 1f;
         hole.color = new Color(1, 1, 1, Seg(t, 0.55f, 0.7f) * (1f - Seg(t, 1.0f, 1.4f)) * (1f - gIn));
-        dim.color = new Color(1, 1, 1, s1 * 0.9f * (1f - Seg(t, X + 0.2f, X + 0.8f)));
-        grid.color = new Color(1, 1, 1, Seg(t, 0.9f, 1.4f) * 0.9f * (1f - Seg(t, X - 0.1f, X + 0.3f)));
+        // 어두운 비네트·격자는 빛의 벽이 레인을 그리기 시작할 때 걷힌다 (C2)
+        dim.color = new Color(1, 1, 1, s1 * 0.9f * (1f - Seg(t, H1 + 1.2f, H1 + 1.8f)));
+        grid.color = new Color(1, 1, 1, Seg(t, 0.9f, 1.4f) * 0.9f * (1f - Seg(t, H1 + 1.1f, H1 + 1.5f)));
 
         // 글리치 슬라이스
         bool burst = (t > 0.58f && t < 0.95f) || (t > H1 - 0.05f && t < H1 + 0.12f);
@@ -818,10 +846,13 @@ public class SongTransitionOverlay : MonoBehaviour
             br = 50f * Eio(m);
             float sp0 = H1 + 0.4f;
             if (t > sp0) { float d = t - sp0; spin = d * d * 2400f; omega = 4800f * d; }
-            float le = Eio(Seg(t, H1 + 0.78f, H1 + 1.12f));
+            float le = Eio(Seg(t, H1 + LayStart, H1 + LayEnd));
             x = Mathf.Lerp(x, 800f, le); y = Mathf.Lerp(y, judgeY, le);
             rx = Mathf.Lerp(0f, 78f, le); sz = Mathf.Lerp(400f, judgeW * 0.98f, le);
-            op = 1f - Seg(t, H1 + 1.05f, H1 + 1.22f);
+            holoK = Seg(t, H1 + HoloStart, H1 + HoloEnd);
+            rx += 12f * Eio(Seg(holoK, 0.35f, 0.8f)); // 78° → 90°: 위아래로 눌려 한 줄
+            op = 1f - Seg(holoK, 0.75f, 1f);
+            if (holoK > 0f) op *= 0.75f + 0.25f * Hash(Mathf.Floor(t * 30f)); // 깜빡임
         }
         bool show = t >= 0.6f;
         float alpha = show ? op : 0f;
@@ -860,6 +891,13 @@ public class SongTransitionOverlay : MonoBehaviour
         else sweep.color = new Color(1, 1, 1, 0);
 
         // 레코드: 홈, 라벨(38%, 가운데 구멍), 고정 광택
+        // 홀로그램 색·줄무늬·RGB 분리 (C2)
+        float split = 0.025f * Mathf.Sin(Mathf.Min(1f, holoK * 1.4f) * Mathf.PI);
+        foreach (var hm in new[] { groovesMat, labelMat, sheenMat })
+        {
+            hm.SetFloat("_Holo", holoK);
+            hm.SetFloat("_Split", hm == groovesMat ? split : 0f);
+        }
         groovesMat.SetFloat("_Spin", spinRad);
         grooves.color = new Color(1, 1, 1, alpha * m);
         label.localRect = new Rect(0.31f, 0.31f, 0.38f, 0.38f);
@@ -867,6 +905,7 @@ public class SongTransitionOverlay : MonoBehaviour
         labelMat.SetFloat("_BlurArc", SpinBlurArc(omega));
         label.SetMaterialDirty();
         grooves.SetMaterialDirty();
+        sheen.SetMaterialDirty();
         label.color = new Color(1, 1, 1, alpha * m);
         sheen.color = new Color(1, 1, 1, alpha * m);
 
@@ -943,15 +982,11 @@ public class SongTransitionOverlay : MonoBehaviour
             shapesGlow.Polyline(pts, 36f, new Color(mint.r, mint.g, mint.b, 0.45f * a));
         }
 
-        // 충격파 + 판정선 번쩍임
-        float sk = Seg(t, H1 + 1.05f, H1 + 1.45f);
-        if (sk > 0f && sk < 1f)
-        {
-            Color c = new Color(pale.r, pale.g, pale.b, 1f - sk);
-            shapes.Ellipse(new Vector2(800f, judgeY), judgeW / 2f * (1f + sk * 0.5f), 18f + sk * 30f, 4f * (1f - sk) + 1f, c);
-            shapesGlow.Ellipse(new Vector2(800f, judgeY), judgeW / 2f * (1f + sk * 0.5f), 18f + sk * 30f, 16f, new Color(pale.r, pale.g, pale.b, 0.5f * (1f - sk)));
-            JudgeLine(Color.white, 1f - sk);
-        }
+        // C2: 눌려서 한 줄이 된 레코드가 판정선으로 스며든다
+        if (holoK > 0.6f && holoK < 1f) JudgeLine(Color.white, 1f - Seg(holoK, 0.85f, 1f));
+
+        // C2: 빛의 벽이 판정선 → 게이트로 나아가며 지나간 자리에 레인을 그린다 (덮개를 걷어 냄)
+        RenderScan(H1);
 
         // 카운트인: 숫자, 링, 판정선 펄스
         string n = "";
@@ -988,6 +1023,42 @@ public class SongTransitionOverlay : MonoBehaviour
 
         shapes.End();
         shapesGlow.End();
+    }
+
+    private readonly Vector2[] quad4 = new Vector2[4];
+
+    private void RenderScan(float H1)
+    {
+        cover.Begin();
+        float s = Eio(Seg(t, H1 + ScanStart, H1 + ScanEnd));
+        float jz = JudgeZ, gz = GateZ;
+        // 아직 그리지 않은 하이웨이(빛의 벽 앞쪽)를 어두운 바닥으로 덮는다. 인게임 화면이 보이기 시작할 때부터
+        if (t >= H1 + 1.0f && s < 1f)
+        {
+            float zf = Mathf.Lerp(jz, gz, s);
+            float z0 = Mathf.Max(zf, jz - 0.2f), z1 = gz + 0.6f;
+            Color dark = new Color(0.01f, 0.035f, 0.04f, 0.94f);
+            quad4[0] = Proj(-HalfWidth(z0) - 0.5f, 0f, z0); quad4[1] = Proj(HalfWidth(z0) + 0.5f, 0f, z0);
+            quad4[2] = Proj(HalfWidth(z1) + 0.5f, 0f, z1); quad4[3] = Proj(-HalfWidth(z1) - 0.5f, 0f, z1);
+            cover.Polygon(quad4, dark);
+            // 게이트 기둥·바 가리기 (세로 판)
+            quad4[0] = Proj(-HalfWidth(gz) - 0.4f, -0.05f, gz); quad4[1] = Proj(HalfWidth(gz) + 0.4f, -0.05f, gz);
+            quad4[2] = Proj(HalfWidth(gz) + 0.4f, 0.8f, gz); quad4[3] = Proj(-HalfWidth(gz) - 0.4f, 0.8f, gz);
+            cover.Polygon(quad4, dark);
+
+            // 빛의 벽 (아래가 밝고 위로 사라짐, 갈수록 낮아짐)
+            if (s > 0f)
+            {
+                float hgt = 1.4f * (1f - s) + 0.2f;
+                Color pale = new Color(0.79f, 1f, 0.94f);
+                Vector2 l = Proj(-HalfWidth(zf), 0f, zf), r = Proj(HalfWidth(zf), 0f, zf);
+                Vector2 lt = Proj(-HalfWidth(zf), hgt, zf), rt = Proj(HalfWidth(zf), hgt, zf);
+                shapes.Gradient(l, r, rt, lt, new Color(pale.r, pale.g, pale.b, 0.75f), new Color(pale.r, pale.g, pale.b, 0f));
+                shapes.Line(l, r, 4f, Color.white);
+                shapesGlow.Line(l, r, 26f, new Color(pale.r, pale.g, pale.b, 0.7f));
+            }
+        }
+        cover.End();
     }
 
     private void JudgeLine(Color c, float a)

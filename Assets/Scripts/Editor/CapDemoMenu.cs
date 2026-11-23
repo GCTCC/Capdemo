@@ -23,8 +23,8 @@ public static class CapDemoMenu
     [MenuItem("Tools/CapDemo/플레이 데이터/확인")]
     private static void LogProgress()
     {
-        Debug.Log($"[CapDemo] 클리어한 챕터: {SaveData.GetChaptersCleared()}, 이름: '{SaveData.GetPlayerName()}', " +
-                  $"맵 바로 Play 시 튜토리얼 단계: {TestStep}");
+        string test = (int)TestStep == TutorialRun.UseSavedStep ? "저장된 단계" : TestStep.ToString();
+        Debug.Log($"[CapDemo] {SaveData.Summary()}\n맵 바로 Play 시 튜토리얼 단계: {test}");
     }
 
     // ── 튜토리얼 테스트: 맵 씬을 바로 Play할 때의 시작 단계 (타이틀부터 Play하면 무시된다) ──
@@ -47,6 +47,20 @@ public static class CapDemoMenu
 
     [MenuItem(TestMenu + "튜토리얼 끝 (장면 없음)", false, 3)]
     private static void TestDone() => SetTest(TutorialStep.Done);
+
+    [MenuItem(TestMenu + "저장된 단계 그대로 (save.json)", false, 20)]
+    private static void TestSaved()
+    {
+        EditorPrefs.SetInt(TutorialRun.TestStepPrefKey, TutorialRun.UseSavedStep);
+        Debug.Log($"[CapDemo] 맵 씬을 바로 Play하면 save.json에 저장된 튜토리얼 단계({SaveData.GetTutorialStep()})로 시작합니다.");
+    }
+
+    [MenuItem(TestMenu + "저장된 단계 그대로 (save.json)", true)]
+    private static bool CheckSaved()
+    {
+        Menu.SetChecked(TestMenu + "저장된 단계 그대로 (save.json)", (int)TestStep == TutorialRun.UseSavedStep);
+        return true;
+    }
 
     [MenuItem(TestMenu + "프롤로그 (집)", true)]
     private static bool CheckPrologue() => Check(TestMenu + "프롤로그 (집)", TutorialStep.Prologue);

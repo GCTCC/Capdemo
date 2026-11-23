@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 645291333e0bd20438ba038cf046836f, type: 3}
+  m_Name: "\uAD6C\uC5ED_Area2_LiveHouse"
+  m_EditorClassIdentifier: Assembly-CSharp::AreaData
+  id: area.livehouse
+  memo: "\uC608\uC2DC \uBB38\uAD6C. \uC7AC\uC774\uAC00 \uBC14\uAFD4 \uC4F0\uAE30"
+  sceneName: Area2_LiveHouse
+  connectedAreas: []
+  displayName: "\uB7EC\uC2A4\uD2B8 \uD640"
+  topLine: "B2 \xB7 UNLISTED"
+  bottomLine: "\uC74C\uD5A5 \uD5C8\uAC00 \xB7 \uD544\uC694 \uC5C6\uC74C"
+  controlledByOtone: 0
+  graffiti: "\uC5EC\uAE34 \uC6B0\uB9AC \uAD6C\uC5ED"
+  showOnFirstVisit: 1

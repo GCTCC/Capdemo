@@ -6,6 +6,8 @@
 //  - _Scan: 재킷 위 가는 스캔라인 세기 (1px 선 / 3px 간격)
 //  - _BlurArc: 회전 잔상 (라디안, 부호 = 방향). 그림을 _Spin부터 _Spin + _BlurArc까지 10번 읽어 고르게 섞는다.
 //              0이면 예전과 똑같이 한 번만 읽는다. 120°가 넘으면 채도도 조금 뺀다 (시안 vblur와 같은 공식)
+//  - _Holo: 홀로그램처럼 사라지기 (0이면 예전과 같음). 민트로 물들고 화면 가로 줄무늬가 생긴다 (전환 C2 "지직 꺼짐")
+//  - _Split: RGB 분리 (판 크기 대비 비율). 테두리 왼쪽에 빨강, 오른쪽에 시안 번짐
 Shader "CapDemo/UI/TransitionDisc"
 {
     Properties
@@ -21,6 +23,9 @@ Shader "CapDemo/UI/TransitionDisc"
         _Scan ("Scanline", Range(0, 1)) = 0
         _ScanColor ("Scanline Color", Color) = (0.64, 0.92, 0.84, 1)
         _Edge ("Edge Softness", Range(0.0005, 0.05)) = 0.004
+        _Holo ("Hologram", Range(0, 1)) = 0
+        _HoloColor ("Hologram Color", Color) = (0.64, 0.92, 0.84, 1)
+        _Split ("RGB Split", Range(0, 0.1)) = 0
         [Toggle] _Additive ("Additive (RGB split)", Float) = 0
 
         _StencilComp ("Stencil Comparison", Float) = 8
@@ -60,12 +65,13 @@ Shader "CapDemo/UI/TransitionDisc"
 
             sampler2D _MainTex;
             fixed4 _Color;
-            float _Radius, _Spin, _Hole, _Scan, _Edge, _BlurArc;
+            float _Radius, _Spin, _Hole, _Scan, _Edge, _BlurArc, _Holo, _Split;
+            fixed4 _HoloColor;
             float4 _UVRect;
             fixed4 _HoleColor, _ScanColor;
 
             struct appdata { float4 vertex : POSITION; float2 uv : TEXCOORD0; fixed4 color : COLOR; };
-            struct v2f { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; fixed4 color : COLOR; };
+            struct v2f { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; fixed4 color : COLOR; float4 screen : TEXCOORD1; };
 
             v2f vert (appdata v)
             {
@@ -73,6 +79,7 @@ Shader "CapDemo/UI/TransitionDisc"
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
                 o.color = v.color * _Color;
+                o.screen = ComputeScreenPos(o.pos);
                 return o;
             }
 
@@ -84,14 +91,19 @@ Shader "CapDemo/UI/TransitionDisc"
                 return tex2D(_MainTex, _UVRect.xy + rp * _UVRect.zw);
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            // 둥근 사각형 마스크 (r = 0.5면 원)
+            float ShapeMask(float2 p)
             {
-                float2 p = i.uv - 0.5;
-                // 둥근 사각형 마스크 (r = 0.5면 원)
                 float r = _Radius;
                 float2 q = abs(p) - (0.5 - r);
                 float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
-                float mask = saturate(-d / _Edge + 0.5);
+                return saturate(-d / _Edge + 0.5);
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                float2 p = i.uv - 0.5;
+                float mask = ShapeMask(p);
 
                 // 그림만 회전 (회전 잔상이 있으면 원 방향으로 10번 읽어 섞는다)
                 fixed4 col;
@@ -126,7 +138,29 @@ Shader "CapDemo/UI/TransitionDisc"
                     col.rgb = lerp(_HoleColor.rgb, col.rgb, h);
                 }
 
+                // 홀로그램처럼: 민트로 물들고 화면 가로 줄무늬로 비어 간다
+                if (_Holo > 0)
+                {
+                    float l = dot(col.rgb, float3(0.299, 0.587, 0.114));
+                    float3 holoCol = _HoloColor.rgb * (0.45 + 0.9 * l);
+                    col.rgb = lerp(col.rgb, holoCol, saturate(_Holo * 2.0) * 0.85);
+                    float py = i.screen.y / max(i.screen.w, 0.0001) * _ScreenParams.y;
+                    float stripe = step(fmod(py, 4.0), 1.5);
+                    col.a *= 1.0 - stripe * saturate(_Holo * 1.4) * 0.7;
+                }
+
                 col.a *= mask;
+
+                // RGB 분리: 모양을 좌우로 밀어 빨강·시안 번짐을 더한다
+                if (_Split > 0)
+                {
+                    float mR = ShapeMask(p + float2(_Split, 0));
+                    float mB = ShapeMask(p - float2(_Split, 0));
+                    float fr = max(0, mR - mask), fb = max(0, mB - mask);
+                    col.rgb = col.rgb * col.a + float3(1.0, 0.30, 0.37) * fr * 0.8 + float3(0.35, 0.91, 1.0) * fb * 0.8;
+                    col.a = saturate(col.a + (fr + fb) * 0.6 * i.color.a);
+                    col.rgb /= max(col.a, 0.0001);
+                }
                 return col;
             }
             ENDCG

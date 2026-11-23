@@ -13,15 +13,18 @@ MonoBehaviour:
   m_Name: Lobby
   m_EditorClassIdentifier: 
   entries:
-  - image: {fileID: 21300000, guid: 75b2633c8a786d14fa13e4a800e310cf, type: 3}
+  - image: {fileID: -4675460473173133062, guid: 1441a01159fce23428d058bc9c144386, type: 3}
     showLamps: 1
-  - image: {fileID: 21300000, guid: c66eabfc4bf1799469fe3f58877b4963, type: 3}
-    showLamps: 0
+  - image: {fileID: 669561769660236073, guid: 5878b1c59a891fb46b2ce0cde885a10a, type: 3}
+    showLamps: 1
+  - image: {fileID: -3000935832658342462, guid: ffcebc2b4ab20fd4a84314f8d95d0525, type: 3}
+    showLamps: 1
   - image: {fileID: -6375797614099437621, guid: a796a4c7e25e5f642b9764c6d2d8b01b, type: 3}
     showLamps: 0
-  - image: {fileID: 21300000, guid: dcdd113493334d84bb2285d98a16f7e1, type: 3}
-    showLamps: 0
-  - image: {fileID: 21300000, guid: 36cd452a898b47b4a9b900e7e1432e06, type: 3}
+  - image: {fileID: 2458508995440444036, guid: 955b87ca47ba8d748ba64f1d515fd9df, type: 3}
     showLamps: 0
   - image: {fileID: 21300000, guid: c0842b321fc89ad4cb73e8398dc146ff, type: 3}
     showLamps: 0
+  - image: {fileID: 5914667563149835715, guid: b8a8c966d06ecb747bc709fd42b96a94, type: 3}
+    showLamps: 0
+  video: {fileID: 0}

@@ -163,16 +163,16 @@ public class RhythmPlayFieldV2 : MonoBehaviour
             IngameV2Art.WithAlpha(mint, 0.08f), IngameV2Art.WithAlpha(mint, 0.025f));
         AddStatic("Holo Floor", NewMaterial("V2 Floor", white, Color.white, false, 0.35f), 1);
 
-        // 3) 레인 구분선: 민트 0.22, 가운데(3|3)만 0.55
+        // 3) 레인 구분선: 모두 민트 0.22, 같은 굵기
+        //    (2026-11-23 재이: 가운데 선만 두꺼워 보인다는 피드백으로 가운데 강조를 없앰)
         batch.Clear();
         for (int i = 1; i < lanes; i++)
         {
             float r = i / (float)lanes;
             float nx = Mathf.Lerp(-nearHalfWidth, nearHalfWidth, r);
             float fx = Mathf.Lerp(-HalfWidthAtZ(endZ), HalfWidthAtZ(endZ), r);
-            bool center = i == lanes / 2;
-            float a = center ? 0.55f : 0.22f;
-            float w = center ? 0.03f : 0.02f;
+            const float a = 0.22f;
+            const float w = 0.02f;
             batch.Quad(P(nx - w, 0.01f, nearZ), P(nx + w, 0.01f, nearZ), P(fx - w * 0.4f, 0.01f, endZ), P(fx + w * 0.4f, 0.01f, endZ),
                 IngameV2Art.WithAlpha(mint, a), IngameV2Art.WithAlpha(mint, a * 0.8f));
         }

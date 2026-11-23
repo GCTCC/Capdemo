@@ -9,9 +9,10 @@ using UnityEngine.UI;
 //
 // 타임라인 (FinishSong이 불린 순간 0초, Time.unscaledDeltaTime 기준)
 //   0.35 ~ 1.7   FULL COMBO(또는 CLEAR) 배너 + 링 (인게임 화면 위)
-//   1.5  ~ 2.25  하이웨이가 판정선 쪽으로 접히며 빛남, 인게임 화면 어두워지며 사라짐
-//   1.95 ~ 2.7   판정선에 누워 있던 레코드가 일어나며 가운데로 (회전 감속, 회전 잔상)
-//   2.7  ~ 3.0   레코드 → 정사각 재킷
+//   1.5  ~ 2.1   (C2) 빛의 벽이 게이트 → 판정선으로 돌아오며 하이웨이를 지움, 인게임 화면 어두워지며 사라짐
+//   2.05 ~ 2.45  (C2) 판정선 한 줄이 위아래로 벌어지며 홀로그램 레코드가 맺힘 (민트·줄무늬·RGB 분리 → 원래 색)
+//   2.3  ~ 2.8   판정선에 누워 있던 레코드가 일어나며 가운데로 (회전 감속, 회전 잔상)
+//   2.75 ~ 3.0   레코드 → 정사각 재킷
 //   2.95         결과 씬 활성화 (미리 불러 둔 것). 검은 화면이 0.5초 동안 걷히며 결과 화면이 떠오른다
 //   3.0  ~ 3.55  재킷이 결과 화면 재킷 자리(96,200 / 380px)로 내려앉음
 //   3.55 ~ 4.65  착지 효과 (외곽선 퍼짐은 여기서, 나머지는 ResultV2Controller가 그린다) → 오버레이 끝
@@ -342,16 +343,15 @@ public class ResultTransitionOverlay : MonoBehaviour
         shapes.Begin();
         shapesGlow.Begin();
 
-        // 검은 판: 인게임 화면을 어둡게(밝기 1 - fo x 0.5) 하며 지우고(1.5 ~ 2.1), 결과 씬이 켜지면 0.5초에 걸쳐 걷는다
-        float fo = Eio(Seg(t, 1.5f, 2.05f));
-        float gameA = 1f - Seg(t, 1.5f, 2.1f);
-        float blackA = 1f - gameA * (1f - fo * 0.5f);
+        // 검은 판: 인게임 화면을 어둡게 하며 지우고(1.5 ~ 2.1), 결과 씬이 켜지면 0.5초에 걸쳐 걷는다
+        float fo = Eio(Seg(t, 1.5f, 2.1f));
+        float blackA = Seg(t, 1.5f, 2.1f) * 0.6f + Seg(t, 1.9f, 2.1f) * 0.4f;
         if (ResultActivated) blackA = 1f - Seg(t, activatedAt, activatedAt + ResultFadeIn);
         black.color = new Color(0, 0, 0, blackA);
         black.raycastTarget = !ResultActivated;
 
         RenderBanner();
-        RenderFold(fo);
+        RenderScanBack(fo);
         RenderRecord();
         RenderGlitch(t > 1.5f && t < 1.72f);
         RenderLandOutline();
@@ -381,47 +381,70 @@ public class ResultTransitionOverlay : MonoBehaviour
         }
     }
 
-    // 하이웨이가 판정선 쪽으로 접히는 빛 면 + 판정선
-    private void RenderFold(float fo)
+    // (C2) 빛의 벽이 게이트에서 판정선까지 돌아오며 지나간 자리(벽 뒤쪽)의 하이웨이를 지운다. 판정선은 남는다
+    private void RenderScanBack(float fo)
     {
-        if (!(t > 1.5f && t < 2.25f)) return;
+        if (!(t > 1.5f && t < 2.2f)) return;
         float zf = Mathf.Lerp(gateZ, judgeZ, fo);
-        float a = t < 1.95f ? 0.35f : 0.35f * (1f - Seg(t, 1.95f, 2.25f));
-        float hj = HalfWidth(judgeZ), hf = HalfWidth(zf);
+        Color dark = new Color(0.01f, 0.03f, 0.035f, 0.95f);
+        // 지운 자리 덮개 (벽 ~ 게이트 너머). 벽이 도착한 뒤(검은 판이 다 덮음)에는 레코드를 가리지 않게 그리지 않는다
+        if (fo < 1f) {
+        float z1 = gateZ + 0.6f;
         pts.Clear();
-        pts.Add(Floor(-hj, judgeZ));
-        pts.Add(Floor(hj, judgeZ));
-        pts.Add(Floor(hf, zf));
-        pts.Add(Floor(-hf, zf));
-        shapes.Polygon(pts, new Color(Pale.r, Pale.g, Pale.b, a));
-        shapes.Polyline(pts, 1.5f, new Color(Pale.r, Pale.g, Pale.b, Mathf.Min(1f, a * 2f)), true);
-        shapesGlow.Polyline(pts, 12f, new Color(Pale.r, Pale.g, Pale.b, Mathf.Min(1f, a * 2f) * 0.6f), true);
+        pts.Add(Floor(-HalfWidth(zf) - 0.5f, zf));
+        pts.Add(Floor(HalfWidth(zf) + 0.5f, zf));
+        pts.Add(Floor(HalfWidth(z1) + 0.5f, z1));
+        pts.Add(Floor(-HalfWidth(z1) - 0.5f, z1));
+        shapes.Polygon(pts, dark);
+        pts.Clear();
+        pts.Add(Point(-HalfWidth(gateZ) - 0.4f, -0.05f, gateZ));
+        pts.Add(Point(HalfWidth(gateZ) + 0.4f, -0.05f, gateZ));
+        pts.Add(Point(HalfWidth(gateZ) + 0.4f, 0.8f, gateZ));
+        pts.Add(Point(-HalfWidth(gateZ) - 0.4f, 0.8f, gateZ));
+        shapes.Polygon(pts, dark);
+        }
 
-        Vector2 l = new Vector2(800f - judgeW / 2f, judgeY), r = new Vector2(800f + judgeW / 2f, judgeY);
-        float la = Mathf.Min(1f, a * 3f);
-        shapes.Line(l, r, 2f + fo * 4f, new Color(1f, 1f, 1f, la));
-        shapesGlow.Line(l, r, 18f + fo * 8f, new Color(1f, 1f, 1f, 0.6f * la));
+        // 빛의 벽 (돌아올수록 높아짐)
+        if (fo > 0f && fo < 1f)
+        {
+            float hgt = 1.4f * fo + 0.2f;
+            Vector2 l = Floor(-HalfWidth(zf), zf), r = Floor(HalfWidth(zf), zf);
+            Vector2 lt = Point(-HalfWidth(zf), hgt, zf), rt = Point(HalfWidth(zf), hgt, zf);
+            shapes.Gradient(l, r, rt, lt, new Color(Pale.r, Pale.g, Pale.b, 0.75f), new Color(Pale.r, Pale.g, Pale.b, 0f));
+            shapes.Line(l, r, 4f, Color.white);
+            shapesGlow.Line(l, r, 26f, new Color(Pale.r, Pale.g, Pale.b, 0.7f));
+        }
+
+        // 판정선: 벽이 도착하면 한 번 밝아졌다가 레코드로 벌어진다
+        Vector2 jl = new Vector2(800f - judgeW / 2f, judgeY), jr = new Vector2(800f + judgeW / 2f, judgeY);
+        float la = 0.6f + 0.4f * Seg(t, 1.95f, 2.1f);
+        shapes.Line(jl, jr, 3f + fo * 3f, new Color(1f, 1f, 1f, la));
+        shapesGlow.Line(jl, jr, 18f + fo * 8f, new Color(1f, 1f, 1f, 0.6f * la));
     }
 
     private void RenderRecord()
     {
         float op = 0f, x = 800f, y = 430f, sz = 400f, rx = 0f, rz = 0f, spin = 0f, omega = 0f, m = 1f;
-        if (t >= 1.95f)
+        float holoK = 0f;
+        if (t >= 2.05f)
         {
-            float u = Eio(Seg(t, 1.95f, 2.7f));
+            float u = Eio(Seg(t, 2.3f, 2.8f));
             if (RiseFromJudgeLine)
             {
                 y = Mathf.Lerp(judgeY, 430f, u);
                 sz = Mathf.Lerp(judgeW * 0.98f, 400f, u);
             }
-            rx = Mathf.Lerp(78f, 0f, u);
-            op = Seg(t, 1.95f, 2.1f);
+            // (C2) 판정선 한 줄이 위아래로 벌어지며 홀로그램 레코드가 맺힌다 (곡 선택 → 인게임의 "지직 꺼짐"을 거꾸로)
+            holoK = 1f - Seg(t, 2.05f, 2.45f);
+            rx = Mathf.Lerp(78f + 12f * Eio(Seg(holoK, 0.35f, 0.8f)), 0f, u);
+            op = 1f - Seg(holoK, 0.75f, 1f);
+            if (holoK > 0f) op *= 0.75f + 0.25f * Hash(Mathf.Floor(t * 30f));
 
-            // 감속 회전: 각도 = 2400 x (d - d²/2), 각속도 = 2400 x (1 - d), 2.95초에 멈춤
-            float d = Mathf.Min(t - 1.95f, 1f);
+            // 감속 회전: 각도 = 2400 x (d - d²/2), 각속도 = 2400 x (1 - d), 1초 뒤 멈춤
+            float d = Mathf.Min(t - 2.05f, 1f);
             spin = 2400f * (d - d * d * 0.5f);
             omega = 2400f * (1f - d);
-            m = 1f - Seg(t, 2.7f, 3.0f);
+            m = 1f - Seg(t, 2.75f, 3.0f);
 
             // 착지
             float f = Eio(Seg(t, HoldT, LandT));
@@ -451,6 +474,12 @@ public class ResultTransitionOverlay : MonoBehaviour
         groovesMat.SetFloat("_Spin", spinRad);
         labelMat.SetFloat("_Spin", spinRad);
         labelMat.SetFloat("_BlurArc", m > 0f ? SongTransitionOverlay.SpinBlurArc(omega) : 0f);
+        float split = 0.025f * Mathf.Sin(Mathf.Min(1f, holoK * 1.4f) * Mathf.PI);
+        foreach (var hm in new[] { groovesMat, labelMat, sheenMat })
+        {
+            hm.SetFloat("_Holo", holoK);
+            hm.SetFloat("_Split", hm == groovesMat ? split : 0f);
+        }
         grooves.color = new Color(1, 1, 1, op * m);
         label.color = new Color(1, 1, 1, op * m);
         sheen.color = new Color(1, 1, 1, op * m);
@@ -548,6 +577,17 @@ public class ResultTransitionOverlay : MonoBehaviour
             return new Vector2(800f + (s.x - Screen.width * 0.5f) / k, 450f - (s.y - Screen.height * 0.5f) / k);
         }
         return SongTransitionOverlay.PJ(x, 0f, z);
+    }
+
+    private Vector2 Point(float x, float y, float z)
+    {
+        if (playField != null && gameCamera != null)
+        {
+            Vector3 s = gameCamera.WorldToScreenPoint(playField.transform.TransformPoint(new Vector3(x, y, z)));
+            float k = Mathf.Max(0.0001f, Mathf.Min(Screen.width / 1600f, Screen.height / 900f));
+            return new Vector2(800f + (s.x - Screen.width * 0.5f) / k, 450f - (s.y - Screen.height * 0.5f) / k);
+        }
+        return SongTransitionOverlay.PJ(x, y, z);
     }
 
     // ── 도우미 ──

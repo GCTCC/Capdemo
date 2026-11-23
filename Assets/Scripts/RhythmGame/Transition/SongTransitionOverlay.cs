@@ -704,7 +704,7 @@ public class SongTransitionOverlay : MonoBehaviour
     }
 
     // transition.html의 PJ와 같은 계산 (카메라 (0,8,-9.2) → (0,0,8.2), 세로 FOV 55°, 1600x900)
-    private static Vector2 PJ(float x, float y, float z)
+    public static Vector2 PJ(float x, float y, float z)
     {
         float tn = Mathf.Tan(55f * 0.5f * Mathf.Deg2Rad);
         Vector3 c = new Vector3(0, 8, -9.2f), target = new Vector3(0, 0, 8.2f);
@@ -723,6 +723,15 @@ public class SongTransitionOverlay : MonoBehaviour
     private static float Eo(float u) { return 1f - Mathf.Pow(1f - u, 3f); }
     private static float Eback(float u) { return 1f + 2.2f * Mathf.Pow(u - 1f, 3f) + 1.2f * Mathf.Pow(u - 1f, 2f); }
     private static float Hash(float n) { float x = Mathf.Sin(n * 127.1f + 311.7f) * 43758.5453f; return x - Mathf.Floor(x); }
+
+    // 회전 잔상 각도 (시안 vblur): arc = min(340°, |각속도| / 30 x 0.9), 회전 반대 방향으로 번진다.
+    // 셰이더 _BlurArc 값(라디안, 부호 포함)으로 돌려준다. 곡 끝 → 결과 전환(ResultTransitionOverlay)도 같이 쓴다
+    public static float SpinBlurArc(float omegaDegPerSec)
+    {
+        float arc = Mathf.Min(340f, Mathf.Abs(omegaDegPerSec) / 30f * 0.9f);
+        if (arc < 1f) return 0f;
+        return (omegaDegPerSec < 0f ? -1f : 1f) * arc * Mathf.Deg2Rad;
+    }
 
     private void Render()
     {
@@ -802,13 +811,13 @@ public class SongTransitionOverlay : MonoBehaviour
             ry = Mathf.Lerp(ry, 0f, u); rz = Mathf.Lerp(rz, 0f, u);
         }
 
-        float spin = 0f, m = 0f;
+        float spin = 0f, m = 0f, omega = 0f;
         if (t >= H1)
         {
             m = Seg(t, H1 + 0.25f, H1 + 0.5f);
             br = 50f * Eio(m);
             float sp0 = H1 + 0.4f;
-            if (t > sp0) { float d = t - sp0; spin = d * d * 2400f; }
+            if (t > sp0) { float d = t - sp0; spin = d * d * 2400f; omega = 4800f * d; }
             float le = Eio(Seg(t, H1 + 0.78f, H1 + 1.12f));
             x = Mathf.Lerp(x, 800f, le); y = Mathf.Lerp(y, judgeY, le);
             rx = Mathf.Lerp(0f, 78f, le); sz = Mathf.Lerp(400f, judgeW * 0.98f, le);
@@ -855,6 +864,7 @@ public class SongTransitionOverlay : MonoBehaviour
         grooves.color = new Color(1, 1, 1, alpha * m);
         label.localRect = new Rect(0.31f, 0.31f, 0.38f, 0.38f);
         labelMat.SetFloat("_Spin", spinRad);
+        labelMat.SetFloat("_BlurArc", SpinBlurArc(omega));
         label.SetMaterialDirty();
         grooves.SetMaterialDirty();
         label.color = new Color(1, 1, 1, alpha * m);

@@ -4,6 +4,8 @@
 //  - _UVRect: 원본 그림에서 쓸 부분 (정사각형이 아닌 재킷은 가운데 1:1만)
 //  - _Hole: 가운데 작은 구멍 반지름 (레코드 라벨용, 0이면 없음)
 //  - _Scan: 재킷 위 가는 스캔라인 세기 (1px 선 / 3px 간격)
+//  - _BlurArc: 회전 잔상 (라디안, 부호 = 방향). 그림을 _Spin부터 _Spin + _BlurArc까지 10번 읽어 고르게 섞는다.
+//              0이면 예전과 똑같이 한 번만 읽는다. 120°가 넘으면 채도도 조금 뺀다 (시안 vblur와 같은 공식)
 Shader "CapDemo/UI/TransitionDisc"
 {
     Properties
@@ -12,6 +14,7 @@ Shader "CapDemo/UI/TransitionDisc"
         _Color ("Tint", Color) = (1,1,1,1)
         _Radius ("Corner Radius", Range(0, 0.5)) = 0
         _Spin ("Spin (rad)", Float) = 0
+        _BlurArc ("Spin Blur Arc (rad)", Float) = 0
         _UVRect ("UV Rect", Vector) = (0, 0, 1, 1)
         _Hole ("Center Hole", Range(0, 0.5)) = 0
         _HoleColor ("Hole Color", Color) = (0.02, 0.024, 0.024, 1)
@@ -57,7 +60,7 @@ Shader "CapDemo/UI/TransitionDisc"
 
             sampler2D _MainTex;
             fixed4 _Color;
-            float _Radius, _Spin, _Hole, _Scan, _Edge;
+            float _Radius, _Spin, _Hole, _Scan, _Edge, _BlurArc;
             float4 _UVRect;
             fixed4 _HoleColor, _ScanColor;
 
@@ -73,6 +76,14 @@ Shader "CapDemo/UI/TransitionDisc"
                 return o;
             }
 
+            // 판 가운데 기준 p를 ang만큼 돌려 원본 그림(_UVRect 안)에서 읽는다
+            fixed4 SampleSpin(float2 p, float ang)
+            {
+                float s = sin(ang), c = cos(ang);
+                float2 rp = float2(c * p.x - s * p.y, s * p.x + c * p.y) + 0.5;
+                return tex2D(_MainTex, _UVRect.xy + rp * _UVRect.zw);
+            }
+
             fixed4 frag (v2f i) : SV_Target
             {
                 float2 p = i.uv - 0.5;
@@ -82,11 +93,24 @@ Shader "CapDemo/UI/TransitionDisc"
                 float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
                 float mask = saturate(-d / _Edge + 0.5);
 
-                // 그림만 회전
-                float s = sin(_Spin), c = cos(_Spin);
-                float2 rp = float2(c * p.x - s * p.y, s * p.x + c * p.y) + 0.5;
-                float2 tuv = _UVRect.xy + rp * _UVRect.zw;
-                fixed4 col = tex2D(_MainTex, tuv) * i.color;
+                // 그림만 회전 (회전 잔상이 있으면 원 방향으로 10번 읽어 섞는다)
+                fixed4 col;
+                if (abs(_BlurArc) > 0.0001)
+                {
+                    float4 sum = 0;
+                    [unroll]
+                    for (int k = 0; k < 10; k++) sum += SampleSpin(p, _Spin + _BlurArc * (k / 9.0));
+                    col = sum * 0.1;
+                    float arcDeg = abs(_BlurArc) * 57.29578;
+                    if (arcDeg > 120.0)
+                    {
+                        float sat = 1.0 - min(0.4, (arcDeg - 120.0) / 500.0);
+                        float l = dot(col.rgb, float3(0.299, 0.587, 0.114));
+                        col.rgb = lerp(float3(l, l, l), col.rgb, sat);
+                    }
+                }
+                else col = SampleSpin(p, _Spin);
+                col *= i.color;
 
                 // 재킷 스캔라인 (위에서 3칸마다 1칸)
                 if (_Scan > 0)

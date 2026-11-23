@@ -574,7 +574,8 @@ public class RhythmGameUIV2 : MonoBehaviour
     private void OnScoreChanged(int score)
     {
         scoreFrom = shownScore;
-        scoreTo = score;
+        // 화면 점수는 V2 콤보 배율 점수를 따른다
+        scoreTo = Controller != null ? Controller.ComboScore : score;
         scoreT = 0f;
         RecalcAccuracy();
     }

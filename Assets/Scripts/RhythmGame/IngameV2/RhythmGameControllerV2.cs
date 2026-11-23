@@ -82,6 +82,13 @@ public class RhythmGameControllerV2 : MonoBehaviour
     private double lastSignedOffset;
     private readonly bool[] autoHeld = new bool[LaneCount];
 
+    // 콤보 배율 점수 (V2 전용). 원본 JudgementScoreManager 점수는 그대로 두고 여기서 따로 쌓는다.
+    // 배율 = 1 + (콤보 / 50) x 0.1, 최대 1.5 (0~49 x1.0, 50~99 x1.1 … 200+ x1.5)
+    private const int ComboStep = 50;
+    private const float ComboStepBonus = 0.1f;
+    private const float MaxComboMultiplier = 1.5f;
+    private int comboScore;
+
     public event Action<JudgementResult, double> JudgedSigned;
 
     public bool IsGameplayActive { get { return gameplayActive; } }
@@ -97,6 +104,14 @@ public class RhythmGameControllerV2 : MonoBehaviour
     // 곡 시작 전(전환 연출 카운트인)에 HUD가 보여 줄 BPM
     public float PendingBpm { get { return transitionChart != null ? transitionChart.SafeBpm : 0f; } }
     public JudgementScoreManager Scores { get { return judgementScoreManager; } }
+    // 화면·결과에 쓰는 V2 점수 (콤보 배율 적용)
+    public int ComboScore { get { return comboScore; } }
+    public float ComboMultiplier { get { return MultiplierFor(judgementScoreManager != null ? judgementScoreManager.Combo : 0); } }
+
+    private static float MultiplierFor(int combo)
+    {
+        return Mathf.Min(1f + (combo / ComboStep) * ComboStepBonus, MaxComboMultiplier);
+    }
 
     public string CurrentModeLabel
     {
@@ -234,7 +249,7 @@ public class RhythmGameControllerV2 : MonoBehaviour
     {
         if (gameplayActive && !isEndingSong)
         {
-            StartCoroutine(FinishSong());
+            StartCoroutine(FinishSong(true));
         }
     }
 
@@ -311,6 +326,7 @@ public class RhythmGameControllerV2 : MonoBehaviour
             currentSongTitle = selectedChart.title;
         }
         judgementScoreManager.ResetScore();
+        comboScore = 0;
         isEndingSong = false;
         for (int i = 0; i < autoHeld.Length; i++) autoHeld[i] = false;
 
@@ -362,12 +378,36 @@ public class RhythmGameControllerV2 : MonoBehaviour
         return syncedChartCopy;
     }
 
-    private IEnumerator FinishSong()
+    // failed = LIFE 0% 실패. 실패는 예전처럼 검은 화면으로 넘어간다
+    private IEnumerator FinishSong(bool failed = false)
     {
         if (isEndingSong) yield break;
 
         isEndingSong = true;
         gameplayActive = false;
+
+        // 곡을 끝까지 마쳤으면: 결과 전환 연출 A (레코드 착지). 결과 씬은 오버레이가 미리 불러 두었다가 켠다
+        if (!failed && Application.CanStreamedLevelBeLoaded(resultSceneName))
+        {
+            PlayResult playResult = CreatePlayResult();
+            RhythmResultContext.Set(currentSongTitle, playResult, entryMode, returnSceneName);
+            var startInfo = new ResultTransitionOverlay.StartInfo
+            {
+                song = currentSong,
+                result = playResult,
+                resultSceneName = resultSceneName,
+                playField = playField
+            };
+            if (ResultTransitionOverlay.TryStart(startInfo))
+            {
+                // 화면이 검게 가려질 때까지 남은 판정 이펙트는 그대로 두고, 가려지면 정리한다 (씬은 오버레이가 바꾼다)
+                var overlay = ResultTransitionOverlay.Active;
+                while (overlay != null && !overlay.ScreenCovered) yield return null;
+                StopCurrentGameplay();
+                yield break;
+            }
+        }
+
         yield return sceneTransition.FadeToBlack();
         if (Application.CanStreamedLevelBeLoaded(resultSceneName))
         {
@@ -446,6 +486,7 @@ public class RhythmGameControllerV2 : MonoBehaviour
         rhythmClock.StopClock();
         noteManager.ClearNotes();
         judgementScoreManager.ResetScore();
+        comboScore = 0;
         gameUI.SetVisible(false);
     }
 
@@ -461,7 +502,10 @@ public class RhythmGameControllerV2 : MonoBehaviour
 
     public PlayResult CreatePlayResult()
     {
-        return judgementScoreManager.CreatePlayResult();
+        // 판정 수·콤보는 원본 그대로, 점수만 V2 콤보 배율 점수로 바꿔 넘긴다
+        PlayResult result = judgementScoreManager.CreatePlayResult();
+        result.score = comboScore;
+        return result;
     }
 
     public bool IsLaneHeldForView(int lane)
@@ -591,6 +635,12 @@ public class RhythmGameControllerV2 : MonoBehaviour
 
     private void HandleJudged(JudgementResult result)
     {
+        // 콤보 배율 점수: Judged는 원본이 콤보를 올린 뒤, ScoreChanged보다 먼저 온다 → 지금 콤보로 배율 계산
+        int basePoints = result.judgement == JudgementType.Perfect ? 1000
+            : result.judgement == JudgementType.Great ? 700
+            : result.judgement == JudgementType.Good ? 400 : 0;
+        if (basePoints > 0) comboScore += Mathf.RoundToInt(basePoints * MultiplierFor(judgementScoreManager.Combo));
+
         double signed = result.noteId == lastInputNoteId ? lastSignedOffset : result.timeDifference;
         lastInputNoteId = int.MinValue;
         if (JudgedSigned != null) JudgedSigned(result, signed);

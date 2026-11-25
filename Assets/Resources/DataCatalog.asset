@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 219822ee27c6faf4ca8768e405b5ed44, type: 3}
+  m_Name: DataCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::DataCatalog
+  areas:
+  - {fileID: 11400000, guid: fb3ebd113ee63d24fb2220c0db95af10, type: 2}
+  - {fileID: 11400000, guid: 6290d0b24da44c447bd3776ff4059aa7, type: 2}
+  - {fileID: 11400000, guid: 33a172c3c0620724686db4980da4df6c, type: 2}
+  - {fileID: 11400000, guid: 731acd5193dca454fa4cba459d7dafbc, type: 2}
+  quests:
+  - {fileID: 11400000, guid: 2e93ad182894af44abe614b5043f36dc, type: 2}
+  guides:
+  - {fileID: 11400000, guid: b18b637243413274cb5f4a133eb46eae, type: 2}
+  controlsGuides:
+  - {fileID: 11400000, guid: 1301d94552c18064dae9b8b13c47725a, type: 2}
+  keyIcons: {fileID: 11400000, guid: 34903dfda2160c54bb69ed550792fcf6, type: 2}
+  distance: {fileID: 11400000, guid: 22d070d6711fff944a2e884cfbfcde11, type: 2}

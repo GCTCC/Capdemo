@@ -173,6 +173,48 @@ public static class IngameV2DevBridge
                     Write("pressed");
                 }
                 break;
+            case "finish":
+                {
+                    // finish 이름 0.5,1.0,... : 곡을 바로 끝내(결과 전환 시작) 지정한 초마다 캡처
+                    var parts = arg.Split(' ');
+                    var c = Object.FindAnyObjectByType<RhythmGameControllerV2>();
+                    if (c == null) { Write("no controller"); break; }
+                    var mi = typeof(RhythmGameControllerV2).GetMethod("FinishSong", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    double t0 = EditorApplication.timeSinceStartup;
+                    c.StartCoroutine((System.Collections.IEnumerator)mi.Invoke(c, new object[] { false }));
+                    if (parts.Length > 1)
+                        foreach (var tok in parts[1].Split(','))
+                            shots.Add(new System.Collections.Generic.KeyValuePair<double, string>(t0 + float.Parse(tok), parts[0] + "_" + tok.Replace('.', 'p')));
+                    Write("finishing");
+                }
+                break;
+            case "opensettings":
+                foreach (var it in Object.FindObjectsByType<HoloMenuItem>(FindObjectsSortMode.None))
+                    if (it.PanelPrefab != null) { it.OpenPanel(); Write("opened " + it.name); }
+                break;
+            case "escdown":
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(UnityEngine.InputSystem.Keyboard.current,
+                    new UnityEngine.InputSystem.LowLevel.KeyboardState(UnityEngine.InputSystem.Key.Escape));
+                Write("esc down");
+                break;
+            case "escup":
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(UnityEngine.InputSystem.Keyboard.current,
+                    new UnityEngine.InputSystem.LowLevel.KeyboardState());
+                Write("esc up");
+                break;
+            case "popups":
+                foreach (var pp in Object.FindObjectsByType<HoloPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                    Write(pp.name + " open=" + pp.IsOpen + " active=" + pp.gameObject.activeInHierarchy + " anyOpen=" + HoloPopup.AnyOpen + " kb=" + (UnityEngine.InputSystem.Keyboard.current != null));
+                break;
+            case "fontmulti":
+                foreach (var guid in AssetDatabase.FindAssets("t:TMP_FontAsset", new[] { "Assets/Art/Fonts" }))
+                {
+                    var fa = AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(AssetDatabase.GUIDToAssetPath(guid));
+                    if (fa == null || fa.atlasPopulationMode != TMPro.AtlasPopulationMode.Dynamic) continue;
+                    if (!fa.isMultiAtlasTexturesEnabled) { fa.isMultiAtlasTexturesEnabled = true; EditorUtility.SetDirty(fa); Write("multi atlas on: " + fa.name); }
+                }
+                AssetDatabase.SaveAssets();
+                break;
             case "tstate":
                 {
                     var ov = SongTransitionOverlay.Active;

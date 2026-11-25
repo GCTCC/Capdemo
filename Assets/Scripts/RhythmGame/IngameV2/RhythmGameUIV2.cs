@@ -151,14 +151,16 @@ public class RhythmGameUIV2 : MonoBehaviour
         SetScaler(go.GetComponent<CanvasScaler>());
         var rootRect = (RectTransform)go.transform;
 
-        var bg = IngameV2Art.Img("Live House", rootRect, background, Color.white * backgroundBrightness);
+        // 배경 그림: Tools > CapDemo > 일러스트 관리의 「인게임 배경」(Resources/Illustrations/Ingame.asset). 비어 있으면 Inspector의 Background
+        var bgSprite = IllustrationSet.FirstOr(IllustrationSet.Ingame, background);
+        var bg = IngameV2Art.Img("Live House", rootRect, bgSprite, Color.white * backgroundBrightness);
         bg.color = new Color(backgroundBrightness, backgroundBrightness, backgroundBrightness, 1f);
         IngameV2Art.Stretch(bg.rectTransform);
-        if (background)
+        if (bgSprite)
         {
             var fitter = bg.gameObject.AddComponent<AspectRatioFitter>();
             fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
-            fitter.aspectRatio = background.rect.width / background.rect.height;
+            fitter.aspectRatio = bgSprite.rect.width / bgSprite.rect.height;
         }
         else
         {
@@ -574,7 +576,8 @@ public class RhythmGameUIV2 : MonoBehaviour
     private void OnScoreChanged(int score)
     {
         scoreFrom = shownScore;
-        scoreTo = score;
+        // 화면 점수는 V2 콤보 배율 점수를 따른다
+        scoreTo = Controller != null ? Controller.ComboScore : score;
         scoreT = 0f;
         RecalcAccuracy();
     }

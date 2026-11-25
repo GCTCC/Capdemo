@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 허브 배경 그림 돌려 보기. 허브 씬에 들어올 때마다(다른 메뉴·씬에 갔다 올 때마다) 목록의 다음 그림으로 바뀐다.
-// 그림 넣는 법: Background > Parallax > Art 오브젝트를 선택하고, Inspector의 Backgrounds 목록에 그림(Sprite)을 끌어다 놓는다.
-//   또는 Assets/Art/UI/HoloHub/Backgrounds 폴더에 그림을 넣고 허브 만들기 메뉴를 다시 실행하면 자동으로 목록에 들어간다.
+// 그림 넣는 법: Tools > CapDemo > 일러스트 관리 창의 「로비 배경」 칸 (Resources/Illustrations/Lobby.asset).
+//   그 파일이 없거나 비어 있을 때만 아래 Backgrounds 목록(Background > Parallax > Art 오브젝트의 Inspector)을 쓴다.
 // 그림은 16:9 크기가 가장 잘 맞는다 (다른 비율이어도 화면을 꽉 채우도록 잘라서 보여 준다).
 [RequireComponent(typeof(Image))]
 public class HoloBackgroundCycle : MonoBehaviour
@@ -30,12 +30,17 @@ public class HoloBackgroundCycle : MonoBehaviour
 
     private void Awake()
     {
-        int count = 0;
-        foreach (var b in backgrounds) if (b != null && b.image) count++;
-        if (count == 0) return;
+        // 일러스트 관리 창의 로비 배경이 있으면 그걸, 없으면 Inspector 목록을 쓴다
+        var list = new System.Collections.Generic.List<Entry>();
+        var set = IllustrationSet.Load(IllustrationSet.Lobby);
+        if (set)
+            foreach (var e in set.Valid()) list.Add(new Entry { image = e.image, showLamps = e.showLamps });
+        if (list.Count == 0)
+            foreach (var b in backgrounds) if (b != null && b.image) list.Add(b);
+        if (list.Count == 0) return;
 
-        index = NextIndex(index);
-        var entry = backgrounds[index];
+        index = NextIndex(index, list.Count);
+        var entry = list[index];
         var image = GetComponent<Image>();
         image.sprite = entry.image;
 
@@ -44,15 +49,12 @@ public class HoloBackgroundCycle : MonoBehaviour
         if (lamps) lamps.SetActive(entry.showLamps);
     }
 
-    private int NextIndex(int previous)
+    private int NextIndex(int previous, int n)
     {
-        int n = backgrounds.Length;
-        for (int tries = 0; tries < n * 3; tries++)
-        {
-            int i = random ? Random.Range(0, n) : (previous + 1 + tries) % n;
-            if (random && n > 1 && i == previous) continue;
-            if (backgrounds[i] != null && backgrounds[i].image) return i;
-        }
-        return 0;
+        if (n <= 1) return 0;
+        if (!random) return (previous + 1) % n;
+        int i;
+        do i = Random.Range(0, n); while (i == previous);
+        return i;
     }
 }

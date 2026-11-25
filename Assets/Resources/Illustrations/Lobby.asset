@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ebfe976edf4d57a8784f65ac5747d9, type: 3}
+  m_Name: Lobby
+  m_EditorClassIdentifier: 
+  entries:
+  - image: {fileID: -4675460473173133062, guid: 1441a01159fce23428d058bc9c144386, type: 3}
+    showLamps: 1
+  - image: {fileID: 669561769660236073, guid: 5878b1c59a891fb46b2ce0cde885a10a, type: 3}
+    showLamps: 1
+  - image: {fileID: -3000935832658342462, guid: ffcebc2b4ab20fd4a84314f8d95d0525, type: 3}
+    showLamps: 1
+  - image: {fileID: -6375797614099437621, guid: a796a4c7e25e5f642b9764c6d2d8b01b, type: 3}
+    showLamps: 0
+  - image: {fileID: 2458508995440444036, guid: 955b87ca47ba8d748ba64f1d515fd9df, type: 3}
+    showLamps: 0
+  - image: {fileID: 21300000, guid: c0842b321fc89ad4cb73e8398dc146ff, type: 3}
+    showLamps: 0
+  - image: {fileID: 5914667563149835715, guid: b8a8c966d06ecb747bc709fd42b96a94, type: 3}
+    showLamps: 0
+  video: {fileID: 0}

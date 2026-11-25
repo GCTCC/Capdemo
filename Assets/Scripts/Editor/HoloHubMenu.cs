@@ -191,6 +191,170 @@ public static class HoloHubMenu
         go.transform.position = new Vector3(0, 0, -10);
     }
 
+    // 이미 만든 HoloHubScene에: 메뉴 글자를 영어(크게·위) + 한글(작게·아래)로 바꾸고,
+    // 오른쪽 위 스토리 진행도를 '스토리 모드 버튼이 선택됐을 때만 펼쳐지는' 패널로 옮긴다 (씬을 새로 만들지 않음)
+    [MenuItem("Tools/CapDemo/허브/메뉴 영어 위로 · 스토리 진행도 펼치기 (지금 씬에 적용)")]
+    public static void ApplyMenuLabelsAndStoryReveal()
+    {
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().path != ScenePath)
+        {
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        }
+        var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+        var tFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TitleFontPath);
+        var bFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(BodyFontPath);
+
+        HoloMenu menu = null;
+        foreach (var root in scene.GetRootGameObjects())
+            if (!menu) menu = root.GetComponentInChildren<HoloMenu>(true);
+        if (!menu)
+        {
+            EditorUtility.DisplayDialog("허브 메뉴", "씬에서 메인 메뉴(HoloMenu)를 찾지 못했어요.", "확인");
+            return;
+        }
+        var canvasRoot = menu.transform.root;
+        Undo.RegisterFullObjectHierarchyUndo(canvasRoot.gameObject, "메뉴 글자·스토리 진행도");
+
+        // 1) 메뉴 글자: 영어가 위·크게, 한글이 아래·작게
+        HoloMenuItem story = null;
+        int changed = 0;
+        foreach (var item in menu.GetComponentsInChildren<HoloMenuItem>(true))
+        {
+            if (item.OpensStory) story = item;
+            var titleT = item.transform.Find("Content/Title");
+            var subT = item.transform.Find("Content/Sub");
+            var title = titleT ? titleT.GetComponent<TextMeshProUGUI>() : null;
+            var sub = subT ? subT.GetComponent<TextMeshProUGUI>() : null;
+            if (!title || !sub) continue;
+            string korean = title.text, english = sub.text;
+            if (IsLatin(korean) && !IsLatin(english)) { var tmp = korean; korean = english; english = tmp; } // 이미 바꾼 경우
+            var content = new Box { rt = (RectTransform)title.transform.parent, w = 524, h = 96 };
+
+            title.text = english;
+            if (tFont) title.font = tFont;
+            title.fontSize = MenuTitleSize * K;
+            title.characterSpacing = MenuTitleSpacing;
+            PlaceRect(title.rectTransform, content, MenuTitleX, MenuTitleY, MenuTitleW, MenuTitleH, TL, TL);
+
+            sub.text = korean;
+            if (bFont) sub.font = bFont;
+            sub.fontSize = MenuSubSize * K;
+            sub.characterSpacing = MenuSubSpacing;
+            PlaceRect(sub.rectTransform, content, MenuSubX, MenuSubY, MenuSubW, MenuSubH, TL, TL);
+            EditorUtility.SetDirty(title);
+            EditorUtility.SetDirty(sub);
+            changed++;
+        }
+
+        // 2) 스토리 진행도: 오른쪽 위 → 스토리 버튼 옆에서 펼쳐지는 패널
+        string storyNote;
+        Transform card = null, topLeft = null;
+        foreach (var t in canvasRoot.GetComponentsInChildren<RectTransform>(true))
+        {
+            if (t.name == "StoryProgress") card = t;
+            else if (t.name == "TopLeft" && t.parent == canvasRoot) topLeft = t;
+        }
+        if (!card || !topLeft) storyNote = "스토리 진행도(StoryProgress) 또는 TopLeft 묶음을 찾지 못해 그대로 뒀어요.";
+        else if (card.parent && card.parent.GetComponent<HoloRevealOnSelect>()) storyNote = "스토리 진행도는 이미 펼치기 패널이에요.";
+        else
+        {
+            var group = new Box { rt = (RectTransform)topLeft, w = MockW, h = MockH };
+            var reveal = Node("StoryReveal", group, StoryRevealX, StoryRevealY, 373, 115, TL, ML, typeof(CanvasGroup), typeof(HoloRevealOnSelect));
+            Undo.RegisterCreatedObjectUndo(reveal.rt.gameObject, "스토리 진행도 펼치기");
+            Undo.SetTransformParent(card, reveal.rt, "스토리 진행도 펼치기");
+            var crt = (RectTransform)card;
+            PlaceRect(crt, reveal, 0, 0, 373, 115, TL, TL);
+            crt.localScale = Vector3.one;
+            var entrance = card.GetComponent<HoloEntrance>();
+            if (entrance) Undo.DestroyObjectImmediate(entrance); // 펼치기가 등장을 맡는다
+            var rv = reveal.rt.GetComponent<HoloRevealOnSelect>();
+            if (story) Set(rv, "showWhen", story);
+            Set(rv, "menu", menu);
+            storyNote = story ? "스토리 진행도를 스토리 모드 버튼 옆으로 옮겼어요." : "스토리 모드 버튼을 못 찾아서 펼침 조건이 비어 있어요.";
+        }
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        Debug.Log("[HoloHub] 메뉴 글자 " + changed + "개를 영어(위)·한글(아래)로 바꿨어요. " + storyNote);
+    }
+
+    private static bool IsLatin(string s)
+    {
+        foreach (char c in s) if (c >= 0xAC00 && c <= 0xD7A3) return false;
+        return true;
+    }
+
+    // 이미 만든 HoloHubScene에 라디오 뉴스 폭·버전 표시 위치만 바꿔 적용한다 (씬을 새로 만들지 않음, 다른 손질은 그대로)
+    [MenuItem("Tools/CapDemo/허브/라디오 뉴스 넓히기 · 버전 표시 구석으로 (지금 씬에 적용)")]
+    public static void ApplyRadioAndVersionLayout()
+    {
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().path != ScenePath)
+        {
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        }
+        var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+        RectTransform radio = null, version = null;
+        foreach (var root in scene.GetRootGameObjects())
+            foreach (var t in root.GetComponentsInChildren<RectTransform>(true))
+            {
+                if (t.name == "Radio7" && t.GetComponent<HoloRadioBar>()) radio = t;
+                else if (t.name == "Version" && t.parent != null && t.parent.name == "BottomRight") version = t;
+            }
+        if (!radio || !version)
+        {
+            EditorUtility.DisplayDialog("허브 배치", "씬에서 Radio7 또는 Version을 찾지 못했어요.", "확인");
+            return;
+        }
+
+        Undo.RegisterFullObjectHierarchyUndo(radio.gameObject, "라디오 넓히기");
+        Undo.RegisterFullObjectHierarchyUndo(version.gameObject, "버전 위치");
+
+        SetW(radio, RadioW);
+        SetW(radio.Find("Beam"), RadioW - 124);
+        SetW(radio.Find("EmitterGlow"), RadioW - 40);
+        SetW(radio.Find("Base"), RadioW - 64);
+        SetW(radio.Find("Emitter"), RadioW - 92);
+        var panel = radio.Find("Panel");
+        SetW(panel, RadioW);
+        foreach (Transform c in panel)
+        {
+            var rt = (RectTransform)c;
+            switch (c.name)
+            {
+                case "Bg": case "Grad": case "BorderT": case "BorderB": case "GlitchSlice": SetW(rt, RadioW); break;
+                case "BorderR": rt.anchoredPosition = new Vector2((RadioW - 1.5f) * K, rt.anchoredPosition.y); break;
+                case "Ticker": SetW(rt, RadioW - 280); break;
+                case "Corner":
+                    if (rt.anchoredPosition.x > 100f) rt.anchoredPosition = new Vector2((RadioW - 13) * K, rt.anchoredPosition.y);
+                    break;
+            }
+        }
+
+        var group = new Box { rt = (RectTransform)version.parent, w = MockW, h = MockH };
+        PlaceRect(version, group, VersionX, VersionY, VersionW, VersionH, TL, MR);
+        var ver = version.Find("Ver");
+        if (ver)
+        {
+            var vrt = (RectTransform)ver;
+            vrt.sizeDelta = new Vector2(VersionW * K, VersionH * K);
+            var tmp = ver.GetComponent<TextMeshProUGUI>();
+            if (tmp) tmp.fontSize = VersionFont * K;
+        }
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        Debug.Log("[HoloHub] 라디오 뉴스 폭을 넓히고 버전 표시를 오른쪽 아래 구석에 작게 옮겼어요. (Ctrl+Z로 되돌릴 수 있어요)");
+    }
+
+    private static void SetW(Transform t, float w)
+    {
+        if (!t) return;
+        var rt = (RectTransform)t;
+        rt.sizeDelta = new Vector2(w * K, rt.sizeDelta.y);
+    }
+
     // ── 화면 조립 ────────────────────────────────────────────────
 
     private static void BuildCanvas()
@@ -216,7 +380,7 @@ public static class HoloHubMenu
         BuildMenu(topLeft);
         BuildLeftBottom(topLeft);
         BuildTopRight(topRight);
-        BuildStory(topRight);
+        BuildStory(topLeft); // 스토리 모드 버튼이 선택됐을 때만 버튼 옆에 펼쳐진다
         BuildEvent(bottomRight);
         BuildRadio(bottomLeft);
         BuildVersion(bottomRight);
@@ -456,6 +620,12 @@ public static class HoloHubMenu
         Set(holoMenu, "connectorText", caption0);
     }
 
+    // 메뉴 버튼 글자 배치 (목업 픽셀)
+    private const float MenuTitleX = 130, MenuTitleY = 14, MenuTitleW = 340, MenuTitleH = 42, MenuTitleSize = 31, MenuTitleSpacing = 4;
+    private const float MenuSubX = 132, MenuSubY = 56, MenuSubW = 300, MenuSubH = 22, MenuSubSize = 15, MenuSubSpacing = 2;
+
+    private static HoloMenuItem storyMenuItem; // BuildStory가 '이 버튼이 선택되면 펼침'에 쓴다
+
     private static HoloMenuItem MenuItem(Box menu, int index, string no, string title, string sub, string icon,
         string tag, string scene, bool songSelect, string caption)
     {
@@ -472,8 +642,9 @@ public static class HoloHubMenu
         var content = Stretch(item, "Content", typeof(CanvasGroup));
         var noText = Txt(content, "No", no, 20, 0, 40, 96, monoFont, 15, HoloPalette.Mute);
         var iconImg = Img(content, "Icon", 76, 30, 36, 36, icon, HoloPalette.Teal);
-        var titleText = Txt(content, "Title", title, 130, 12, 330, 46, titleFont, 34, HoloPalette.Ink);
-        var subText = Txt(content, "Sub", sub, 131, 56, 300, 20, monoFont, 13, HoloPalette.Dim, spacing: 18);
+        // 영어(크게, 위) + 한글(작게, 아래). 2026-11-25 재이 요청으로 위아래를 바꿨다
+        var titleText = Txt(content, "Title", sub, MenuTitleX, MenuTitleY, MenuTitleW, MenuTitleH, titleFont, MenuTitleSize, HoloPalette.Ink, spacing: MenuTitleSpacing);
+        var subText = Txt(content, "Sub", title, MenuSubX, MenuSubY, MenuSubW, MenuSubH, bodyFont, MenuSubSize, HoloPalette.Dim, spacing: MenuSubSpacing);
         var arrow = Img(content, "Arrow", 476, 37, 22, 22, "icon_chevron", HoloPalette.Dim);
 
         var shows = new List<Object> { sheenMask.rt.GetComponent<CanvasGroup>() };
@@ -500,6 +671,7 @@ public static class HoloHubMenu
         Set(mi, "opensSongSelect", songSelect);
         Set(mi, "opensStory", scene == StoryScene);
         Set(mi, "caption", caption);
+        if (scene == StoryScene) storyMenuItem = mi;
         // 설정 메뉴는 씬 대신 설정 창을 띄운다 (Tools > CapDemo > 설정·일시정지 > 프리팹 만들기로 먼저 만들어 둔다)
         if (sub == "SETTINGS")
         {
@@ -612,7 +784,10 @@ public static class HoloHubMenu
 
     private static void BuildStory(Box g)
     {
-        var card = Node("StoryProgress", g, 1545, 130, 373, 115, TL, MR);
+        // 스토리 모드 버튼 오른쪽, 연결선 아래에 붙는다. 평소엔 접혀 있다가 스토리 모드가 선택되면 펼쳐진다
+        var reveal = Node("StoryReveal", g, StoryRevealX, StoryRevealY, 373, 115, TL, ML, typeof(CanvasGroup), typeof(HoloRevealOnSelect));
+        if (storyMenuItem) Set(reveal.rt.GetComponent<HoloRevealOnSelect>(), "showWhen", storyMenuItem);
+        var card = Node("StoryProgress", reveal, 0, 0, 373, 115, TL, TL);
         var bg = Img(card, "Bg", 0, 0, 373, 115, "panel_tlbr14", HoloPalette.Panel, raycast: true);
         var line = Img(card, "Line", 0, 0, 373, 115, "panel_tlbr14_line", HoloPalette.Line);
         var content = Stretch(card, "Content", typeof(CanvasGroup));
@@ -633,8 +808,10 @@ public static class HoloHubMenu
         Txt(content, "Next", "리허설 직전, 정전", 152, 82, 200, 18, monoFont, 11, HoloPalette.Dim, TextAlignmentOptions.MidlineRight);
 
         Hover(card, 1.03f, content.rt, false, CT(line, HoloPalette.Teal), CT(bg, HoloPalette.Panel2));
-        Enter(card, 0.15f, new Vector2(60, 0));
     }
+
+    // 스토리 진행도가 펼쳐지는 자리 (TopLeft 묶음 기준, 목업 픽셀): 스토리 버튼 연결선 끝 아래
+    private const float StoryRevealX = 736, StoryRevealY = 440;
 
     private static void BuildEvent(Box g)
     {
@@ -698,19 +875,22 @@ public static class HoloHubMenu
     private static Dictionary<string, object> Entry(string kind, string title, string sub, string badge) =>
         new Dictionary<string, object> { { "kind", kind }, { "title", title }, { "sub", sub }, { "badge", badge } };
 
+    // 라디오 뉴스 바 폭 (목업 픽셀). 2026-11-23 재이 요청으로 1545 → 1720 (오른쪽 버전 표시 자리까지 넓힘)
+    private const float RadioW = 1720f;
+
     private static void BuildRadio(Box g)
     {
         var holo = HoloPalette.Holo;
-        var radio = Node("Radio7", g, 80, 1022, 1545, 80, TL, ML, typeof(HoloRadioBar));
+        var radio = Node("Radio7", g, 80, 1022, RadioW, 80, TL, ML, typeof(HoloRadioBar));
 
-        var beam = Img(radio, "Beam", 62, 3, 1421, 72, "beam", holo.WithAlpha(0.30f));
-        var glow = Img(radio, "EmitterGlow", 20, 58, 1505, 40, "glow", holo.WithAlpha(0.55f));
-        Img(radio, "Base", 32, 77, 1481, 5, null, new Color(11 / 255f, 26 / 255f, 28 / 255f, 1f));
-        var emitter = Img(radio, "Emitter", 46, 74.5f, 1453, 3.5f, null, holo.WithAlpha(0.95f));
+        var beam = Img(radio, "Beam", 62, 3, RadioW - 124, 72, "beam", holo.WithAlpha(0.30f));
+        var glow = Img(radio, "EmitterGlow", 20, 58, RadioW - 40, 40, "glow", holo.WithAlpha(0.55f));
+        Img(radio, "Base", 32, 77, RadioW - 64, 5, null, new Color(11 / 255f, 26 / 255f, 28 / 255f, 1f));
+        var emitter = Img(radio, "Emitter", 46, 74.5f, RadioW - 92, 3.5f, null, holo.WithAlpha(0.95f));
 
-        var panel = Node("Panel", radio, 0, 16, 1545, 48, TL, TL, typeof(CanvasGroup));
-        Img(panel, "Bg", 0, 0, 1545, 48, null, holo.WithAlpha(0.08f), raycast: true);
-        var grad = Img(panel, "Grad", 0, 0, 1545, 48, "grad_top", holo.WithAlpha(0.16f));
+        var panel = Node("Panel", radio, 0, 16, RadioW, 48, TL, TL, typeof(CanvasGroup));
+        Img(panel, "Bg", 0, 0, RadioW, 48, null, holo.WithAlpha(0.08f), raycast: true);
+        var grad = Img(panel, "Grad", 0, 0, RadioW, 48, "grad_top", holo.WithAlpha(0.16f));
         grad.rectTransform.localScale = new Vector3(1, -1, 1);
 
         var scanGo = new GameObject("Scanlines", typeof(RectTransform), typeof(RawImage), typeof(HoloUVScroll));
@@ -725,10 +905,10 @@ public static class HoloHubMenu
 
         // 테두리
         var border = holo.WithAlpha(0.55f);
-        Img(panel, "BorderT", 0, 0, 1545, 1.5f, null, border);
-        Img(panel, "BorderB", 0, 46.5f, 1545, 1.5f, null, border);
+        Img(panel, "BorderT", 0, 0, RadioW, 1.5f, null, border);
+        Img(panel, "BorderB", 0, 46.5f, RadioW, 1.5f, null, border);
         Img(panel, "BorderL", 0, 0, 1.5f, 48, null, border);
-        Img(panel, "BorderR", 1543.5f, 0, 1.5f, 48, null, border);
+        Img(panel, "BorderR", RadioW - 1.5f, 0, 1.5f, 48, null, border);
 
         // 왼쪽 라벨 칸: 이퀄라이저 + RADIO 7 + FM 77.7
         var label = Node("Label", panel, 0, 0, 255, 48);
@@ -741,7 +921,7 @@ public static class HoloHubMenu
         Txt(label, "Freq", "FM 77.7", 158, 0, 90, 48, monoFont, 13, holo.WithAlpha(0.9f), spacing: 6);
 
         // 흐르는 뉴스: 오토네가 재건한 도시의 라디오 뉴스 (세계관 문서 기준, 가짜 기사)
-        var ticker = Node("Ticker", panel, 270, 0, 1265, 48, TL, TL, typeof(RectMask2D));
+        var ticker = Node("Ticker", panel, 270, 0, RadioW - 280, 48, TL, TL, typeof(RectMask2D));
         const string gap = "            ";
         const string news =
             "<color=#FF4D5E>[속보]</color>  4번 부두 물류창고서 야간조 노동자 숨진 채 발견 <alpha=#B0>· 경찰 \"단순 추락사고로 추정\"<alpha=#FF>" + gap +
@@ -758,11 +938,11 @@ public static class HoloHubMenu
 
         // 네 귀퉁이 꺾쇠
         Corner(panel, 3, 3, false, false);
-        Corner(panel, 1532, 3, true, false);
+        Corner(panel, RadioW - 13, 3, true, false);
         Corner(panel, 3, 35, false, true);
-        Corner(panel, 1532, 35, true, true);
+        Corner(panel, RadioW - 13, 35, true, true);
 
-        var slice = Img(panel, "GlitchSlice", 0, 22, 1545, 3, null, holo.WithAlpha(0.7f), TL, ML);
+        var slice = Img(panel, "GlitchSlice", 0, 22, RadioW, 3, null, holo.WithAlpha(0.7f), TL, ML);
 
         var bar = radio.rt.GetComponent<HoloRadioBar>();
         Set(bar, "beam", beam);
@@ -788,10 +968,13 @@ public static class HoloHubMenu
         Img(c, "V", right ? 8.5f : 0, 0, 1.5f, 10, null, color);
     }
 
+    private const float VersionX = 1820f, VersionY = 1093f, VersionW = 150f, VersionH = 16f, VersionFont = 10f;
+
     private static void BuildVersion(Box g)
     {
-        var info = Node("Version", g, 1700, 1070, 218, 20, TL, MR);
-        Txt(info, "Ver", "VER 0.3.1", 0, 0, 218, 20, monoFont, 12, HoloPalette.Mute, TextAlignmentOptions.MidlineRight, spacing: 6);
+        // 오른쪽 아래 구석에 작게 (2026-11-23 재이 요청: 218x20·12pt → 150x16·10pt, 구석으로)
+        var info = Node("Version", g, VersionX, VersionY, VersionW, VersionH, TL, MR);
+        Txt(info, "Ver", "VER 0.3.1", 0, 0, VersionW, VersionH, monoFont, VersionFont, HoloPalette.Mute, TextAlignmentOptions.MidlineRight, spacing: 6);
         Enter(info, 0.5f, new Vector2(0, -20));
     }
 

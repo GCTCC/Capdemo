@@ -42,6 +42,9 @@ public class HoloMenu : MonoBehaviour
         Select(Mathf.Clamp(startIndex, 0, items.Length - 1), instant: true);
     }
 
+    // 지금 선택된 버튼 (HoloRevealOnSelect 등이 본다)
+    public HoloMenuItem Selected => current >= 0 && current < items.Length ? items[current] : null;
+
     public void Select(HoloMenuItem item) => Select(System.Array.IndexOf(items, item), false);
 
     private void Select(int index, bool instant)

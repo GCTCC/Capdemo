@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +9,33 @@ using UnityEngine;
 // 끝까지 보면 SaveData에 기록되어(게임을 껐다 켜도 유지) 그 뒤로는 F로 평소 대사(Dialogue)가 나온다.
 // First Meet Story를 넣으면, 처음 범위 안으로 들어왔을 때 일러스트와 함께 그 스토리가 맵 위에 재생된다(씬은 그대로).
 // 스토리와 첫 만남 대사를 둘 다 넣으면 First Meet Order에서 고른 순서대로 이어서 나온다(기본: 대사 먼저).
+// New Dialogues에 조건 달린 대화를 넣으면, 조건이 맞고 아직 안 본 동안 F로 그 대화가 먼저 나온다(새 대화 표시).
 [RequireComponent(typeof(Collider2D))]
 public class NpcInteract : MonoBehaviour
 {
+    // 머리 위 표시 상태 (UI가 읽는다)
+    public enum Mark
+    {
+        None,        // 표시 없음
+        Talk,        // 가까이 · [F 대화]
+        NewQuest,    // 노란 ! (퀘스트 대상, 첫 만남 전)
+        NewDialogue, // 빨간 말풍선 ••• (조건 맞는 새 대화)
+    }
+
+    [Serializable]
+    public class ConditionalDialogue
+    {
+        [Tooltip("조건이 맞을 때 나올 대화")]
+        public NpcDialogue dialogue;
+        [Tooltip("이 조건이 모두 맞을 때만")]
+        public List<Condition> when = new List<Condition>();
+        [Tooltip("켜면 한 번 끝까지 보면 다시 안 나온다 (평소 대사로 돌아감)")]
+        public bool once = true;
+    }
+
+    [Tooltip("진행 기록에 쓰는 NPC 이름. 영문 소문자와 점 (예: npc.bouncer). 퀘스트·안내 조건에서 이 ID로 이 NPC를 가리킨다.\n" +
+             "비워 두면 예전처럼 첫 만남 에셋 이름으로만 기록한다")]
+    [SerializeField] private string npcId = "";
     [Tooltip("이 NPC의 대사 파일 (Create > CapDemo > NPC 대화)")]
     [SerializeField] private NpcDialogue dialogue;
     [Tooltip("Dialogue가 비어 있을 때만 쓰는 대사")]
@@ -30,18 +55,47 @@ public class NpcInteract : MonoBehaviour
     [Tooltip("첫 만남 대사와 첫 만남 스토리를 둘 다 넣었을 때 어느 쪽을 먼저 보여 줄지")]
     [SerializeField] private FirstMeetOrder firstMeetOrder = FirstMeetOrder.DialogueFirst;
 
+    [Header("새 대화")]
+    [Tooltip("조건이 맞으면 평소 대사 대신 나오는 대화들. 위에 있는 것이 먼저. 조건이 맞고 아직 안 봤으면 머리 위에 빨간 말풍선이 뜬다")]
+    [SerializeField] private List<ConditionalDialogue> newDialogues = new List<ConditionalDialogue>();
+
     private PlayerController2D playerInRange; // 상호작용 가능하게 할 범위
     private bool talking; // 대화중에는 이동 제어. 제어를 위한 bool
     private bool playingFirstMeet; // 지금 하는 대화가 첫 만남 대화인지. 끝나면 기록한다
+    private ConditionalDialogue playingNew; // 지금 하는 대화가 새 대화인지
     private PlayerController2D player; // 첫 만남 거리를 재기 위한 씬의 플레이어
     private StoryOverlay storyOverlay; // 첫 만남 스토리를 띄울 맵용 스토리 화면
 
     [Tooltip("끄면 말을 걸 수 없는 NPC가 된다(F 표시가 안 뜬다).")]
     [SerializeField] private bool canTalk = true;
 
-    // 첫 만남 대화가 아직 남아 있으면 그것을, 아니면 평소 대사를 쓴다 (F로 말을 걸어도 같다)
-    public IReadOnlyList<StoryLine> Lines =>
-        FirstMeetPending ? firstMeetDialogue.Lines : dialogue ? dialogue.Lines : lines;
+    public string NpcId => npcId;
+
+    // 첫 만남 대화가 아직 남아 있으면 그것을, 다음으로 조건 맞는 새 대화를, 아니면 평소 대사를 쓴다 (F로 말을 걸어도 같다)
+    public IReadOnlyList<StoryLine> Lines
+    {
+        get
+        {
+            if (FirstMeetPending) return firstMeetDialogue.Lines;
+            var pending = PendingNewDialogue();
+            if (pending != null) return pending.dialogue.Lines;
+            return dialogue ? dialogue.Lines : lines;
+        }
+    }
+
+    // 머리 위에 띄울 표시
+    public Mark CurrentMark
+    {
+        get
+        {
+            if (!canTalk) return Mark.None;
+            if (talking) return Mark.None;
+            if (playerInRange && Talkable) return Mark.Talk;
+            if (Progress.IsQuestTalkTarget(npcId) || FirstMeetPending || FirstStoryPending) return Mark.NewQuest;
+            if (PendingNewDialogue() != null) return Mark.NewDialogue;
+            return Mark.None;
+        }
+    }
 
     // 첫 만남 대사가 있고 아직 끝까지 본 적이 없는지
     private bool FirstMeetPending =>
@@ -52,6 +106,18 @@ public class NpcInteract : MonoBehaviour
 
     // 대사가 하나도 없으면 말을 걸 수 없는 것으로 친다
     private bool Talkable => canTalk && Lines.Count > 0;
+
+    // 조건이 맞고 아직 안 본 새 대화 (없으면 null)
+    private ConditionalDialogue PendingNewDialogue()
+    {
+        foreach (var d in newDialogues)
+        {
+            if (d == null || !d.dialogue || d.dialogue.Lines.Count == 0) continue;
+            if (d.once && SaveData.HasSeenDialogue(d.dialogue.name)) continue;
+            if (Condition.AllMet(d.when)) return d;
+        }
+        return null;
+    }
 
     private void Awake()
     {
@@ -92,14 +158,19 @@ public class NpcInteract : MonoBehaviour
         storyOverlay.Play(story, () =>
         {
             SaveData.MarkNpcMet(story.name);
+            SaveData.MarkDialogueSeen(story.name);
+            SaveData.MarkNpcMet(npcId);
             RefreshPrompt();
+            Progress.NotifyDialogueFinished(story);
         });
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         var player = FindPlayer(other);
-        if (!player || !Talkable) return;
+        if (!player) return;
+        Progress.NotifyNpcInRange(npcId); // 첫 안내(말 걸기 안내 등) 검사
+        if (!Talkable) return;
         playerInRange = player;
         player.SetNearbyNpc(this);
         RefreshPrompt();
@@ -118,12 +189,30 @@ public class NpcInteract : MonoBehaviour
     public void SetTalking(bool value)
     {
         talking = value;
-        if (value) playingFirstMeet = FirstMeetPending;
-        else if (playingFirstMeet)
+        if (value)
         {
-            // 첫 만남 대화를 끝까지 봤으니 기록한다. 이제부터 Lines는 평소 대사가 된다
-            SaveData.MarkNpcMet(firstMeetDialogue.name);
+            playingFirstMeet = FirstMeetPending;
+            playingNew = playingFirstMeet ? null : PendingNewDialogue();
+        }
+        else
+        {
+            ScriptableObject finished;
+            if (playingFirstMeet)
+            {
+                // 첫 만남 대화를 끝까지 봤으니 기록한다. 이제부터 Lines는 평소 대사가 된다
+                SaveData.MarkNpcMet(firstMeetDialogue.name); // 예전 방식 기록 (StoryBeat의 Must Have Seen이 읽는다)
+                SaveData.MarkNpcMet(npcId);
+                finished = firstMeetDialogue;
+            }
+            else if (playingNew != null) finished = playingNew.dialogue;
+            else finished = dialogue;
+
+            if (finished) SaveData.MarkDialogueSeen(finished.name);
             playingFirstMeet = false;
+            playingNew = null;
+            RefreshPrompt();
+            Progress.NotifyDialogueFinished(finished);
+            return;
         }
         RefreshPrompt();
     }

@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
+using UnityEngine.Video;
 
 // 타이틀 화면: 검은 화면에서 페이드 인한 뒤, 아무 키나 누르면 페이드 아웃하며 다음 씬으로 넘어간다.
 // 튜토리얼 챕터(첫 곡까지) 미완료 → TutoScene (처음부터 다시), 완료 → HoloHubScene
@@ -21,8 +23,74 @@ public class TitleScreen : MonoBehaviour
     [SerializeField, Min(0f)] private float fadeInDuration = 1f;
     [SerializeField, Min(0f)] private float fadeOutDuration = 0.6f;
 
+    [Tooltip("배경 일러스트를 보여 주는 Image. 비워 두면 씬에서 이름이 \"BackGround\"인 Image를 찾는다.\n" +
+             "그림은 Tools > CapDemo > 일러스트 관리의 「타이틀 배경」에서 바꾼다 (비어 있으면 Image에 원래 들어 있던 그림 그대로)")]
+    [SerializeField] private Image backgroundImage;
+
     private float readyTime = float.MaxValue;
     private bool started;
+
+    private void Awake()
+    {
+        if (!backgroundImage)
+        {
+            var go = GameObject.Find("BackGround");
+            if (go) backgroundImage = go.GetComponent<Image>();
+        }
+        if (backgroundImage)
+            backgroundImage.sprite = IllustrationSet.FirstOr(IllustrationSet.Title, backgroundImage.sprite);
+
+        var set = IllustrationSet.Load(IllustrationSet.Title);
+        if (set && set.video && backgroundImage) StartBackgroundVideo(set.video);
+    }
+
+    // ── 배경 동영상 ──
+    // BackGround Image 위에 같은 크기의 RawImage를 깔고, 영상 첫 장면이 나온 뒤에 보이게 한다 (그 전엔 그림이 보임)
+    private VideoPlayer videoPlayer;
+    private RenderTexture videoTexture;
+    private RawImage videoImage;
+
+    private void StartBackgroundVideo(VideoClip clip)
+    {
+        var go = new GameObject("Background Video", typeof(RectTransform), typeof(RawImage), typeof(VideoPlayer));
+        var rect = (RectTransform)go.transform;
+        rect.SetParent(backgroundImage.transform, false);
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = rect.offsetMax = Vector2.zero;
+
+        videoImage = go.GetComponent<RawImage>();
+        videoImage.raycastTarget = false;
+        videoImage.enabled = false;
+
+        videoTexture = new RenderTexture((int)clip.width, (int)clip.height, 0);
+        videoImage.texture = videoTexture;
+
+        videoPlayer = go.GetComponent<VideoPlayer>();
+        videoPlayer.playOnAwake = false;
+        videoPlayer.clip = clip;
+        videoPlayer.isLooping = true;
+        videoPlayer.audioOutputMode = VideoAudioOutputMode.None;
+        videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+        videoPlayer.targetTexture = videoTexture;
+        videoPlayer.sendFrameReadyEvents = true;
+        videoPlayer.frameReady += OnFirstVideoFrame;
+        videoPlayer.prepareCompleted += p => p.Play();
+        videoPlayer.Prepare();
+    }
+
+    private void OnFirstVideoFrame(VideoPlayer player, long frame)
+    {
+        videoImage.enabled = true;
+        player.frameReady -= OnFirstVideoFrame;
+        player.sendFrameReadyEvents = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (videoTexture) videoTexture.Release();
+        if (videoTexture) Destroy(videoTexture);
+    }
 
     private IEnumerator Start()
     {

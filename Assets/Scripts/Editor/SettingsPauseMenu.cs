@@ -17,7 +17,8 @@ public static class SettingsPauseMenu
 {
     private const string Folder = "Assets/Prefabs/UI/";
     public const string SettingsPrefabPath = Folder + "SettingsPanel.prefab";
-    public const string PausePrefabPath = Folder + "PausePanel.prefab";
+    // 일시정지 창은 Resources 안에 둔다 (리듬 인게임이 씬 연결 없이 PausePanel.SpawnShared()로 꺼내 쓴다)
+    public const string PausePrefabPath = "Assets/Resources/" + PausePanel.ResourcePath + ".prefab";
     public const string ControlsPrefabPath = Folder + "StoryControls.prefab";
 
     private const string TitleFontPath = "Assets/Art/Fonts/경기천년제목_Bold SDF.asset";
@@ -39,6 +40,7 @@ public static class SettingsPauseMenu
         var style = LoadStyle();
         if (style == null) return;
         Directory.CreateDirectory(Folder);
+        Directory.CreateDirectory(Path.GetDirectoryName(PausePrefabPath));
 
         // 일시정지 창 → Auto 버튼(일시정지 창을 가리킴) → 설정 창 순서
         var pause = PausePanel.Build(style);

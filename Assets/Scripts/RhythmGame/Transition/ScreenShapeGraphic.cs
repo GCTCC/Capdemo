@@ -71,6 +71,18 @@ public class ScreenShapeGraphic : MaskableGraphic
         }
     }
 
+    // 위아래 색이 다른 사각 면 (bl, br 아래 / tr, tl 위). 빛의 벽 등
+    public void Gradient(Vector2 bl, Vector2 br, Vector2 tr, Vector2 tl, Color bottom, Color top)
+    {
+        int k = verts.Count;
+        V(bl, bottom, new Vector2(0.5f, 0.5f));
+        V(br, bottom, new Vector2(0.5f, 0.5f));
+        V(tr, top, new Vector2(0.5f, 0.5f));
+        V(tl, top, new Vector2(0.5f, 0.5f));
+        tris.Add(k); tris.Add(k + 2); tris.Add(k + 1);
+        tris.Add(k); tris.Add(k + 3); tris.Add(k + 2);
+    }
+
     // 볼록한 면 (사각형 등). 단색
     public void Polygon(IList<Vector2> pts, Color c)
     {

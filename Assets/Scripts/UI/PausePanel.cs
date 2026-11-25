@@ -9,13 +9,15 @@ using UnityEngine.SceneManagement;
 //  - 확인: 지직 전환으로 Return Scene(메인화면 = HoloHubScene)으로 간다. Open(onConfirm, ...)으로 다른 동작을 줄 수도 있다
 //  - 취소/ESC: 창이 닫히고 멈췄던 곳에서 이어진다
 //  - 키보드: Enter = 고른 버튼, Esc = 취소, ←/→ = 버튼 고르기
-// 프리팹은 Tools > CapDemo > 설정·일시정지 > 프리팹 만들기로 만든다 (Assets/Prefabs/UI/PausePanel.prefab).
+// 프리팹은 Tools > CapDemo > 설정·일시정지 > 프리팹 만들기로 만든다 (Assets/Resources/UI/PausePanel.prefab).
+// Resources 안에 있어서 씬에 연결하지 않아도 PausePanel.SpawnShared()로 어디서든 꺼내 쓸 수 있다 (리듬 인게임 확인 창 등).
 public class PausePanel : HoloPopup
 {
     [Header("문구")]
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text messageText;
     [SerializeField] private string defaultMessage = "메인화면으로 돌아가시겠습니까?";
+    [SerializeField] private string defaultTitle = "일시정지";
 
     [Header("버튼")]
     [SerializeField] private HoloDialogButton confirmButton;
@@ -30,6 +32,30 @@ public class PausePanel : HoloPopup
     private int focus = 1; // 0 확인, 1 취소 (실수로 나가지 않게 취소가 먼저)
     private System.Action onConfirm, onCancel;
     private bool confirmed;
+    private bool pausing; // 이번에 열 때 게임을 멈췄는지
+    private string defaultConfirmEn; // 확인 버튼의 작은 영문 (프리팹 값 = MAIN)
+
+    private void SetConfirmEn(string text)
+    {
+        var en = confirmButton ? confirmButton.transform.Find("En")?.GetComponent<TMP_Text>() : null;
+        if (!en) return;
+        if (defaultConfirmEn == null) defaultConfirmEn = en.text;
+        if (!string.IsNullOrEmpty(text)) en.text = text;
+    }
+
+    public const string ResourcePath = "UI/PausePanel";
+
+    // Resources의 공통 프리팹을 씬에 하나 만든다 (닫힌 상태). 없으면 null
+    public static PausePanel SpawnShared()
+    {
+        var prefab = Resources.Load<PausePanel>(ResourcePath);
+        if (!prefab)
+        {
+            Debug.LogWarning("[PausePanel] Resources/" + ResourcePath + " 프리팹이 없어요. Tools > CapDemo > 설정·일시정지 > 1. 프리팹 만들기를 실행하세요.");
+            return null;
+        }
+        return Spawn(prefab);
+    }
 
     public string ReturnScene
     {
@@ -48,12 +74,18 @@ public class PausePanel : HoloPopup
     public void Show() => Show(null, null, null);
 
     // 확인·취소 때 할 일을 직접 준다. 비우면 기본 동작 (확인 = Return Scene으로, 취소 = 닫고 이어 하기)
-    public void Show(System.Action confirm, System.Action cancel, string message)
+    // title을 비우면 "일시정지". pauseGame을 false로 주면 게임 시간을 건드리지 않는다
+    // (리듬 인게임처럼 이미 자기 방식으로 멈춰 있는 곳에서 확인 창으로만 쓸 때)
+    public void Show(System.Action confirm, System.Action cancel, string message, string title = null, bool? pauseGame = null,
+        string confirmEn = null)
     {
         if (IsOpen) return;
+        SetConfirmEn(string.IsNullOrEmpty(confirmEn) ? defaultConfirmEn : confirmEn);
         onConfirm = confirm;
         onCancel = cancel;
+        pausing = pauseGame ?? this.pauseGame;
         if (messageText) messageText.text = string.IsNullOrEmpty(message) ? defaultMessage : message;
+        if (titleText) titleText.text = string.IsNullOrEmpty(title) ? defaultTitle : title;
         Open();
     }
 
@@ -61,7 +93,7 @@ public class PausePanel : HoloPopup
     {
         confirmed = false;
         transform.SetAsLastSibling();
-        if (pauseGame) GamePause.Pause();
+        if (pausing) GamePause.Pause();
         SetFocus(1);
     }
 
@@ -72,7 +104,7 @@ public class PausePanel : HoloPopup
 
         if (onConfirm != null)
         {
-            if (pauseGame) GamePause.Resume();
+            if (pausing) GamePause.Resume();
             HideNow();
             onConfirm.Invoke();
             return;
@@ -99,7 +131,7 @@ public class PausePanel : HoloPopup
     protected override void OnClosed()
     {
         if (confirmed) return;
-        if (pauseGame) GamePause.Resume();
+        if (pausing) GamePause.Resume();
         var cancel = onCancel;
         onCancel = null;
         cancel?.Invoke();
@@ -129,7 +161,7 @@ public class PausePanel : HoloPopup
     private void OnDisable()
     {
         // 열린 채로 씬이 바뀌거나 지워져도 게임이 멈춘 채로 남지 않게
-        if (IsOpen && pauseGame && !confirmed) GamePause.Resume();
+        if (IsOpen && pausing && !confirmed) GamePause.Resume();
     }
 
     // ── 만들기 (에디터 메뉴가 부른다) ───────────────────────────────

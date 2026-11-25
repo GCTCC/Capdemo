@@ -9,6 +9,7 @@ using UnityEngine.UI;
 //  - 일시정지(또는 ESC): 게임을 멈추고 "메인화면으로 돌아가시겠습니까?" 창(PausePanel)을 띄운다
 // 스토리 캔버스(StoryCanvas·MapStoryCanvas)나 맵 대화 캔버스(DialogueCanvas) 안에 넣어 두면,
 // 같은 캔버스의 StoryManager가 재생 중이거나 DemoDialogue가 열려 있을 때만 보인다.
+// 맵 대화 캔버스(DialogueCanvas)에 있는 것은 맵을 걸어 다닐 때도 ESC로 일시정지 창을 연다 (Esc On Map).
 // 넣기: Tools > CapDemo > 설정·일시정지 > 스토리·맵 대화에 Auto·일시정지 버튼 붙이기
 public class StoryControls : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class StoryControls : MonoBehaviour
     [SerializeField] private StoryManager story;
     [Tooltip("비우면 같은 캔버스에서 찾는다")]
     [SerializeField] private DemoDialogue mapDialogue;
+
+    [Tooltip("맵 대화 캔버스에 있을 때: 대화 중이 아니어도(맵을 걸어 다닐 때) ESC로 일시정지 창을 연다")]
+    [SerializeField] private bool escOnMap = true;
 
     [Header("AUTO 기다리는 시간 (대사가 다 나온 뒤)")]
     [Tooltip("기본으로 기다리는 시간(초)")]
@@ -37,6 +41,7 @@ public class StoryControls : MonoBehaviour
     private static readonly List<StoryControls> active = new List<StoryControls>();
     private PausePanel pausePanel;
     private bool visible;
+    private StoryOverlay[] overlays; // 맵 위 스토리. 재생 중에는 그쪽 버튼이 ESC를 받는다
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetOnPlay()
@@ -85,17 +90,23 @@ public class StoryControls : MonoBehaviour
 
     public void OpenPause()
     {
-        if (!visible || GamePause.IsPaused || HoloPopup.AnyOpen || HoloTransition.IsBusy) return;
+        if (!(visible || CanPauseOnMap()) || GamePause.IsPaused || HoloPopup.AnyOpen || HoloTransition.IsBusy || ScreenFader.IsBusy) return;
         if (!pausePanel)
         {
-            if (!pausePanelPrefab)
-            {
-                Debug.LogWarning("[StoryControls] Pause Panel Prefab이 비어 있어요. Tools > CapDemo > 설정·일시정지 메뉴로 다시 붙여 주세요.", this);
-                return;
-            }
-            pausePanel = HoloPopup.Spawn(pausePanelPrefab);
+            pausePanel = pausePanelPrefab ? HoloPopup.Spawn(pausePanelPrefab) : PausePanel.SpawnShared();
+            if (!pausePanel) return;
         }
         pausePanel.Show();
+    }
+
+    // 맵을 걸어 다니는 중인지 (맵 대화 캔버스 + 대화·맵 스토리 재생 중이 아님)
+    private bool CanPauseOnMap()
+    {
+        if (!escOnMap || !mapDialogue || mapDialogue.IsOpen) return false;
+        if (overlays == null) overlays = FindObjectsByType<StoryOverlay>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var o in overlays)
+            if (o && o.IsPlaying) return false;
+        return true;
     }
 
     private void Update()
@@ -114,7 +125,7 @@ public class StoryControls : MonoBehaviour
         if (autoArrows) autoArrows.enabled = !AutoOn || Time.unscaledTime % 0.8f < 0.5f;
 
         var kb = Keyboard.current;
-        if (visible && kb != null && kb.escapeKey.wasPressedThisFrame) OpenPause();
+        if (kb != null && kb.escapeKey.wasPressedThisFrame && (visible || CanPauseOnMap())) OpenPause();
     }
 
     private void SetVisible(bool on, bool instant)

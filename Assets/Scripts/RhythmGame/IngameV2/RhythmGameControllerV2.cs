@@ -37,6 +37,8 @@ public class RhythmGameControllerV2 : MonoBehaviour
 
     [Header("Scene Flow")]
     [SerializeField] private string songSelectSceneName = "SongSelectScene_v2";
+    [Tooltip("스토리 모드 곡에서 일시정지 → 나가기를 누르면 갈 메인화면")]
+    [SerializeField] private string mainSceneName = "HoloHubScene";
     [SerializeField] private string resultSceneName = "RhythmResultScene_v2";
 
     [Header("Input System")]
@@ -234,6 +236,52 @@ public class RhythmGameControllerV2 : MonoBehaviour
         }
 
         playField.UpdateLaneEffects(IsLaneHeldForView, IsHoldingLongNote);
+    }
+
+    // 일시정지를 열 수 있는지: 곡이 진행 중이고, 전환 연출(곡 선택→인게임 카운트인, 곡 끝→결과) 중이 아닐 때
+    public bool CanPause
+    {
+        get
+        {
+            return gameplayActive && !isEndingSong && !IsTransitioning
+                && SongTransitionOverlay.Active == null && ResultTransitionOverlay.Active == null;
+        }
+    }
+
+    // 일시정지 → 처음부터 다시: 같은 곡·같은 모드로 이 씬을 다시 연다 (곡 선택의 레코드 전환 없이 커버 소개부터)
+    public void RestartSong()
+    {
+        if (!isEndingSong) StartCoroutine(RestartRoutine());
+    }
+
+    private IEnumerator RestartRoutine()
+    {
+        isEndingSong = true;
+        gameplayActive = false;
+        yield return sceneTransition.FadeToBlack();
+        StopCurrentGameplay();
+        string songName = currentSong != null ? currentSong.DisplayName : string.Empty;
+        RhythmLaunchContext.Request(entryMode, songName, returnSceneName, currentSong == null);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // 일시정지 → 나가기 (스토리 모드 곡): 메인화면(허브)으로 지직 전환. 튜토리얼은 중간 저장이 없어 다음에 처음부터 시작한다
+    public void ExitToMainScreen()
+    {
+        if (!isEndingSong) StartCoroutine(ExitToMainRoutine());
+    }
+
+    private IEnumerator ExitToMainRoutine()
+    {
+        isEndingSong = true;
+        gameplayActive = false;
+        rhythmClock.StopClock(); // 소리만 먼저 끈다. 화면은 지직 전환이 찍어 간다
+        if (Application.CanStreamedLevelBeLoaded(mainSceneName) && HoloTransition.LoadScene(mainSceneName)) yield break;
+
+        yield return sceneTransition.FadeToBlack();
+        StopCurrentGameplay();
+        if (Application.CanStreamedLevelBeLoaded(mainSceneName)) SceneManager.LoadScene(mainSceneName);
+        else if (!TryLoadReturnScene()) TryLoadSongSelectScene();
     }
 
     public void ReturnToLobby()

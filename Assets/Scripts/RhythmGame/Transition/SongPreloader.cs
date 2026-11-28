@@ -108,7 +108,7 @@ public class SongPreloader : MonoBehaviour
             NoteCount = chart.notes != null ? chart.notes.Count : 0;
             Bpm = chart.SafeBpm;
         }
-        ChartFileName = song != null && song.chartFile != null ? song.chartFile.name + ".json" : "(random)";
+        ChartFileName = song != null ? song.ChartFileName : "(random)";
         yield return Wait(extra * WChart, v => chartP = v);
         chartP = 1f;
         ChartDone = true;

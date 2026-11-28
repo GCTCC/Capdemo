@@ -37,6 +37,11 @@ public class NoteManager : MonoBehaviour
     private double nextRandomSpawnTime;
     private int nextRandomNoteId;
 
+    // 설정 적용 확인/디버깅용 읽기 전용 상태.
+    public float ScrollSpeed { get { return noteSpeed; } }
+    public float ApproachTime { get { return approachTime; } }
+    public int ActiveNoteCount { get { return activeNotes.Count; } }
+
     private const double MissWindow = 0.18;
     // 경계 침범을 막는 최소 여백만 두어 레인 폭과 시각적으로 맞춘다.
     private const float NoteLaneInsetRatio = 0.025f;
@@ -72,11 +77,26 @@ public class NoteManager : MonoBehaviour
         minSpawnInterval = Mathf.Max(0.05f, newMinSpawnInterval);
         maxSpawnInterval = Mathf.Max(minSpawnInterval, newMaxSpawnInterval);
         doubleNoteChance = Mathf.Clamp01(newDoubleNoteChance);
-        approachTime = Mathf.Max(0.1f, (farZ - judgeZ) / noteSpeed);
+        approachTime = NoteScrollSetting.ApproachSeconds(farZ, judgeZ, noteSpeed);
 
         nextChartNoteIndex = 0;
         nextRandomNoteId = 0;
         nextRandomSpawnTime = 0.6;
+    }
+
+    // 설정 변경 시 활성 노트를 유지하면서 다음 생성 시점과 위치만 갱신한다.
+    public void SetScrollSpeed(float speed)
+    {
+        noteSpeed = Mathf.Max(0.01f, speed);
+        approachTime = NoteScrollSetting.ApproachSeconds(farZ, judgeZ, noteSpeed);
+        RefreshNotePositions();
+    }
+
+    public void RefreshNotePositions()
+    {
+        if (rhythmClock == null) return;
+        foreach (RuntimeNote note in activeNotes)
+            if (!note.isJudged) UpdateNoteMesh(note);
     }
 
     public void Tick()

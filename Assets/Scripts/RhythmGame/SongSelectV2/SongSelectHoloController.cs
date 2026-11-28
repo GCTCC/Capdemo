@@ -16,7 +16,7 @@ using UnityEngine.UI;
 //
 // 조작: 곡 줄 클릭 = 선택(바로 미리듣기), 선택된 줄 한 번 더 클릭 = 플레이
 //       ↑↓(W/S) = 곡 이동, ←→ = 난이도(지금은 목업), TAB = 정렬(기본→레벨순→BPM순)
-//       Enter/Space = 플레이, Esc = 팝업 닫기 / 이전 화면, F1 배속 · F2 싱크 팝업(목업), F5 = 목록 새로고침
+//       Enter/Space = 플레이, Esc = 팝업 닫기 / 이전 화면, F1 배속 · F2 싱크 팝업, F5 = 목록 새로고침
 [RequireComponent(typeof(ChartAutoLoader))]
 [RequireComponent(typeof(RhythmSceneTransition))]
 [DisallowMultipleComponent]
@@ -101,7 +101,7 @@ public class SongSelectHoloController : MonoBehaviour
     [SerializeField] private TMP_Text bestRank;
     [SerializeField] private GameObject fullComboTag;
 
-    [Header("편의 버튼 (배속·싱크는 목업: 값만 저장, 인게임에 아직 안 씀)")]
+    [Header("편의 버튼 (배속·판정 싱크: 저장 및 인게임 적용)")]
     [SerializeField] private Button speedButton;
     [SerializeField] private Button syncButton;
     [SerializeField] private Button settingsButton;
@@ -131,8 +131,6 @@ public class SongSelectHoloController : MonoBehaviour
     [SerializeField, Min(1f)] private float previewLength = 30f;
     [SerializeField, Min(0f)] private float previewFade = 0.4f;
 
-    private const string SpeedKey = "opt_noteSpeed";
-    private const string SyncKey = "opt_syncMs";
 
     private ChartAutoLoader chartAutoLoader;
     private RhythmSceneTransition sceneTransition;
@@ -168,8 +166,7 @@ public class SongSelectHoloController : MonoBehaviour
     private int sortMode;               // 0 기본, 1 레벨순, 2 BPM순
     private static readonly string[] SortNames = { "기본", "레벨순", "BPM순" };
     private int popupMode = -1;         // -1 닫힘, 0 배속, 1 싱크
-    private float noteSpeed;
-    private int syncMs;
+    private RhythmSettingsPopup rhythmSettingsPopup;
 
     private readonly Dictionary<string, float[]> waveCache = new Dictionary<string, float[]>();
     private readonly Dictionary<string, int> noteCountCache = new Dictionary<string, int>();
@@ -196,11 +193,9 @@ public class SongSelectHoloController : MonoBehaviour
         if (backButton) backButton.onClick.AddListener(ReturnToPreviousScene);
         if (refreshButton) refreshButton.onClick.AddListener(RefreshSongs);
 
-        noteSpeed = PlayerPrefs.GetFloat(SpeedKey, 8.5f);
-        syncMs = PlayerPrefs.GetInt(SyncKey, 12);
         if (speedButton) speedButton.onClick.AddListener(() => TogglePopup(0));
         if (syncButton) syncButton.onClick.AddListener(() => TogglePopup(1));
-        if (settingsButton) settingsButton.onClick.AddListener(() => Debug.Log("[곡 선택] 설정 화면은 아직 준비 중이에요."));
+        if (settingsButton) settingsButton.onClick.AddListener(OpenRhythmSettings);
         if (optionLeft) optionLeft.onClick.AddListener(() => AdjustOption(-1));
         if (optionRight) optionRight.onClick.AddListener(() => AdjustOption(1));
         if (optionPopup) optionPopup.SetActive(false);
@@ -243,6 +238,9 @@ public class SongSelectHoloController : MonoBehaviour
 
     private string ModeLabel => entryMode == RhythmEntryMode.Story ? storyModeLabel : singleModeLabel;
 
+    private void OnEnable() { RhythmSettings.Changed += RefreshOptionLabels; }
+    private void OnDisable() { RhythmSettings.Changed -= RefreshOptionLabels; }
+
     private void OnDestroy()
     {
         if (coverMaterial) Destroy(coverMaterial);
@@ -253,7 +251,7 @@ public class SongSelectHoloController : MonoBehaviour
         if (orbitSpinner) orbitSpinner.Rotate(0f, 0f, orbitSpinSpeed * Time.unscaledDeltaTime);
         UpdatePreviewWindow();
         UpdateDisc();
-        if (isLoading) return;
+        if (isLoading || HoloPopup.AnyOpen) return;
 
         var kb = Keyboard.current;
         if (kb == null) return;
@@ -278,7 +276,7 @@ public class SongSelectHoloController : MonoBehaviour
         else if (kb.escapeKey.wasPressedThisFrame) ReturnToPreviousScene();
         else if (kb.f1Key.wasPressedThisFrame) TogglePopup(0);
         else if (kb.f2Key.wasPressedThisFrame) TogglePopup(1);
-        else if (kb.f10Key.wasPressedThisFrame) Debug.Log("[곡 선택] 설정 화면은 아직 준비 중이에요.");
+        else if (kb.f10Key.wasPressedThisFrame) OpenRhythmSettings();
         else if (kb.f5Key.wasPressedThisFrame) RefreshSongs();
     }
 
@@ -496,7 +494,16 @@ public class SongSelectHoloController : MonoBehaviour
         if (fullComboTag) fullComboTag.SetActive(record.fullCombo);
     }
 
-    // ── 배속·싱크 팝업 (목업: 값만 PlayerPrefs에 저장) ──
+    private void OpenRhythmSettings()
+    {
+        if (isLoading) return;
+        TogglePopup(-1);
+        if (rhythmSettingsPopup == null)
+            rhythmSettingsPopup = RhythmSettingsPopup.Create(transform, infoText != null ? infoText.font : null);
+        rhythmSettingsPopup.Open();
+    }
+
+    // ── 배속·싱크: 공용 설정 저장소를 사용한다 ──
 
     private void TogglePopup(int mode)
     {
@@ -516,23 +523,16 @@ public class SongSelectHoloController : MonoBehaviour
 
     private void AdjustOption(int dir)
     {
-        if (popupMode == 0)
-        {
-            noteSpeed = Mathf.Clamp(Mathf.Round((noteSpeed + dir * 0.5f) * 2f) / 2f, 1f, 10f);
-            PlayerPrefs.SetFloat(SpeedKey, noteSpeed);
-        }
-        else if (popupMode == 1)
-        {
-            syncMs = Mathf.Clamp(syncMs + dir * 2, -200, 200);
-            PlayerPrefs.SetInt(SyncKey, syncMs);
-        }
-        PlayerPrefs.Save();
+        if (popupMode == 0) RhythmSettings.NoteSpeed += dir * NoteScrollSetting.Step;
+        else if (popupMode == 1) RhythmSettings.SyncMs += dir * JudgementTimingSetting.Step;
         RefreshOptionLabels();
     }
 
     private void RefreshOptionLabels()
     {
-        string speed = noteSpeed.ToString("0.0");
+        float noteSpeed = RhythmSettings.NoteSpeed;
+        int syncMs = RhythmSettings.SyncMs;
+        string speed = noteSpeed.ToString("0.00");
         string sync = (syncMs >= 0 ? "+" : "") + syncMs + "ms";
         if (speedLabel) speedLabel.text = speed;
         if (syncLabel) syncLabel.text = sync;
@@ -804,7 +804,7 @@ public class SongSelectHoloController : MonoBehaviour
 
     public void PlaySelected()
     {
-        if (isLoading || selectedIndex < 0 || selectedIndex >= songs.Count) return;
+        if (isLoading || HoloPopup.AnyOpen || selectedIndex < 0 || selectedIndex >= songs.Count) return;
         StartCoroutine(LoadGameplay(songs[selectedIndex].DisplayName));
     }
 
@@ -820,10 +820,12 @@ public class SongSelectHoloController : MonoBehaviour
 
     private IEnumerator LoadGameplay(string songName)
     {
+        // 실행 씬 목록이 잘못되었으면 미리듣기/화면을 바꾸기 전에 중단한다.
+        if (!CanLoad(gameplaySceneName)) yield break;
         isLoading = true;
 
         // 인게임 v2로 갈 때는 전환 연출 A(레코드 회전)가 로딩과 씬 이동을 맡는다
-        if (gameplaySceneName == "RhythmScene_v2" && CanLoad(gameplaySceneName))
+        if (gameplaySceneName == "RhythmScene_v2")
         {
             RhythmLaunchContext.Request(entryMode, songName, returnSceneName);
             RhythmLaunchExtrasV2.Set(CurrentDifficultyName,
@@ -844,12 +846,6 @@ public class SongSelectHoloController : MonoBehaviour
 
         StopPreviewNow();
         yield return sceneTransition.FadeToBlack();
-        if (!CanLoad(gameplaySceneName))
-        {
-            isLoading = false;
-            yield return sceneTransition.RevealScene();
-            yield break;
-        }
         RhythmLaunchContext.Request(entryMode, songName, returnSceneName);
         // 인게임 v2 곡 정보 패널에 보일 난이도 (HARD 12 등)
         RhythmLaunchExtrasV2.Set(CurrentDifficultyName,
@@ -904,7 +900,10 @@ public class SongSelectHoloController : MonoBehaviour
     private static bool CanLoad(string sceneName)
     {
         if (!string.IsNullOrWhiteSpace(sceneName) && Application.CanStreamedLevelBeLoaded(sceneName)) return true;
-        Debug.LogError("SongSelectHoloController: '" + sceneName + "' 씬이 Build Settings에 없습니다.");
+        Debug.LogError("SongSelectHoloController: '" + sceneName + "' 씬을 불러올 수 없습니다. "
+            + "현재 활성 Build Profile의 Scene List에 씬을 추가하고 활성화하세요. "
+            + "Play를 종료한 뒤 Tools > CapDemo > 리듬게임 > v2 씬 이동 설정 복구를 실행하세요. "
+            + "게임 씬의 정확한 이름은 RhythmScene_v2입니다.");
         return false;
     }
 
@@ -927,6 +926,9 @@ public class SongSelectHoloController : MonoBehaviour
     private static float ReadBpm(TextAsset chart)
     {
         if (!chart) return 0f;
+        float osuBpm;
+        int osuNoteCount;
+        if (ChartAutoLoader.TryGetOsuSummary(chart, out osuBpm, out osuNoteCount)) return osuBpm;
         try
         {
             var probe = JsonUtility.FromJson<BpmProbe>(chart.text);
@@ -945,6 +947,13 @@ public class SongSelectHoloController : MonoBehaviour
     {
         if (song == null || !song.chartFile) return 0;
         if (noteCountCache.TryGetValue(song.DisplayName, out int cached)) return cached;
+        float osuBpm;
+        int osuNoteCount;
+        if (ChartAutoLoader.TryGetOsuSummary(song.chartFile, out osuBpm, out osuNoteCount))
+        {
+            noteCountCache[song.DisplayName] = osuNoteCount;
+            return osuNoteCount;
+        }
         int count = 0;
         try
         {

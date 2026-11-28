@@ -28,6 +28,7 @@ public class PauseMenuV2 : MonoBehaviour
     private GameObject countdown;
     private TextMeshProUGUI countdownNumber, countdownRed, countdownCyan;
     private TextMeshProUGUI exitLabel;
+    private RhythmSettingsPopup rhythmSettingsPopup;
 
     public bool IsPaused { get { return state != PauseState.Playing; } }
 
@@ -38,6 +39,7 @@ public class PauseMenuV2 : MonoBehaviour
 
     private void Update()
     {
+        if (rhythmSettingsPopup != null && rhythmSettingsPopup.IsOpen) return;
         Keyboard keyboard = Keyboard.current;
         bool escapePressed = keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
 
@@ -80,7 +82,7 @@ public class PauseMenuV2 : MonoBehaviour
 
     public void BeginResumeCountdown()
     {
-        if (state != PauseState.Paused) return;
+        if (state != PauseState.Paused || (rhythmSettingsPopup != null && rhythmSettingsPopup.IsOpen)) return;
         countdownRemaining = Mathf.Max(0.1f, countdownSeconds);
         state = PauseState.Countdown;
         ShowView();
@@ -100,6 +102,15 @@ public class PauseMenuV2 : MonoBehaviour
         state = PauseState.Playing;
         ShowView();
         if (controller != null) controller.ReturnToLobby();
+    }
+
+    private void OpenRhythmSettings()
+    {
+        if (state != PauseState.Paused) return;
+        var ui = GetComponent<RhythmGameUIV2>();
+        if (rhythmSettingsPopup == null)
+            rhythmSettingsPopup = RhythmSettingsPopup.Create(transform, ui != null ? ui.FontKorean : null);
+        rhythmSettingsPopup.Open();
     }
 
     private void ShowView()
@@ -144,7 +155,7 @@ public class PauseMenuV2 : MonoBehaviour
         IngameV2Art.Stretch(scan.rectTransform);
 
         // 일시정지 패널
-        int pw = Mathf.RoundToInt(440 * k), ph = Mathf.RoundToInt(250 * k);
+        int pw = Mathf.RoundToInt(440 * k), ph = Mathf.RoundToInt(310 * k);
         var panelImg = IngameV2Art.Img("Panel", root, IngameV2Art.GlassPanel(pw, ph, 18), Color.white);
         IngameV2Art.PlaceCenter(panelImg.rectTransform, 960, 540, pw, ph);
         panel = panelImg.gameObject;
@@ -157,7 +168,8 @@ public class PauseMenuV2 : MonoBehaviour
         IngameV2Art.Place(sub.rectTransform, 0, 88 * k, pw, 20 * k);
 
         MakeButton(pr, korean, "게임으로 돌아가기", 62 * k, 128 * k, pw - 124 * k, 40 * k, IngameV2Art.Mint, BeginResumeCountdown);
-        exitLabel = MakeButton(pr, korean, "나가기 · 곡 선택으로", 62 * k, 180 * k, pw - 124 * k, 40 * k, IngameV2Art.Red, ExitToLobby);
+        MakeButton(pr, korean, "리듬 설정", 62 * k, 180 * k, pw - 124 * k, 40 * k, IngameV2Art.Mint, OpenRhythmSettings);
+        exitLabel = MakeButton(pr, korean, "나가기 · 곡 선택으로", 62 * k, 232 * k, pw - 124 * k, 40 * k, IngameV2Art.Red, ExitToLobby);
 
         // 재개 카운트다운
         var cd = IngameV2Art.NewRect("Countdown", root);

@@ -67,7 +67,7 @@ public class RhythmGameControllerV2 : MonoBehaviour
     private PauseMenuV2 pauseMenu;
     private RhythmSceneTransition sceneTransition;
     private ChartData activeChartData;
-    private ChartData syncedChartCopy;
+    private RhythmRuntimeSettings runtimeSettings;
     private ChartData transitionChart;   // 전환 연출이 미리 읽어 준 채보 (이 컨트롤러가 지운다)
     private List<ChartAutoLoader.SongEntry> availableSongs;
     private ChartAutoLoader.SongEntry currentSong;
@@ -89,7 +89,8 @@ public class RhythmGameControllerV2 : MonoBehaviour
     public string CurrentSongTitle { get { return currentSongTitle; } }
     public ChartAutoLoader.SongEntry CurrentSong { get { return currentSong; } }
     public bool IsStoryMode { get { return entryMode == RhythmEntryMode.Story; } }
-    public float NoteSpeed { get { return noteSpeed; } }
+    public float BaseNoteSpeed { get { return baseNoteSpeed; } }
+    public float NoteSpeed { get { return runtimeSettings != null ? runtimeSettings.EffectiveNoteSpeed : noteSpeed; } }
     public string DifficultyName { get { return RhythmLaunchExtrasV2.HasValue ? RhythmLaunchExtrasV2.Difficulty : "NORMAL"; } }
     public int DifficultyLevel { get { return RhythmLaunchExtrasV2.HasValue ? RhythmLaunchExtrasV2.Level : 0; } }
     public AudioSource MusicSource { get { return GetComponent<AudioSource>(); } }
@@ -125,12 +126,13 @@ public class RhythmGameControllerV2 : MonoBehaviour
         pauseMenu = GetComponent<PauseMenuV2>();
         sceneTransition = GetComponent<RhythmSceneTransition>();
 
-        // 배속: 곡 선택 화면 표시값(1~10, 기본 8.5) → 실제 노트 속도
-        noteSpeed = baseNoteSpeed * (GameSettings.NoteSpeed / GameSettings.NoteSpeedDefault);
 
         BuildInputActions();
         playField.PrepareForPlay();
-        playField.SetTiming(rhythmClock, noteSpeed);
+        runtimeSettings = GetComponent<RhythmRuntimeSettings>();
+        if (runtimeSettings == null) runtimeSettings = gameObject.AddComponent<RhythmRuntimeSettings>();
+        runtimeSettings.Initialize(rhythmClock, noteManager, playField, baseNoteSpeed);
+        noteSpeed = runtimeSettings.EffectiveNoteSpeed;
         noteSkin.Initialize(noteManager, playField);
         judgementScoreManager.Initialize(noteManager);
         gameUI.Initialize(this, playField, pauseMenu);
@@ -305,7 +307,9 @@ public class RhythmGameControllerV2 : MonoBehaviour
         if (rhythmClock.IsPlaying) rhythmClock.StopClock();
 
         noteManager.ClearNotes();
-        activeChartData = ApplySync(selectedChart);
+        runtimeSettings.Apply();
+        noteSpeed = runtimeSettings.EffectiveNoteSpeed;
+        activeChartData = selectedChart;
         if (selectedChart != null && !string.IsNullOrWhiteSpace(selectedChart.title))
         {
             currentSongTitle = selectedChart.title;
@@ -333,33 +337,6 @@ public class RhythmGameControllerV2 : MonoBehaviour
         gameplayActive = true;
         gameUI.SetVisible(true);
         rhythmClock.StartClock(activeChartData);
-    }
-
-    // 싱크: 곡 선택에서 고른 ms만큼 노트 시간을 민다 (양수 = 노트가 늦게 온다).
-    // 원본 채보 데이터는 그대로 두고 복사본에만 적용한다.
-    private ChartData ApplySync(ChartData source)
-    {
-        if (syncedChartCopy != null)
-        {
-            Destroy(syncedChartCopy);
-            syncedChartCopy = null;
-        }
-
-        int syncMs = GameSettings.SyncMs;
-        if (source == null || syncMs == 0) return source;
-
-        syncedChartCopy = Instantiate(source);
-        syncedChartCopy.name = source.name + " (sync " + syncMs + "ms)";
-        double shift = syncMs / 1000.0;
-        syncedChartCopy.musicOffset = source.musicOffset + shift;
-        for (int i = 0; i < syncedChartCopy.notes.Count; i++)
-        {
-            NoteData n = syncedChartCopy.notes[i];
-            n.hitTime += shift;
-            n.endTime += shift;
-            syncedChartCopy.notes[i] = n;
-        }
-        return syncedChartCopy;
     }
 
     private IEnumerator FinishSong()
@@ -602,7 +579,6 @@ public class RhythmGameControllerV2 : MonoBehaviour
         if (judgementScoreManager != null) judgementScoreManager.Judged -= HandleJudged;
         if (rhythmClock != null) rhythmClock.StopClock();
         if (ownsRuntimeActionMap && gameplayActionMap != null) gameplayActionMap.Dispose();
-        if (syncedChartCopy != null) Destroy(syncedChartCopy);
         if (transitionChart != null) Destroy(transitionChart);
     }
 }

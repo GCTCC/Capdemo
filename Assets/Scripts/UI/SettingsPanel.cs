@@ -7,7 +7,7 @@ using UnityEngine.UI;
 // 설정 창. 허브의 '설정' 메뉴(HoloMenuItem의 Panel Prefab)가 지금 화면 위에 띄운다. 씬은 바뀌지 않는다.
 // 왼쪽 탭 4개 + 오른쪽 내용:
 //   사운드  전체/배경음/효과음 음량, 미리듣기          (실제 동작)
-//   리듬    배속, 싱크(±ms), 키 설정                    (배속·싱크는 저장만, 키 설정은 보기용 목업)
+//   리듬    배속, 싱크(±ms), 키 설정                    (배속·싱크는 실제 적용, 키 설정은 보기용 목업)
 //   화면    전체화면/창, 해상도, 프레임 제한            (실제 동작. 에디터 Game 창에서는 전체화면·해상도가 안 바뀜)
 //   데이터  진행 초기화 + "정말 초기화할까요?" 확인
 // 값은 전부 GameSettings가 PlayerPrefs에 저장한다. ESC 또는 [닫기]로 닫는다. Q/E로 탭을 넘긴다.
@@ -55,6 +55,7 @@ public class SettingsPanel : HoloPopup
 
     private static readonly string[] LaneKeys = { "A", "S", "D", "J", "K", "L" }; // RhythmGameController의 6레인 키
 
+    private RhythmSyncPreview syncPreview;
     private int currentTab;
     private AudioSource bgmPreview, sfxPreview;
     private bool resetConfirmOpen;
@@ -140,10 +141,48 @@ public class SettingsPanel : HoloPopup
     protected override void OnOpened()
     {
         transform.SetAsLastSibling();
+        EnsureSyncPreviewButton();
         Refresh();
         ShowResetConfirm(false);
         if (resetStatus) resetStatus.text = "";
         ShowTab(currentTab);
+        // 이미 만들어진 프리팹의 이전 안내 문구도 현재 동작에 맞춘다.
+        foreach (var text in GetComponentsInChildren<TMP_Text>(true))
+            if (text.text.Contains("인게임 반영은 준비 중"))
+                text.text = "곡 선택과 공유 · 즉시 적용 · 싱크 +: 늦게 / -: 빠르게";
+    }
+
+    private void EnsureSyncPreviewButton()
+    {
+        if (syncStepper == null || syncStepper.transform.parent.Find("SyncPreviewButton") != null) return;
+        var page = syncStepper.transform.parent;
+        var label = syncStepper.GetComponentInChildren<TMP_Text>(true);
+        var image = HoloUI.Image("SyncPreviewButton", page, null, new Color(0.08f, 0.25f, 0.25f, 1), true);
+        HoloUI.Place(image.rectTransform, 605f, RowH + 4f, 180f, 44f);
+        var button = image.gameObject.AddComponent<Button>();
+        button.targetGraphic = image;
+        var buttonFont = IngameV2Art.MakeFont(SongTransitionSettings.Load().notoSansKr, label != null ? label.font : null);
+        var text = HoloUI.Text("Label", image.transform, buttonFont,
+            "프리뷰에서 상세 설정", 14f, Color.white, TextAlignmentOptions.Center);
+        HoloUI.Stretch(text.rectTransform);
+        button.onClick.AddListener(OpenSyncPreview);
+    }
+
+    private void OpenSyncPreview()
+    {
+        if (syncPreview == null)
+        {
+            var label = syncStepper != null ? syncStepper.GetComponentInChildren<TMP_Text>(true) : null;
+            syncPreview = RhythmSyncPreview.Create(transform, label != null ? label.font : null);
+            syncPreview.Closed += () => {
+                if (group != null) group.interactable = true;
+                if (speedStepper != null) speedStepper.SetText(SpeedText());
+                if (syncStepper != null) syncStepper.SetText(SyncText());
+            };
+        }
+        if (group != null) group.interactable = false;
+        syncPreview.Open();
+        if (!syncPreview.IsOpen && group != null) group.interactable = true;
     }
 
     protected override void OnClosing()
@@ -168,7 +207,7 @@ public class SettingsPanel : HoloPopup
         StopBgmPreview();
     }
 
-    private static string SpeedText() => "x " + GameSettings.NoteSpeed.ToString("0.0");
+    private static string SpeedText() => "x " + GameSettings.NoteSpeed.ToString("0.00");
     private static string SyncText() { int ms = GameSettings.SyncMs; return (ms >= 0 ? "+" : "") + ms + " ms"; }
     private static string ScreenModeText() => GameSettings.Fullscreen ? "전체화면" : "창 모드";
     private static string ResolutionText() { var r = GameSettings.Resolution; return r.x + " × " + r.y; }
@@ -266,6 +305,7 @@ public class SettingsPanel : HoloPopup
 
     protected override void HandleKeys()
     {
+        if (syncPreview != null && syncPreview.IsPreviewOpen) return;
         var kb = Keyboard.current;
         if (kb == null) return;
 
@@ -401,7 +441,7 @@ public class SettingsPanel : HoloPopup
         p.speedStepper = HoloStepper.Build(page, style, ControlX, 4f, 260f);
         RowLabel(page, style, 1, "싱크 조절", "SYNC OFFSET");
         p.syncStepper = HoloStepper.Build(page, style, ControlX, RowH + 4f, 260f);
-        Note(page, style, RowH * 2 - 4f, "곡 선택 화면의 배속·싱크와 같은 값이에요.  ·  인게임 반영은 준비 중", HoloPalette.Amber);
+        Note(page, style, RowH * 2 - 4f, "곡 선택과 공유 · 즉시 적용 · 싱크 +: 늦게 / -: 빠르게", HoloPalette.Amber);
 
         RowLabel(page, style, 3, "키 설정", "KEY CONFIG");
         var keys = new List<HoloDialogButton>();

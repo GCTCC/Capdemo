@@ -476,7 +476,7 @@ public class SongTransitionOverlay : MonoBehaviour
         optsAlpha = opts.gameObject.AddComponent<CanvasGroup>();
         float speed = GameSettings.NoteSpeed;
         int sync = GameSettings.SyncMs;
-        opts.text = "배속 <color=#EEF7F4><b>" + speed.ToString("0.0") + "</b></color>  ·  싱크 <color=#EEF7F4><b>" + (sync >= 0 ? "+" : "") + sync
+        opts.text = "배속 <color=#EEF7F4><b>" + speed.ToString("0.00") + "</b></color>  ·  싱크 <color=#EEF7F4><b>" + (sync >= 0 ? "+" : "") + sync
             + "ms</b></color>  ·  노트 <color=#EEF7F4><b>MINT / RED</b></color>";
 
         bestGroup = NewRect("Best", infoGroup);
@@ -1044,7 +1044,7 @@ public class SongTransitionOverlay : MonoBehaviour
             (0.12f, "> load   audio  " + slug + ".ogg  ", pl.AudioMegabytes.ToString("0.0") + "MB OK", pl.AudioDone),
             (0.38f, "> parse  chart  " + slug + ".json  ", pl.NoteCount + " notes OK", pl.ChartDone),
             (0.62f, "> build  stage  holo_lane_06 · " + settings.stageBackgroundName + "  ", "OK", pl.SceneDone),
-            (0.82f, "> apply  speed " + GameSettings.NoteSpeed.ToString("0.0") + " · offset " + (GameSettings.SyncMs >= 0 ? "+" : "") + GameSettings.SyncMs + "ms  ", "OK", pl.ApplyDone),
+            (0.82f, "> apply  speed " + GameSettings.NoteSpeed.ToString("0.00") + " · offset " + (GameSettings.SyncMs >= 0 ? "+" : "") + GameSettings.SyncMs + "ms  ", "OK", pl.ApplyDone),
             (0.97f, "> stage synced. ", "READY", pl.IsDone),
         };
         sb.Length = 0;

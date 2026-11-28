@@ -4,23 +4,23 @@ using UnityEngine;
 // 설정 창(SettingsPanel)의 값을 저장하고 게임에 반영하는 곳. 설정값은 전부 이 파일을 거친다.
 // 저장은 PlayerPrefs(opt_ 로 시작하는 키). SaveData.ResetProgress(진행 초기화)는 이 값들을 지우지 않는다.
 //   - 음량: 전체(AudioListener 전체 소리) / 배경음 / 효과음. 배경음·효과음은 StoryAudio, AudioVolumeTag가 곱해 쓴다
-//   - 리듬: 배속·싱크. 곡 선택 화면(SongSelectHoloController)과 같은 키를 쓴다. 인게임 반영은 아직 안 함
+//   - 리듬: 배속·싱크. 곡 선택 화면(SongSelectHoloController)과 같은 키를 쓴다. RhythmSettings와 공유하고 인게임에 즉시 반영
 //   - 화면: 전체화면/창, 해상도, 프레임 제한
 public static class GameSettings
 {
     private const string MasterKey = "opt_master";
     private const string BgmKey = "opt_bgm";
     private const string SfxKey = "opt_sfx";
-    public const string NoteSpeedKey = "opt_noteSpeed"; // SongSelectHoloController와 같은 키
-    public const string SyncKey = "opt_syncMs";         // SongSelectHoloController와 같은 키
+    public const string NoteSpeedKey = RhythmSettings.NoteSpeedKey; // SongSelectHoloController와 같은 키
+    public const string SyncKey = RhythmSettings.SyncKey;         // SongSelectHoloController와 같은 키
     private const string FullscreenKey = "opt_fullscreen";
     private const string ResWidthKey = "opt_resW";
     private const string ResHeightKey = "opt_resH";
     private const string FrameLimitKey = "opt_fps";
 
     // 배속·싱크 범위 (곡 선택 화면과 같게)
-    public const float NoteSpeedMin = 1f, NoteSpeedMax = 10f, NoteSpeedStep = 0.5f, NoteSpeedDefault = 8.5f;
-    public const int SyncMin = -200, SyncMax = 200, SyncStep = 2, SyncDefault = 12;
+    public const float NoteSpeedMin = NoteScrollSetting.Min, NoteSpeedMax = NoteScrollSetting.Max, NoteSpeedStep = NoteScrollSetting.Step, NoteSpeedDefault = NoteScrollSetting.Default;
+    public const int SyncMin = JudgementTimingSetting.Min, SyncMax = JudgementTimingSetting.Max, SyncStep = JudgementTimingSetting.Step, SyncDefault = JudgementTimingSetting.Default;
 
     // 프레임 제한 선택지. 0 = 제한 없음
     public static readonly int[] FrameLimits = { 30, 60, 120, 144, 0 };
@@ -93,27 +93,18 @@ public static class GameSettings
         }
     }
 
-    // ── 리듬 (저장만, 인게임 반영은 아직) ─────────────────────
+    // ── 리듬: 기존 API 호환, 저장/변경 알림은 RhythmSettings가 담당 ──
 
     public static float NoteSpeed
     {
-        get => PlayerPrefs.GetFloat(NoteSpeedKey, NoteSpeedDefault);
-        set
-        {
-            float v = Mathf.Clamp(Mathf.Round(value / NoteSpeedStep) * NoteSpeedStep, NoteSpeedMin, NoteSpeedMax);
-            PlayerPrefs.SetFloat(NoteSpeedKey, v);
-            Changed?.Invoke();
-        }
+        get => RhythmSettings.NoteSpeed;
+        set { RhythmSettings.NoteSpeed = value; Changed?.Invoke(); }
     }
 
     public static int SyncMs
     {
-        get => PlayerPrefs.GetInt(SyncKey, SyncDefault);
-        set
-        {
-            PlayerPrefs.SetInt(SyncKey, Mathf.Clamp(value, SyncMin, SyncMax));
-            Changed?.Invoke();
-        }
+        get => RhythmSettings.SyncMs;
+        set { RhythmSettings.SyncMs = value; Changed?.Invoke(); }
     }
 
     // ── 화면 ────────────────────────────────────────────

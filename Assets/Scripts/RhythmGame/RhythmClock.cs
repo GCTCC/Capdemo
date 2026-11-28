@@ -5,6 +5,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class RhythmClock : MonoBehaviour
 {
+    public const float DefaultNoteTimingCalibrationMs = 145.83333f;
+    public float NoteTimingCalibrationMilliseconds { get { return noteTimingCalibrationMilliseconds; } }
     [Header("Fallback Timing")]
     // ChartData가 연결되지 않았을 때 사용할 기본 BPM이다.
     [SerializeField]
@@ -20,7 +22,7 @@ public class RhythmClock : MonoBehaviour
     // 현재 테스트 환경에서 확인한 7000 / 48000초를 기본 보정값으로 사용한다.
     [SerializeField]
     [Range(-500.0f, 500.0f)]
-    private float noteTimingCalibrationMilliseconds = 145.83333f;
+    private float noteTimingCalibrationMilliseconds = DefaultNoteTimingCalibrationMs;
 
     // 음악을 재생하는 AudioSource다. 없으면 Awake에서 자동으로 만든다.
     private AudioSource musicSource;
@@ -94,18 +96,22 @@ public class RhythmClock : MonoBehaviour
         }
     }
 
-    // 채보 노트 이동과 판정에 사용하는 보정된 시간이다.
-    // NoteEditor JSON의 원본 offset은 건드리지 않고 Unity 출력 지연만 별도로 보정한다.
+    // 사용자 싱크와 기기별 보정은 별도로 보관한다. 음악 재생 시각/pitch에는 영향을 주지 않는다.
+    private int userSyncMilliseconds;
+    public int UserSyncMilliseconds
+    {
+        get { return userSyncMilliseconds; }
+        set { userSyncMilliseconds = JudgementTimingSetting.Normalize(value); }
+    }
+
+    // 노트 이동, 탭/홀드 판정, MISS, 마디선이 모두 이 시각을 사용한다.
     public double ChartTime
     {
         get
         {
-            if (chartData == null || !chartData.HasNotes)
-            {
-                return SongTime;
-            }
-
-            return SongTime - noteTimingCalibrationMilliseconds / 1000.0;
+            double calibration = chartData != null && chartData.HasNotes
+                ? noteTimingCalibrationMilliseconds : 0.0;
+            return JudgementTimingSetting.ChartTime(SongTime, calibration, userSyncMilliseconds);
         }
     }
 
